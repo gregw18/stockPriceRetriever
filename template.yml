@@ -1,0 +1,101 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: An AWS Lambda application that retrieves prices for a given list of securities.
+Resources:
+  function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: lambda_retrieve.lambda_handler
+      Runtime: python3.8
+      CodeUri: code/.
+      Description: Retrieve prices for listed securities.
+      Events:
+        RetrieveScheduledEvent:
+          Type: Schedule
+          Properties:
+            Schedule: cron(04 22 ? * MON-FRI *)
+      Timeout: 300
+      # Function's execution role
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambdaReadOnlyAccess
+        - AmazonS3FullAccess
+        - AmazonSNSFullAccess
+      Tracing: PassThrough
+      Layers:
+        - !Ref libs
+  libs:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: stock-retriever-python-lib
+      Description: Dependencies for the stock price retriever.
+      ContentUri: package/.
+      CompatibleRuntimes:
+        - python3.8
+  StockRetrieverError:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Warn if lambda hits error.
+      AlarmName: stock-retriever-error2
+      ActionsEnabled: true
+      AlarmActions:
+        - !Ref StockRetrieverTopic
+      MetricName: Errors
+      Namespace: AWS/Lambda
+      Statistic: Sum
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref function
+      Period: 3600
+      EvaluationPeriods: 1
+      DatapointsToAlarm: 1
+      Threshold: 0.0
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: missing
+  StockRetrieverTopic:
+    Type: 'AWS::SNS::Topic'
+    Properties:
+      Subscription:
+        - Endpoint: greg_walker@sympatico.ca
+          Protocol: email
+  StockRetrieverResultsTopic:
+    Type: 'AWS::SNS::Topic'
+    Properties:
+      Subscription:
+        - Endpoint: greg_walker@sympatico.ca
+          Protocol: email
+  StockRetrieverTopicPolicy:
+    Type: 'AWS::SNS::TopicPolicy'
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Sid: __default_statement_ID
+            Effect: Allow
+            Principal:
+              AWS: '*'
+            Action:
+              - 'SNS:GetTopicAttributes'
+              - 'SNS:SetTopicAttributes'
+              - 'SNS:AddPermission'
+              - 'SNS:RemovePermission'
+              - 'SNS:DeleteTopic'
+              - 'SNS:Subscribe'
+              - 'SNS:ListSubscriptionsByTopic'
+              - 'SNS:Publish'
+              - 'SNS:Receive'
+            Resource:
+              !Ref StockRetrieverTopic
+            Condition:
+              StringEquals:
+                'AWS:SourceOwner':
+                  !Ref 'AWS::AccountId'
+          - Sid: TrustCWEToPublishEventsToMyTopic
+            Effect: Allow
+            Principal:
+              Service: events.amazonaws.com
+            Action: 'sns:Publish'
+            Resource:
+              !Ref StockRetrieverTopic
+      Topics:
+        - !Ref StockRetrieverTopic
+        - !Ref StockRetrieverResultsTopic
