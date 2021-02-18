@@ -10,7 +10,7 @@ import stockTarget
 
 
 srcFile = "PortfolioTest.xls"
-srcTab = "2018"
+srcTab = "Current"
 
 
 class TestStockTarget():

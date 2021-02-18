@@ -4,7 +4,7 @@ V0.01, September 6, 2020, GAW.
 """
 
 srcFile = "Portfolio.xls"
-srcTab = "2018"                 # name of tab in spreadsheet to read data from.
+srcTab = "Current"                 # name of tab in spreadsheet to read data from.
 bucketNameFile = "bucket-name.txt"
 alphaFile = "alpha.txt"
 

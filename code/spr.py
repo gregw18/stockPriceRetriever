@@ -151,7 +151,7 @@ def display_help():
     print("\t-n no display - don't display graphs after retrieving prices.")
     print("\t-h display this help information.")
     print("0 arguments results in looking up results for symbols in the default")
-    print("file 'Portfolio (copy).xls' in the default '2018' tab.")
+    print("file 'Portfolio (copy).xls' in the default 'Current' tab.")
     print("If 1 argument is provided it is assumed to be the name of the file containing symbols ")
     print("to retrieve prices for.")
 
