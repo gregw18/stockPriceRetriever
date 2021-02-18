@@ -45,5 +45,5 @@ class TestStockTarget():
         assert myList[0].Symbol == "TSX:ALA"
         assert myList[1].Symbol == "BHGE"
         assert myList[2].Symbol == "SAN"
-        assert myList[0].Buy_price == 18
-        assert myList[0].Sell_price == 29
+        assert myList[0].Buy_price == 6
+        assert myList[0].Sell_price == 129

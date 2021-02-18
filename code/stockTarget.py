@@ -42,7 +42,7 @@ class StockTarget:
                 with pd.ExcelFile(srcFile) as xlFile:
                     myWs = xlFile.parse(tabName)
 
-            except (FileNotFoundError, PermissionError) as E:
+            except (FileNotFoundError, PermissionError, ValueError) as E:
                 print("Exception when trying to read file: ", srcFile)
                 print(E)
         else:
