@@ -1,5 +1,6 @@
-numpy==1.16.0
-pandas==0.22.0
+numpy
+pandas
+xlrd
 requests==2.18.4
 urllib3==1.22
 yahoo-fin==0.8.5
