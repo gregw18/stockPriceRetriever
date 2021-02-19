@@ -18,7 +18,7 @@ Resources:
       # Function's execution role
       Policies:
         - AWSLambdaBasicExecutionRole
-        - AWSLambdaReadOnlyAccess
+        - AWSLambda_ReadOnlyAccess
         - AmazonS3FullAccess
         - AmazonSNSFullAccess
       Tracing: PassThrough
