@@ -4,7 +4,7 @@ V0.04, May 11, 2020, GAW
 """
 
 import pytest
-import xlrd.book
+# import xlrd.book
 
 import stockTarget
 
@@ -31,9 +31,9 @@ class TestStockTarget():
         Test that get empty list when tab doesn't exist.
         """
         myTargets = stockTarget.StockTarget()
-        with pytest.raises(xlrd.book.XLRDError):
-            myList = myTargets.get_list(srcFile, "notab")
-            assert len(myList) == 0
+        #with pytest.raises(xlrd.book.XLRDError):
+        myList = myTargets.get_list(srcFile, "notab")
+        assert len(myList) == 0
 
     def test_getExpected(self):
         """
