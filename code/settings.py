@@ -3,8 +3,10 @@ Settings and settings class for stock price retriever.
 V0.01, September 6, 2020, GAW.
 """
 
-srcFile = "Portfolio.xls"
-srcTab = "Current"                 # name of tab in spreadsheet to read data from.
+import json
+
+# srcFile = "Portfolio.xls"
+# srcTab = "Current"                 # name of tab in spreadsheet to read data from.
 bucketNameFile = "bucket-name.txt"
 alphaFile = "alpha.txt"
 
@@ -15,6 +17,11 @@ class Settings:
     """
 
     def __init__(self):
+        with open("settings.json", "r") as config_file:
+                configData = json.load(config_file)
+        self.srcFile = configData["srcfile"]
+        self.srcTab = configData["srctab"]
+
         self.alphaBaseUrl = "https://www.alphavantage.co/query"
         self.alphaCallDelay = 20			# Number of seconds to wait before
                                                         # calling api (to avoid going over
