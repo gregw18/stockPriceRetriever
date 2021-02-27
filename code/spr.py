@@ -163,18 +163,19 @@ if __name__ == "__main__":
     print("argv: ", sys.argv, ", len=", len(sys.argv))
 
     myArgs = ProgArgs()
-    myArgs.parse_args(sys.argv, settings.srcFile, settings.srcTab)
+    mysettings = settings.Settings()
+    myArgs.parse_args(sys.argv, mysettings.srcFile, mysettings.srcTab)
 
     if myArgs.action == Action.help:
         display_help()
     elif myArgs.action == Action.lookup:
         symbol_lookup(myArgs.symbol)
     elif myArgs.action == Action.graph:
-        mysettings = settings.Settings()
+        # mysettings = settings.Settings()
         myResultsFile = resultsFile.ResultsFile(mysettings.bucketName, mysettings.resultsPrefix)
         display_graphs(myArgs.srcFile, myResultsFile)
     elif myArgs.action == Action.retrieve:
-        mysettings = settings.Settings()
+        # mysettings = settings.Settings()
         myResultsFile = resultsFile.ResultsFile(mysettings.bucketName, mysettings.resultsPrefix)
         res_file = retrievePrices.retrieve_prices_from_file(myArgs.srcFile,
                                                             myArgs.srcTab,

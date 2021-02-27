@@ -31,8 +31,8 @@ def lambda_handler(event, context):
     print('python version=', sys.version)
     print("cwd=", os.getcwd())
 
-    resFile = retrievePrices.retrieve_prices_from_file(settings.srcFile,
-                                                       settings.srcTab,
+    resFile = retrievePrices.retrieve_prices_from_file(mysettings.srcFile,
+                                                       mysettings.srcTab,
                                                        sprEnums.PriceProvider.yahoo,
                                                        mysettings=mysettings,
                                                        myResultsFile=myResultsFile)
