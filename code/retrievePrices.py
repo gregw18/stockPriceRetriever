@@ -13,6 +13,7 @@ import urllib3
 import requests
 
 from yahoo_fin.stock_info import get_live_price
+from yahoo_fin.stock_info import get_quote_table
 
 import security
 import stockTarget
@@ -72,7 +73,9 @@ def _get_price_yahoo(symbol, mysettings):
     price = 0
     yahooSymbol = get_yahoo_ticker(symbol)
     try:
-        price = get_live_price(yahooSymbol)
+        quote_table = get_quote_table(yahooSymbol)
+        price = quote_table['Quote Price']
+        # price = get_live_price(yahooSymbol)
     except:
         E = sys.exc_info()[0]
         print("Failed to retrieve price for ", yahooSymbol)
