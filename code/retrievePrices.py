@@ -75,7 +75,6 @@ def _get_price_yahoo(symbol, mysettings):
     try:
         quote_table = get_quote_table(yahooSymbol)
         price = quote_table['Quote Price']
-        # price = get_live_price(yahooSymbol)
     except:
         E = sys.exc_info()[0]
         print("Failed to retrieve price for ", yahooSymbol)
