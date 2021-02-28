@@ -137,7 +137,7 @@ def retrieve_prices(symbolList, priceProvider, mysettings, myResultsFile):
         priceInfo = retrieveFn(symbol.Symbol, mysettings)
         mySecurity = security.Security()
         mySecurity.pop_from_row(symbol, priceInfo)
-        if price > 0:
+        if priceInfo.currentPrice > 0:
             actionMsg = _get_action_msg(symbol, priceInfo.currentPrice)
             _display_msg(symbol, priceInfo.currentPrice, actionMsg)
             # Don't write to file if no price, as resulting bar makes it look like should buy.
