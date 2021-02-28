@@ -50,7 +50,7 @@ def get_email(myGroups):
     max_wid = 45
     mySubj = ""
     # Subtracting 2 for width because of removing b' from security.name (see longer comment below.)
-    myBody = "symbol.name: ".ljust(max_wid - 2) + "rating, current, buy, sell"
+    myBody = "symbol.name: ".ljust(max_wid - 2) + "   rating, current,     buy,    sell,    %chg"
 
     for groupCode in sprEnums.GroupCodes:
         myList = myGroups.get_results_for_group(groupCode)
@@ -59,9 +59,9 @@ def get_email(myGroups):
             myBody += "\n" + code_display_names[groupCode] + "\n"
             for rating in myList:
                 myBody += (rating.security.symbol + '.' + rating.security.name + ": ").ljust(max_wid)
-                myBody += "%.2f%%, %.2f, " % (rating.rating * 100, rating.security.currentPrice)
-                myBody += "%.2f, %.2f" % (rating.security.buyPrice, rating.security.sellPrice)
-                myBody += "%.2f\n" % (rating.get_percent_change_today())
+                myBody += "%7.2f%%, %7.2f, " % (rating.rating * 100, rating.security.currentPrice)
+                myBody += "%7.2f, %7.2f, " % (rating.security.buyPrice, rating.security.sellPrice)
+                myBody += "%7.2f%%\n" % (rating.security.get_percent_change_today())
 
     # If no securities provided, return empties.
     if not mySubj:

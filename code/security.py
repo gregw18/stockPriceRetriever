@@ -114,6 +114,20 @@ class Security:
         self.sellPrice = sellPrice
         self.currentPrice = currentPrice
 
+    def pop_with_priceInfo(self, name, symbol, buyPrice, sellPrice, priceInfo):
+        """
+        Populate from given properties.
+        """
+        self.name       = name
+        self.symbol     = symbol
+        self.buyPrice   = buyPrice
+        self.sellPrice  = sellPrice
+        self.currentPrice  = priceInfo.currentPrice
+        self.lastClosePrice = priceInfo.lastClosePrice
+        self.low52Week  = priceInfo.low52Week
+        self.high52Week = priceInfo.high52Week
+        self.status     = self.get_status()
+
     def pop_from_row(self, row, priceInfo):
         """
         Populate properties from row from spreadsheet.
