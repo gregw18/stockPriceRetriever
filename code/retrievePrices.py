@@ -70,11 +70,10 @@ def _get_price_yahoo(symbol, mysettings):
     """
 
     time.sleep(mysettings.yahooCallDelay)
-    price = 0
     yahooSymbol = get_yahoo_ticker(symbol)
+    priceInfo = PriceInfo()
     try:
         quote_table = get_quote_table(yahooSymbol)
-        priceInfo = PriceInfo()
         priceInfo.currentPrice = quote_table['Quote Price']
         priceInfo.lastClosePrice = quote_table['Previous Close']
     except:
@@ -82,7 +81,7 @@ def _get_price_yahoo(symbol, mysettings):
         print("Failed to retrieve price for ", yahooSymbol)
         print(E)
 
-    return float(price)
+    return priceInfo
 
 
 def get_yahoo_ticker(symbol):
