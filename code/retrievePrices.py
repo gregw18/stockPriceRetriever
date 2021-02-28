@@ -71,7 +71,7 @@ def _get_price_yahoo(symbol, mysettings):
 
     time.sleep(mysettings.yahooCallDelay)
     yahooSymbol = get_yahoo_ticker(symbol)
-    priceInfo = PriceInfo()
+    priceInfo = security.PriceInfo()
     try:
         quote_table = get_quote_table(yahooSymbol)
         priceInfo.currentPrice = quote_table['Quote Price']
