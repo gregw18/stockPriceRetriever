@@ -41,7 +41,6 @@ def send(myResultsFile, resFile, resultsTopicName):
 
     print("Finished daily_email.create")
 
-
 def get_email(myGroups):
     """
     Create email message (subject and body) summarizing price data from
@@ -61,7 +60,8 @@ def get_email(myGroups):
             for rating in myList:
                 myBody += (rating.security.symbol + '.' + rating.security.name + ": ").ljust(max_wid)
                 myBody += "%.2f%%, %.2f, " % (rating.rating * 100, rating.security.currentPrice)
-                myBody += "%.2f, %.2f\n" % (rating.security.buyPrice, rating.security.sellPrice)
+                myBody += "%.2f, %.2f" % (rating.security.buyPrice, rating.security.sellPrice)
+                myBody += "%.2f\n" % (rating.get_percent_change_today())
 
     # If no securities provided, return empties.
     if not mySubj:

@@ -165,6 +165,16 @@ class Security:
 
         return myData
 
+    def get_percent_change_today(self):
+        """
+        Calculate percentage change for today, using (current price - last close price) / last close price.
+        Multiplying by 100 so get 20% rather than 0.20.
+        """
+        priceChangeToday = self.currentPrice - self.lastClosePrice
+        percentChangeToday = (priceChangeToday / self.lastClosePrice) * 100
+
+        return percentChangeToday
+
 
 class StkGraphData:
     """

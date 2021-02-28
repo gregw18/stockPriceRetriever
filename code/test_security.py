@@ -4,6 +4,7 @@ V0.01, February 27, 2019, GAW
 """
 
 import pandas as pd
+import pytest
 
 import security
 
@@ -211,3 +212,21 @@ class TestSecurity():
         assert myData.priceLinePos == 301
         assert myData.xBounds[0] == 10
         assert myData.xBounds[1] == 310
+
+    @pytest.mark.parametrize("current, lastClose, expected", [(12, 10, 20), (80, 100, -20), (10, 10, 0)])
+    def test_percentChange(self, current, lastClose, expected):
+        """
+        Create security with current within buy and sell, so shouldn't have buy or sell bars.
+        Testing increase, decrease and no change.
+        """
+        testDf = self.createSrcDf()
+        mySecurity = security.Security()
+        firstRow = testDf.iloc[0]
+        priceInfo = security.PriceInfo()
+        priceInfo.currentPrice = current
+        priceInfo.lastClosePrice = lastClose
+        mySecurity.pop_from_row(firstRow, priceInfo)
+
+        percentChange = mySecurity.get_percent_change_today()
+
+        assert percentChange == expected
