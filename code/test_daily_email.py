@@ -11,9 +11,9 @@ import security_groups
 
 
 class Test_daily_email:
-    def createSecurity(self, name, symbol, buyPrice, sellPrice, currPrice):
+    def createSecurity(self, name, symbol, buyPrice, sellPrice, currentPrice):
         mySec = security.Security()
-        mySec.pop(name, symbol, buyPrice, sellPrice, currPrice)
+        mySec.pop(name, symbol, buyPrice, sellPrice, currentPrice)
         return mySec
 
     @pytest.mark.xfail

@@ -79,7 +79,7 @@ class ResultsFile:
             with open(resFile, 'w') as f:
                 # Loop through all securities in list, getting and checking current price.
                 for sec in securitiesList:
-                    if sec.currPrice > 0:
+                    if sec.currentPrice > 0:
                         # Don't write to file if no price, as resulting bar makes it look
                         # like should buy.
                         f.write(sec.write() + "\n")
@@ -112,7 +112,7 @@ class ResultsFile:
 
             # Loop through all securities in list, getting and checking current price.
             for sec in securitiesList:
-                if sec.currPrice > 0:
+                if sec.currentPrice > 0:
                     # Don't save if no price, as resulting bar makes it look like should buy.
                     resultsString += sec.write() + "\n"
 

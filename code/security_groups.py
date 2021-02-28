@@ -85,14 +85,14 @@ class security_groups:
         Calculate rating for securities in the buy zone: (buy - current) / buy
         Basically, percentage below buy price.
         """
-        return (this_security.buyPrice - this_security.currPrice) / this_security.buyPrice
+        return (this_security.buyPrice - this_security.currentPrice) / this_security.buyPrice
 
     def _calc_rating_middle(self, this_security):
         """
         Calculate rating for securities in the middle zone: (current - buy) / (sell - buy)
         Basically, percentage of buy/sell range above buy.
         """
-        return ((this_security.currPrice - this_security.buyPrice) /
+        return ((this_security.currentPrice - this_security.buyPrice) /
                 (this_security.sellPrice - this_security.buyPrice))
 
     def _calc_rating_sell(self, this_security):
@@ -100,7 +100,7 @@ class security_groups:
         Calculate rating for securities in the sell zone: (current - sell) / sell
         Basically, percentage above sell price.
         """
-        return (this_security.currPrice - this_security.sellPrice) / this_security.sellPrice
+        return (this_security.currentPrice - this_security.sellPrice) / this_security.sellPrice
 
     def _get_group_code(self, this_security):
         """
@@ -112,13 +112,13 @@ class security_groups:
           Otherwise, middle
         """
         middle_range = this_security.sellPrice - this_security.buyPrice
-        if this_security.currPrice < this_security.buyPrice:
+        if this_security.currentPrice < this_security.buyPrice:
             myGroup = sprEnums.GroupCodes.buy
-        elif this_security.currPrice - this_security.buyPrice < (.25 * middle_range):
+        elif this_security.currentPrice - this_security.buyPrice < (.25 * middle_range):
             myGroup = sprEnums.GroupCodes.near_buy
-        elif this_security.currPrice > this_security.sellPrice:
+        elif this_security.currentPrice > this_security.sellPrice:
             myGroup = sprEnums.GroupCodes.sell
-        elif this_security.currPrice - this_security.buyPrice > (0.75 * middle_range):
+        elif this_security.currentPrice - this_security.buyPrice > (0.75 * middle_range):
             myGroup = sprEnums.GroupCodes.near_sell
         else:
             myGroup = sprEnums.GroupCodes.middle

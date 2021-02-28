@@ -1,6 +1,6 @@
 """
 Retrieving prices, for stock price retriever.
-V0.01, September 2, 2020, GAW.
+V0.02, February 28, 2021, GAW.
 """
 
 import datetime
@@ -74,7 +74,9 @@ def _get_price_yahoo(symbol, mysettings):
     yahooSymbol = get_yahoo_ticker(symbol)
     try:
         quote_table = get_quote_table(yahooSymbol)
-        price = quote_table['Quote Price']
+        priceInfo = PriceInfo()
+        priceInfo.currentPrice = quote_table['Quote Price']
+        priceInfo.lastClosePrice = quote_table['Previous Close']
     except:
         E = sys.exc_info()[0]
         print("Failed to retrieve price for ", yahooSymbol)
@@ -133,12 +135,12 @@ def retrieve_prices(symbolList, priceProvider, mysettings, myResultsFile):
     securities = []
     for symbol in symbolList:
         print(symbol.Stock)
-        price = retrieveFn(symbol.Symbol, mysettings)
+        priceInfo = retrieveFn(symbol.Symbol, mysettings)
         mySecurity = security.Security()
-        mySecurity.pop_from_row(symbol, price)
+        mySecurity.pop_from_row(symbol, priceInfo)
         if price > 0:
-            actionMsg = _get_action_msg(symbol, price)
-            _display_msg(symbol, price, actionMsg)
+            actionMsg = _get_action_msg(symbol, priceInfo.currentPrice)
+            _display_msg(symbol, priceInfo.currentPrice, actionMsg)
             # Don't write to file if no price, as resulting bar makes it look like should buy.
             securities.append(mySecurity)
 

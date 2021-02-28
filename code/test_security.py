@@ -16,6 +16,11 @@ class TestSecurity():
                            "Symbol",
                            "Ignore"]	# Dataframe column names.
         self.testPrice = 11.59
+        self.testPriceInfo = security.PriceInfo()
+        self.testPriceInfo.currentPrice = self.testPrice
+        self.testPriceInfo.lastClosePrice = 42.33
+        self.testPriceInfo.low52Week = 33.21
+        self.testPriceInfo.high52Week = 64.34
 
     def createSrcDf(self):
         """
@@ -37,12 +42,15 @@ class TestSecurity():
         testDf = self.createSrcDf()
         mySecurity = security.Security()
         firstRow = testDf.iloc[0]
-        mySecurity.pop_from_row(firstRow, self.testPrice)
+        mySecurity.pop_from_row(firstRow, self.testPriceInfo)
         assert mySecurity.symbol == firstRow.Symbol
         assert mySecurity.buyPrice == firstRow.Buy_price
         assert mySecurity.sellPrice == firstRow.Sell_price
         assert mySecurity.name == firstRow.Stock
-        assert mySecurity.currPrice == self.testPrice
+        assert mySecurity.currentPrice == self.testPriceInfo.currentPrice
+        assert mySecurity.lastClosePrice == self.testPriceInfo.lastClosePrice
+        assert mySecurity.low52Week == self.testPriceInfo.low52Week
+        assert mySecurity.high52Week == self.testPriceInfo.high52Week
 
     def test_write(self):
         """
@@ -51,10 +59,12 @@ class TestSecurity():
         testDf = self.createSrcDf()
         firstRow = testDf.iloc[0]
         mySecurity = security.Security()
-        mySecurity.pop_from_row(firstRow, self.testPrice)
+        mySecurity.pop_from_row(firstRow, self.testPriceInfo)
         retStr = mySecurity.write()
         goodStr = firstRow.Stock + "," + firstRow.Symbol + "," + str(firstRow.Buy_price) + ","
-        goodStr = goodStr + str(firstRow.Sell_price) + "," + str(self.testPrice) + "," + "2"
+        goodStr = goodStr + str(firstRow.Sell_price) + "," + str(self.testPriceInfo.currentPrice) + ","
+        goodStr = goodStr + str(self.testPriceInfo.lastClosePrice) + "," + str(self.testPriceInfo.low52Week) + ","
+        goodStr = goodStr + str(self.testPriceInfo.high52Week) + "," + "2"
         assert retStr == goodStr
 
     def test_read_match(self):
@@ -65,17 +75,19 @@ class TestSecurity():
         """
         myRow = self.createSrcRow()
         writeSecurity = security.Security()
-        writeSecurity.pop_from_row(myRow, self.testPrice)
+        writeSecurity.pop_from_row(myRow, self.testPriceInfo)
         writeStr = writeSecurity.write()
 
         readSecurity = security.Security()
         readSecurity.read(writeStr)
-        assert readSecurity.name      == writeSecurity.name
-        assert readSecurity.symbol    == writeSecurity.symbol
-        assert readSecurity.buyPrice  == writeSecurity.buyPrice
-        assert readSecurity.sellPrice == writeSecurity.sellPrice
-        assert readSecurity.currPrice == writeSecurity.currPrice
-        assert readSecurity.status    == writeSecurity.status
+        assert readSecurity == writeSecurity
+
+        #assert readSecurity.name      == writeSecurity.name
+        #assert readSecurity.symbol    == writeSecurity.symbol
+        #assert readSecurity.buyPrice  == writeSecurity.buyPrice
+        #assert readSecurity.sellPrice == writeSecurity.sellPrice
+        #assert readSecurity.currentPrice == writeSecurity.currentPrice
+        #assert readSecurity.status    == writeSecurity.status
 
     def test_read_fixesStatus(self):
         """
@@ -84,7 +96,7 @@ class TestSecurity():
         """
         myRow = self.createSrcRow()
         writeSecurity = security.Security()
-        writeSecurity.pop_from_row(myRow, self.testPrice)
+        writeSecurity.pop_from_row(myRow, self.testPriceInfo)
         writeSecurity.status = "0"
         writeStr = writeSecurity.write()
 
@@ -94,7 +106,10 @@ class TestSecurity():
         assert readSecurity.symbol ==    writeSecurity.symbol
         assert readSecurity.buyPrice ==  writeSecurity.buyPrice
         assert readSecurity.sellPrice == writeSecurity.sellPrice
-        assert readSecurity.currPrice == writeSecurity.currPrice
+        assert readSecurity.currentPrice == writeSecurity.currentPrice
+        assert readSecurity.lastClosePrice == writeSecurity.lastClosePrice
+        assert readSecurity.low52Week == writeSecurity.low52Week
+        assert readSecurity.high52Week == writeSecurity.high52Week
         assert readSecurity.status ==    "2"
 
     def run_get_status_test(self, price, expectedResult):
@@ -103,7 +118,9 @@ class TestSecurity():
         """
         myRow = self.createSrcRow()
         mySecurity = security.Security()
-        mySecurity.pop_from_row(myRow, price)
+        myPriceInfo = security.PriceInfo()
+        myPriceInfo.currentPrice = price
+        mySecurity.pop_from_row(myRow, myPriceInfo)
         calcStatus = mySecurity.get_status()
         assert calcStatus == expectedResult
 
@@ -137,9 +154,9 @@ class TestSecurity():
         """
         self.run_get_status_test(29.01, "1")
 
-    def createSecurity(self, status, name, symbol, buyPrice, sellPrice, currPrice):
+    def createSecurity(self, status, name, symbol, buyPrice, sellPrice, currentPrice):
         mySec = security.Security()
-        mySec.pop_with_status(status, name, symbol, buyPrice, sellPrice, currPrice)
+        mySec.pop_with_status(status, name, symbol, buyPrice, sellPrice, currentPrice)
         return mySec
 
     def test_sort1(self):

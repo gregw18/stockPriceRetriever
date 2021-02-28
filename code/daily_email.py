@@ -60,7 +60,7 @@ def get_email(myGroups):
             myBody += "\n" + code_display_names[groupCode] + "\n"
             for rating in myList:
                 myBody += (rating.security.symbol + '.' + rating.security.name + ": ").ljust(max_wid)
-                myBody += "%.2f%%, %.2f, " % (rating.rating * 100, rating.security.currPrice)
+                myBody += "%.2f%%, %.2f, " % (rating.rating * 100, rating.security.currentPrice)
                 myBody += "%.2f, %.2f\n" % (rating.security.buyPrice, rating.security.sellPrice)
 
     # If no securities provided, return empties.

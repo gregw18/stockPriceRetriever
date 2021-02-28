@@ -14,9 +14,9 @@ class Test_security_groups:
     def setup_method(self):
         self.groups = security_groups.security_groups()
 
-    def createSecurity(self, name, symbol, buyPrice, sellPrice, currPrice):
+    def createSecurity(self, name, symbol, buyPrice, sellPrice, currentPrice):
         mySec = security.Security()
-        mySec.pop(name, symbol, buyPrice, sellPrice, currPrice)
+        mySec.pop(name, symbol, buyPrice, sellPrice, currentPrice)
         return mySec
 
     def test_single_buy(self):

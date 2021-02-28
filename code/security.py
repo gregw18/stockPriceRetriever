@@ -1,9 +1,21 @@
 """
 Security and stkGraphData classes, for my spr (stock price checker) program.
-V0.01, February 26, 2019, GAW
+Includes price DTO (data transfer object) class.
+V0.02, February 28, 2021, GAW
 """
 
 import math
+
+
+class PriceInfo:
+    """
+    Used to return price data after retrieve it from provider.
+    """
+
+    currentPrice = 0
+    lastClosePrice = 0
+    low52Week = 0
+    high52Week = 0
 
 
 class Security:
@@ -15,7 +27,10 @@ class Security:
         self.symbol = ""
         self.buyPrice = 0
         self.sellPrice = 0
-        self.currPrice = 0
+        self.currentPrice = 0
+        self.lastClosePrice = 0
+        self.low52Week = 0
+        self.high52Week = 0
         self.status = ""        # 0 = buy, 1 = sell, 2 = no action. Numbers chosen for sorting.
 
     def __eq__(self, other):
@@ -23,9 +38,12 @@ class Security:
         if self.name == other.name:
             if self.buyPrice == other.buyPrice:
                 if self.sellPrice == other.sellPrice:
-                    if self.currPrice == other.currPrice:
+                    if self.currentPrice == other.currentPrice:
                         if self.status == other.status:
-                            areSame = True
+                            if self.lastClosePrice == other.lastClosePrice:
+                                if self.low52Week == other.low52Week:
+                                    if self.high52Week == other.high52Week:
+                                        areSame = True
         return areSame
 
     def write(self):
@@ -37,7 +55,10 @@ class Security:
         retStr = retStr + self.symbol + ","
         retStr = retStr + str(self.buyPrice) + ","
         retStr = retStr + str(self.sellPrice) + ","
-        retStr = retStr + str(self.currPrice) + ","
+        retStr = retStr + str(self.currentPrice) + ","
+        retStr = retStr + str(self.lastClosePrice) + ","
+        retStr = retStr + str(self.low52Week) + ","
+        retStr = retStr + str(self.high52Week) + ","
         retStr = retStr + self.status
 
         return retStr
@@ -49,26 +70,29 @@ class Security:
         the file.
         """
         textList = textLine.split(",")
-        self.name      = textList[0]
-        self.symbol    = textList[1]
-        self.buyPrice  = float(textList[2])
-        self.sellPrice = float(textList[3])
-        self.currPrice = float(textList[4])
-        self.status    = self.get_status()
+        self.name       = textList[0]
+        self.symbol     = textList[1]
+        self.buyPrice   = float(textList[2])
+        self.sellPrice  = float(textList[3])
+        self.currentPrice  = float(textList[4])
+        self.lastClosePrice = float(textList[5])
+        self.low52Week  = float(textList[6])
+        self.high52Week = float(textList[7])
+        self.status     = self.get_status()
 
     def get_status(self):
         """
         Calculate status for current security. See __init__ for values.
         """
-        if self.currPrice < self.buyPrice:
+        if self.currentPrice < self.buyPrice:
             status = "0"
-        elif self.currPrice > self.sellPrice:
+        elif self.currentPrice > self.sellPrice:
             status = "1"
         else:
             status = "2"
         return status
 
-    def pop(self, name, symbol, buyPrice, sellPrice, currPrice):
+    def pop(self, name, symbol, buyPrice, sellPrice, currentPrice):
         """
         Populate from given properties.
         """
@@ -76,10 +100,10 @@ class Security:
         self.symbol    = symbol
         self.buyPrice  = buyPrice
         self.sellPrice = sellPrice
-        self.currPrice = currPrice
+        self.currentPrice = currentPrice
         self.status    = self.get_status()
 
-    def pop_with_status(self, status, name, symbol, buyPrice, sellPrice, currPrice):
+    def pop_with_status(self, status, name, symbol, buyPrice, sellPrice, currentPrice):
         """
         Populate from given properties, including status.
         """
@@ -88,18 +112,21 @@ class Security:
         self.symbol    = symbol
         self.buyPrice  = buyPrice
         self.sellPrice = sellPrice
-        self.currPrice = currPrice
+        self.currentPrice = currentPrice
 
-    def pop_from_row(self, row, price):
+    def pop_from_row(self, row, priceInfo):
         """
         Populate properties from row from spreadsheet.
         """
-        self.name      = row.Stock
-        self.symbol    = row.Symbol
-        self.buyPrice  = row.Buy_price
-        self.sellPrice = row.Sell_price
-        self.currPrice = price
-        self.status    = self.get_status()
+        self.name       = row.Stock
+        self.symbol     = row.Symbol
+        self.buyPrice   = row.Buy_price
+        self.sellPrice  = row.Sell_price
+        self.currentPrice  = priceInfo.currentPrice
+        self.lastClosePrice = priceInfo.lastClosePrice
+        self.low52Week  = priceInfo.low52Week
+        self.high52Week = priceInfo.high52Week
+        self.status     = self.get_status()
 
     def get_sort_string(self):
         """
@@ -118,17 +145,17 @@ class Security:
         myData.noActionWid = self.sellPrice - self.buyPrice
 
         lowVal = self.buyPrice
-        if self.currPrice < self.buyPrice:
-            lowVal = self.currPrice
-            myData.buyWid = self.buyPrice - self.currPrice
+        if self.currentPrice < self.buyPrice:
+            lowVal = self.currentPrice
+            myData.buyWid = self.buyPrice - self.currentPrice
 
         highVal = self.sellPrice
-        if self.currPrice > self.sellPrice:
-            myData.sellWid = self.currPrice - self.sellPrice
-            highVal = self.currPrice
+        if self.currentPrice > self.sellPrice:
+            myData.sellWid = self.currentPrice - self.sellPrice
+            highVal = self.currentPrice
 
-        # if self.currPrice > self.buyPrice and self.currPrice < self.sellPrice:
-        myData.priceLinePos = self.currPrice
+        # if self.currentPrice > self.buyPrice and self.currentPrice < self.sellPrice:
+        myData.priceLinePos = self.currentPrice
 
         # Want both bounds to be to the nearest 10, so label ticks are easy to understand.
         myData.offset  = lowVal
