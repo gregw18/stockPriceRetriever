@@ -43,7 +43,6 @@ def plt_me():
 
     low3 = 50
     price3 = 60
-    high3 = 70
     p3 = axes[2]
     p3.barh("MSFT", low2, color='red')
     p3.barh("MSFT", price2, color='yellow', left=low3)

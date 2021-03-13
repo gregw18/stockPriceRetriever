@@ -333,7 +333,8 @@ class Test_security_groups:
                 assert myRating.security.symbol == stock[1]
                 assert round(myRating.rating, 2) == round(stock[6], 2)
             else:
-                assertTrue(False, "Unable to find symbol in group:" + stock[1] + stock[5])
+                assert False, "Unable to find symbol in group:" + stock[1] + stock[5]
+                # assertTrue(False, "Unable to find symbol in group:" + stock[1] + stock[5])
 
         # Verify that, within each group, stocks are sorted properly. For buy, ratings should
         # ratings should decrease, for rest should increase.
