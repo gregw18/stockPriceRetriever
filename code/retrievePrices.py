@@ -68,7 +68,7 @@ def _split_price_range(priceRangeStr):
     """
     split_pos = priceRangeStr.find('-')
     low = float(priceRangeStr[0:split_pos])
-    high = float(priceRange[split_pos + 1:])
+    high = float(priceRangeStr[split_pos + 1:])
 
     return low, high
 
