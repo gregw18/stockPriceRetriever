@@ -53,14 +53,14 @@ def set_axes_properties(ax, sec, graphData):
     ax.set_xbound(graphData.xBounds)
 
 
-def display_graphs(fileName, myResultsFile):
+def display_graphs(fileName, resultsFile):
     """
     Display a graph for each group of securities. Can only fit a limited number on each graph,
     so now displaying multiple graphs. Size defined by numCols and maxRows.
     """
 
     # secList = myResultsFile.read_results_file(fileName)
-    secList = myResultsFile.read_results_file_s3(fileName)
+    secList = resultsFile.read_results_file_s3(fileName)
     numSecurities = len(secList)
     if numSecurities > 0:
         # Get resorted version from security_groups.

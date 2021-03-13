@@ -64,7 +64,8 @@ class TestSecurity():
         retStr = mySecurity.write()
         goodStr = firstRow.Stock + "," + firstRow.Symbol + "," + str(firstRow.Buy_price) + ","
         goodStr += str(firstRow.Sell_price) + "," + str(self.testPriceInfo.currentPrice) + ","
-        goodStr += str(self.testPriceInfo.lastClosePrice) + "," + str(self.testPriceInfo.low52Week) + ","
+        goodStr += str(self.testPriceInfo.lastClosePrice) + ","
+        goodStr += str(self.testPriceInfo.low52Week) + ","
         goodStr += str(self.testPriceInfo.high52Week) + "," + "2"
         assert retStr == goodStr
 
@@ -213,9 +214,9 @@ class TestSecurity():
         assert myData.xBounds[0] == 10
         assert myData.xBounds[1] == 310
 
-    @pytest.mark.parametrize("current, lastClose, expected", 
-                        [(12, 10, 20), 
-                        (80, 100, -20), 
+    @pytest.mark.parametrize("current, lastClose, expected",
+                        [(12, 10, 20),
+                        (80, 100, -20),
                         (10, 10, 0)])
     def test_percentChange(self, current, lastClose, expected):
         """
@@ -234,9 +235,9 @@ class TestSecurity():
 
         assert percentChange == expected
 
-    @pytest.mark.parametrize("current, high52week, expected", 
-                        [(8, 10, 80), 
-                        (80, 80, 100), 
+    @pytest.mark.parametrize("current, high52week, expected",
+                        [(8, 10, 80),
+                        (80, 80, 100),
                         (12, 10, 120)])
     def test_percentof52Week(self, current, high52week, expected):
         """

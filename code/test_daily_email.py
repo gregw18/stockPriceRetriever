@@ -20,7 +20,7 @@ class Test_daily_email:
         mySec.pop_with_priceInfo(name, symbol, buyPrice, sellPrice, priceInfo)
         return mySec
 
-#    @pytest.mark.xfail
+    @pytest.mark.xfail
     def test_one_middle(self):
         """
         Test with one security, in middle.

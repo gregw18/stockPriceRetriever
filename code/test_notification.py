@@ -120,7 +120,7 @@ class TestNotifications():
         my_notifier = notification_interface.notification_interface()
         self._add_n_topics(1, 5)
         topic_exists = my_notifier.findArnForTopicName(self.bad_name)
-        assert topic_exists
+        assert not topic_exists
 
     def test_5_topics_first_match(self):
         """
@@ -194,4 +194,4 @@ class TestNotifications():
         self._add_n_topics(1, 350)
         self._add_topic(self.good_name)
         topic_exists = my_notifier.findArnForTopicName(self.bad_name)
-        assert topic_exists
+        assert not topic_exists

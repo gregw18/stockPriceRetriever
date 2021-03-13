@@ -18,7 +18,7 @@ class Settings:
 
     def __init__(self):
         with open("settings.json", "r") as config_file:
-                configData = json.load(config_file)
+            configData = json.load(config_file)
         self.srcFile = configData["srcfile"]
         self.srcTab = configData["srctab"]
 
