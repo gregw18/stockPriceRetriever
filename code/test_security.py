@@ -230,3 +230,20 @@ class TestSecurity():
         percentChange = mySecurity.get_percent_change_today()
 
         assert percentChange == expected
+
+    @pytest.mark.parametrize("current, high52week, expected", [(8, 10, 80), (80, 80, 100), (12, 10, 120)])
+    def test_percentChange(self, current, high52week, expected):
+        """
+        Create security with current above, equal to and below 52 week high.
+        """
+        testDf = self.createSrcDf()
+        mySecurity = security.Security()
+        firstRow = testDf.iloc[0]
+        priceInfo = security.PriceInfo()
+        priceInfo.currentPrice = current
+        priceInfo.high52Week = high52week
+        mySecurity.pop_from_row(firstRow, priceInfo)
+
+        percentage = mySecurity.get_percent_52_week_high()
+
+        assert percentage == expected
