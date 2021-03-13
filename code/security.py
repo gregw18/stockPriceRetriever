@@ -189,6 +189,13 @@ class Security:
 
         return percentChangeToday
 
+    def get_percent_52_week_high(self):
+        """
+        Calculate current price as a percentage of 52 week high.
+        Multiplying by 100 so get 80% rather than 0.80.
+        """
+        return (self.currentPrice/self.high52Week) * 100
+
 
 class StkGraphData:
     """

@@ -3,8 +3,6 @@ File to test StockTarget class
 V0.04, May 11, 2020, GAW
 """
 
-import pytest
-# import xlrd.book
 
 import stockTarget
 

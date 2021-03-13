@@ -83,8 +83,8 @@ class TestNotifications():
         """
         Add n topics, with names topic1-topicn.
         """
-        for num in range(start, start + num):
-            nextName = "topic" + str(num)
+        for n in range(start, start + num):
+            nextName = "topic" + str(n)
             self._add_topic(nextName)
 
     def test_no_topics_no_match(self):
@@ -93,7 +93,7 @@ class TestNotifications():
         """
         my_notifier = notification_interface.notification_interface()
         topic_exists = my_notifier.findArnForTopicName(self.bad_name)
-        assert topic_exists == False
+        assert not topic_exists
 
     def test_one_topic_no_match(self):
         """
@@ -102,7 +102,7 @@ class TestNotifications():
         my_notifier = notification_interface.notification_interface()
         self._add_topic(self.good_name)
         topic_exists = my_notifier.findArnForTopicName(self.bad_name)
-        assert topic_exists == False
+        assert not topic_exists
 
     def test_one_topic_match(self):
         """
@@ -111,7 +111,7 @@ class TestNotifications():
         my_notifier = notification_interface.notification_interface()
         self._add_topic(self.good_name)
         topic_exists = my_notifier.findArnForTopicName(self.good_name)
-        assert topic_exists == True
+        assert topic_exists
 
     def test_5_topics_no_match(self):
         """
@@ -120,7 +120,7 @@ class TestNotifications():
         my_notifier = notification_interface.notification_interface()
         self._add_n_topics(1, 5)
         topic_exists = my_notifier.findArnForTopicName(self.bad_name)
-        assert topic_exists == False
+        assert topic_exists
 
     def test_5_topics_first_match(self):
         """
@@ -130,7 +130,7 @@ class TestNotifications():
         self._add_topic(self.good_name)
         self._add_n_topics(1, 5)
         topic_exists = my_notifier.findArnForTopicName(self.good_name)
-        assert topic_exists == True
+        assert topic_exists
 
     def test_5_topics_last_match(self):
         """
@@ -141,7 +141,7 @@ class TestNotifications():
         self._add_n_topics(1, 5)
         self._add_topic(self.good_name)
         topic_exists = my_notifier.findArnForTopicName(self.good_name)
-        assert topic_exists == True
+        assert topic_exists
 
     def test_5_topics_middle_match(self):
         """
@@ -152,7 +152,7 @@ class TestNotifications():
         self._add_topic(self.good_name)
         self._add_n_topics(4, 2)
         topic_exists = my_notifier.findArnForTopicName(self.good_name)
-        assert topic_exists == True
+        assert topic_exists
 
     def test_350_topics_first_group_match(self):
         """
@@ -163,7 +163,7 @@ class TestNotifications():
         self._add_topic(self.good_name)
         self._add_n_topics(46, 305)
         topic_exists = my_notifier.findArnForTopicName(self.good_name)
-        assert topic_exists == True
+        assert topic_exists
 
     def test_350_topics_third_group_match(self):
         """
@@ -174,7 +174,7 @@ class TestNotifications():
         self._add_topic(self.good_name)
         self._add_n_topics(246, 105)
         topic_exists = my_notifier.findArnForTopicName(self.good_name)
-        assert topic_exists == True
+        assert topic_exists
 
     def test_350_topics_last_item_match(self):
         """
@@ -184,7 +184,7 @@ class TestNotifications():
         self._add_n_topics(1, 350)
         self._add_topic(self.good_name)
         topic_exists = my_notifier.findArnForTopicName(self.good_name)
-        assert topic_exists == True
+        assert topic_exists
 
     def test_350_topics_no_match(self):
         """
@@ -194,4 +194,4 @@ class TestNotifications():
         self._add_n_topics(1, 350)
         self._add_topic(self.good_name)
         topic_exists = my_notifier.findArnForTopicName(self.bad_name)
-        assert topic_exists == False
+        assert topic_exists

@@ -61,6 +61,18 @@ def _get_price_alphavest(symbol, mysettings):
     return float(price)
 
 
+def _split_price_range(priceRangeStr):
+    """
+    Given a 52-week price range, in the format '99.99 - 99.99', where 99.99 can be any reasonable stock price,
+    return the low and high prices as floats.
+    """
+    split_pos = priceRangeStr.find('-')
+    low = float(priceRangeStr[0:split_pos])
+    high = float(priceRange[split_pos + 1:])
+
+    return low, high
+
+
 def _get_price_yahoo(symbol, mysettings):
     """
     Return current price for given stock, 0 if hit an error.
@@ -76,6 +88,7 @@ def _get_price_yahoo(symbol, mysettings):
         quote_table = get_quote_table(yahooSymbol)
         priceInfo.currentPrice = quote_table['Quote Price']
         priceInfo.lastClosePrice = quote_table['Previous Close']
+        priceInfo.low52Week, priceInfo.high52Week = _split_price_range(quote_table['52 Week Range'])
     except:
         E = sys.exc_info()[0]
         print("Failed to retrieve price for ", yahooSymbol)
