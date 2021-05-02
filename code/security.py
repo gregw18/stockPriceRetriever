@@ -185,10 +185,10 @@ class Security:
         Multiplying by 100 so get 20% rather than 0.20.
         """
         percentChangeToday = 0
-        if self.lastClosePrice > 0
+        if self.lastClosePrice > 0:
                 priceChangeToday = self.currentPrice - self.lastClosePrice
                 percentChangeToday = (priceChangeToday / self.lastClosePrice) * 100
-        else
+        else:
                 print("Error, lastClosePrice=0 for security: ", self.symbol)
 
         return percentChangeToday
@@ -198,9 +198,9 @@ class Security:
         Calculate current price as a percentage of 52 week high.
         Multiplying by 100 so get 80% rather than 0.80.
         """
-        if self.high52Week > 0
+        if self.high52Week > 0:
                 return (self.currentPrice/self.high52Week) * 100
-        else
+        else:
                 print("Error, high52Week=0 for security:", self.symbol)
                 return 0
 
