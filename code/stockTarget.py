@@ -55,12 +55,14 @@ class StockTarget:
         Read in list of securities, from given excel filename and tab.
         """
         securityList = []
+        print("Starting stockTarget.get_list.")
         # Get dataframe from file.
         myWs = self._get_worksheet(srcFile, tabName)
         if not(myWs is None):
             # Loop through all records in spreadsheet, saving ones we want to retrieve prices for.
             for row in myWs.itertuples(index=False):
                 if not (pd.isnull(row.Stock)) and row.Ignore == "N":
+                    print("Looking at stock ", row.Stock)
                     if self._is_rec_complete(row):
                         securityList.append(row)
 
