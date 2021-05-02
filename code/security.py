@@ -184,8 +184,12 @@ class Security:
         Calculate percentage change for today, using (current price - last close price) / last close price.
         Multiplying by 100 so get 20% rather than 0.20.
         """
-        priceChangeToday = self.currentPrice - self.lastClosePrice
-        percentChangeToday = (priceChangeToday / self.lastClosePrice) * 100
+        percentChangeToday = 0
+        if self.lastClosePrice > 0
+                priceChangeToday = self.currentPrice - self.lastClosePrice
+                percentChangeToday = (priceChangeToday / self.lastClosePrice) * 100
+        else
+                print("Error, lastClosePrice=0 for security: ", self.symbol)
 
         return percentChangeToday
 
@@ -194,7 +198,11 @@ class Security:
         Calculate current price as a percentage of 52 week high.
         Multiplying by 100 so get 80% rather than 0.80.
         """
-        return (self.currentPrice/self.high52Week) * 100
+        if self.high52Week > 0
+                return (self.currentPrice/self.high52Week) * 100
+        else
+                print("Error, high52Week=0 for security:", self.symbol)
+                return 0
 
 
 class StkGraphData:
