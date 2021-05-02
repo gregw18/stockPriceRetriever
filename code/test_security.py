@@ -217,8 +217,8 @@ class TestSecurity():
     @pytest.mark.parametrize("current, lastClose, expected",
                         [(12, 10, 20),
                         (80, 100, -20),
-                        (10, 10, 0)
-                        (12, 0, 0])
+                        (10, 10, 0),
+                        (12, 0, 0)])
     def test_percentChange(self, current, lastClose, expected):
         """
         Create security with current within buy and sell, so shouldn't have buy or sell bars.
@@ -240,7 +240,7 @@ class TestSecurity():
                         [(8, 10, 80),
                         (80, 80, 100),
                         (12, 10, 120),
-                        (20, 0, 0])
+                        (20, 0, 0)])
     def test_percentof52Week(self, current, high52week, expected):
         """
         Create security with current above, equal to and below 52 week high.
