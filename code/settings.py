@@ -24,8 +24,8 @@ class Settings:
 
         self.alphaBaseUrl = "https://www.alphavantage.co/query"
         self.alphaCallDelay = 20			# Number of seconds to wait before
-                                                        # calling api (to avoid going over
-                                                        # req/min limit.)
+                                                      # calling api (to avoid going over
+                                                      # req/min limit.)
         self.respContName = "Global Quote"	# Name of master container in response.
         self.priceName = "05. price"		# Name of entry containing price.
         self.alphaApiTimeOut = 4

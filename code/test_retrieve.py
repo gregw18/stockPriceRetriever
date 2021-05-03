@@ -3,12 +3,8 @@
 # V0.01, May 2, 2021, GAW
 """
 
-import datetime
 import retrievePrices
-import security
 import settings
-
-import pytest
 
 
 badBucketNameFile = "nobucket-name.txt"
@@ -19,17 +15,24 @@ symbolGoogle = "GOOGL"
 
 
 class TestRetrievePrices():
+    """
+    Testing that working with prices > 999.99 - had errors converting strings with commas
+    to float.
+    """
     def test_getAMZN(self):
+        """
+        Confirm that both values that are used as denominators are > 0.
+        """
         mySettings = settings.Settings()
-        myInfo = retrievePrices._get_price_yahoo(symbolGoogle, mysettings)
+        myInfo = retrievePrices._get_price_yahoo(symbolGoogle, mySettings)
         assert myInfo.high52Week > 0
         assert myInfo.lastClosePrice > 0
-        
 
     def test_split(self):
+        """
+        Verify that am now successfully splitting numbers containing commas.
+        """
         testRange = "1,334.01 - 2,345.99"
         low, high = retrievePrices._split_price_range(testRange)
         assert low == 1334.01
         assert high == 2345.99
-
-

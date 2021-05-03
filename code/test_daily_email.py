@@ -11,7 +11,8 @@ import security_groups
 
 
 class Test_daily_email:
-    def createSecurity(self, name, symbol, buyPrice, sellPrice, currentPrice, lastClosePrice, high52Week):
+    def createSecurity(self, name, symbol, buyPrice, sellPrice, currentPrice,
+                       lastClosePrice, high52Week):
         mySec = security.Security()
         priceInfo = security.PriceInfo()
         priceInfo.currentPrice = currentPrice
@@ -38,7 +39,8 @@ class Test_daily_email:
         secList.append(buySec)
         buySec = self.createSecurity("Manulife", "MFC", 20.4, 43.211, 24.5679, 34.5654, 42.112)
         secList.append(buySec)
-        buySec = self.createSecurity("Microsoft", "MSFT", 120.3, 230.211, 240.087999, 220.1234, 225.4321)
+        buySec = self.createSecurity("Microsoft", "MSFT", 120.3, 230.211, 240.087999,
+                                     220.1234, 225.4321)
         secList.append(buySec)
         buySec = self.createSecurity("Apple", "AAPL", 20.3, 130.211, 14.087999, 12.09888, 80.4488)
         secList.append(buySec)
@@ -47,7 +49,7 @@ class Test_daily_email:
 
         mySubj, myBody = daily_email.get_email(myGroups)
         print("\nemail:", mySubj, "\n", myBody)
-        assert True == False
+        assert False
 
     def test_empty_list(self):
         """

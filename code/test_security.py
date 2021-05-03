@@ -11,11 +11,12 @@ import security
 
 class TestSecurity():
     def setup(self):
+        # Dataframe column names.
         self.dfColNames = ["Stock",
                            "Buy_price",
                            "Sell_price",
                            "Symbol",
-                           "Ignore"]	# Dataframe column names.
+                           "Ignore"]
         self.testPrice = 11.59
         self.testPriceInfo = security.PriceInfo()
         self.testPriceInfo.currentPrice = self.testPrice
@@ -84,13 +85,6 @@ class TestSecurity():
         readSecurity.read(writeStr)
         assert readSecurity == writeSecurity
 
-        #assert readSecurity.name      == writeSecurity.name
-        #assert readSecurity.symbol    == writeSecurity.symbol
-        #assert readSecurity.buyPrice  == writeSecurity.buyPrice
-        #assert readSecurity.sellPrice == writeSecurity.sellPrice
-        #assert readSecurity.currentPrice == writeSecurity.currentPrice
-        #assert readSecurity.status    == writeSecurity.status
-
     def test_read_fixesStatus(self):
         """
         Test an invalid record - i.e. change status after populating, write it, read it, confirm
@@ -104,15 +98,15 @@ class TestSecurity():
 
         readSecurity = security.Security()
         readSecurity.read(writeStr)
-        assert readSecurity.name ==      writeSecurity.name
-        assert readSecurity.symbol ==    writeSecurity.symbol
-        assert readSecurity.buyPrice ==  writeSecurity.buyPrice
-        assert readSecurity.sellPrice == writeSecurity.sellPrice
-        assert readSecurity.currentPrice == writeSecurity.currentPrice
+        assert readSecurity.name           == writeSecurity.name
+        assert readSecurity.symbol         == writeSecurity.symbol
+        assert readSecurity.buyPrice       == writeSecurity.buyPrice
+        assert readSecurity.sellPrice      == writeSecurity.sellPrice
+        assert readSecurity.currentPrice   == writeSecurity.currentPrice
         assert readSecurity.lastClosePrice == writeSecurity.lastClosePrice
-        assert readSecurity.low52Week == writeSecurity.low52Week
-        assert readSecurity.high52Week == writeSecurity.high52Week
-        assert readSecurity.status ==    "2"
+        assert readSecurity.low52Week      == writeSecurity.low52Week
+        assert readSecurity.high52Week     == writeSecurity.high52Week
+        assert readSecurity.status         == "2"
 
     def run_get_status_test(self, price, expectedResult):
         """
@@ -215,10 +209,10 @@ class TestSecurity():
         assert myData.xBounds[1] == 310
 
     @pytest.mark.parametrize("current, lastClose, expected",
-                        [(12, 10, 20),
-                        (80, 100, -20),
-                        (10, 10, 0),
-                        (12, 0, 0)])
+                             [(12, 10, 20),
+                              (80, 100, -20),
+                              (10, 10, 0),
+                              (12, 0, 0)])
     def test_percentChange(self, current, lastClose, expected):
         """
         Create security with current within buy and sell, so shouldn't have buy or sell bars.
@@ -237,10 +231,10 @@ class TestSecurity():
         assert percentChange == expected
 
     @pytest.mark.parametrize("current, high52week, expected",
-                        [(8, 10, 80),
-                        (80, 80, 100),
-                        (12, 10, 120),
-                        (20, 0, 0)])
+                             [(8, 10, 80),
+                              (80, 80, 100),
+                              (12, 10, 120),
+                              (20, 0, 0)])
     def test_percentof52Week(self, current, high52week, expected):
         """
         Create security with current above, equal to and below 52 week high.

@@ -29,7 +29,6 @@ class TestStockTarget():
         Test that get empty list when tab doesn't exist.
         """
         myTargets = stockTarget.StockTarget()
-        #with pytest.raises(xlrd.book.XLRDError):
         myList = myTargets.get_list(srcFile, "notab")
         assert len(myList) == 0
 

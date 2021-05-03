@@ -41,6 +41,7 @@ def send(myResultsFile, resFile, resultsTopicName):
 
     print("Finished daily_email.create")
 
+
 def get_email(myGroups):
     """
     Create email message (subject and body) summarizing price data from
@@ -50,7 +51,8 @@ def get_email(myGroups):
     max_wid = 45
     mySubj = ""
     # Subtracting 2 for width because of removing b' from security.name (see longer comment below.)
-    myBody = "symbol.name: ".ljust(max_wid - 2) + "   rating, current,     buy,    sell,   %52wk,    %chg"
+    myBody = "symbol.name: ".ljust(max_wid - 2) + \
+             "   rating, current,     buy,    sell,   %52wk,    %chg"
 
     for groupCode in sprEnums.GroupCodes:
         myList = myGroups.get_results_for_group(groupCode)
@@ -58,7 +60,8 @@ def get_email(myGroups):
             mySubj += str(len(myList)) + " " + code_display_names[groupCode] + ", "
             myBody += "\n" + code_display_names[groupCode] + "\n"
             for rating in myList:
-                myBody += (rating.security.symbol + '.' + rating.security.name + ": ").ljust(max_wid)
+                myBody += (rating.security.symbol + '.' + rating.security.name +
+                           ": ").ljust(max_wid)
                 myBody += "%7.2f%%, %7.2f, " % (rating.rating * 100, rating.security.currentPrice)
                 myBody += "%7.2f, %7.2f, " % (rating.security.buyPrice, rating.security.sellPrice)
                 myBody += "%7.2f%%, " % (rating.security.get_percent_52_week_high())

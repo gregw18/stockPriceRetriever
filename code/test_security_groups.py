@@ -268,49 +268,92 @@ class Test_security_groups:
         # Format of lists is name, symbol, buy price, sell price, current price,
         # expected group code, expected rating.
         srcList = []
-        srcList.append(["banco santander", "SAN", 1.3, 3.11, 2.0199, sprEnums.GroupCodes.middle, 0.39779])
-        srcList.append(["Bell Canada", "BCE", 48, 61, 56.1699, sprEnums.GroupCodes.middle, 0.6284])
-        srcList.append(["BMO US Preferred", "ZHP", 11.7, 23.75, 23.65, sprEnums.GroupCodes.near_sell, 0.9917])
-        srcList.append(["Canadian Pacific", "CP", 243, 418.9, 415.1099, sprEnums.GroupCodes.near_sell, 0.9784])
-        srcList.append(["Eli Lilly", "LLY", 93.1, 171.1, 141.6499, sprEnums.GroupCodes.middle, 0.6224])
-        srcList.append(["Encana", "OVV", 2.55, 18, 1.10999, sprEnums.GroupCodes.buy, 0.5647])
-        srcList.append(["Exxon", "XOM", 25.5, 73.1, 34.86, sprEnums.GroupCodes.near_buy, 0.1966])
-        srcList.append(["First Asset Tech Giant", "TXF", 13, 24, 19, sprEnums.GroupCodes.middle, 0.5454])
-        srcList.append(["Home Depot", "HD", 131.7, 334.8, 281.16, sprEnums.GroupCodes.middle, 0.7359])
-        srcList.append(["Horizons Preferred", "HPR", 4.1, 10.7, 7.65, sprEnums.GroupCodes.middle, 0.5378])
-        srcList.append(["Inter Pipeline", "IPL", 6.03, 24.9, 3.9399, sprEnums.GroupCodes.buy, 0.3466])
-        srcList.append(["Johnson and Johnson", "JNJ", 90, 170, 145.08, sprEnums.GroupCodes.middle, 0.6885])
-        srcList.append(["Manulife Financial", "MFC", 10, 29, 18.89, sprEnums.GroupCodes.middle, 0.4679])
-        srcList.append(["Microsoft", "MSFT", 115, 230.3, 214.8899, sprEnums.GroupCodes.near_sell, 0.8663])
-        srcList.append(["Suncor Energy", "SU", 15.03, 53, 16.07, sprEnums.GroupCodes.near_buy, 0.02739])
-        srcList.append(["TD Bank", "TD", 51.3, 87.8, 60.02, sprEnums.GroupCodes.near_buy, 0.2389])
-        srcList.append(["VG Dev Europe", "VE", 25, 49, 27.06, sprEnums.GroupCodes.near_buy, 0.08583])
-        srcList.append(["VG Emerg Mkt", "VWO", 26, 65, 45.15, sprEnums.GroupCodes.middle, 0.4910])
-        srcList.append(["VG Canada Index", "VCE", 13, 34.5, 34.54, sprEnums.GroupCodes.sell, 0.00115])
-        srcList.append(["Air Canada", "AC", 10.33, 48, 16.77, sprEnums.GroupCodes.near_buy, 0.17095])
-        srcList.append(["Alexion Pharma", "ALXN", 83.7, 315, 119.67, sprEnums.GroupCodes.near_buy, 0.1555])
-        srcList.append(["Algonquin Power", "AQN", 14.79, 20.5, 20.54, sprEnums.GroupCodes.sell, 0.0024])
-        srcList.append(["Apple", "AAPL", 48.3, 101.1, 115.75, sprEnums.GroupCodes.sell, 0.1449])
-        srcList.append(["Biogen", "BIIB", 241.3, 451, 266.7999, sprEnums.GroupCodes.near_buy, 0.1216])
-        srcList.append(["Boeing", "BA", 93.55, 380, 169.07, sprEnums.GroupCodes.middle, 0.26364])
-        srcList.append(["Boston Scientific", "BSX", 27.5, 43, 36.86, sprEnums.GroupCodes.middle, 0.6038])
-        srcList.append(["CAE Electronics", "CAE", 15.1, 32, 23.26, sprEnums.GroupCodes.middle, 0.4828])
-        srcList.append(["Canadian Apartment", "CAR", 41, 58, 44.15, sprEnums.GroupCodes.near_buy, 0.1853])
-        srcList.append(["CNH Industrial", "CNHI", 5.76, 10.75, 8.5, sprEnums.GroupCodes.middle, 0.5491])
-        srcList.append(["Delta Airlines", "DAL", 19.51, 53, 33.72, sprEnums.GroupCodes.middle, 0.4243])
-        srcList.append(["Disney", "DIS", 110, 210, 127.5599, sprEnums.GroupCodes.near_buy, 0.175599])
-        srcList.append(["Dollarama", "DOL", 37.95, 53, 50.39, sprEnums.GroupCodes.near_sell, 0.82657])
-        srcList.append(["Illumina", "ILMN", 245, 445, 325.92, sprEnums.GroupCodes.middle, 0.4046])
-        srcList.append(["InterRent", "IIP", 10.8, 38.5, 9.87, sprEnums.GroupCodes.buy, 0.0861])
-        srcList.append(["Norwegian Cruise", "NCLH", 8.51, 42, 17.7099, sprEnums.GroupCodes.middle, 0.2747])
-        srcList.append(["Peyto Exploration", "PEY", 0.92, 4.5, 3.0999, sprEnums.GroupCodes.middle, 0.6089])
-        srcList.append(["Riocan Real Estate", "REI", 13.5, 28.3, 14.77999, sprEnums.GroupCodes.near_buy, 0.08648])
-        srcList.append(["Seven Generations Energy", "VII", 1.31, 4.7, 4.78, sprEnums.GroupCodes.sell, 0.01702])
-        srcList.append(["T Rowe Price", "TROW", 96, 130, 146.36, sprEnums.GroupCodes.sell, 0.12584])
-        srcList.append(["Telus", "T", 20.3, 29.7, 24.04, sprEnums.GroupCodes.middle, 0.39787])
-        srcList.append(["TJX", "TJX", 35.71, 61, 56.02, sprEnums.GroupCodes.near_sell, 0.80308])
-        srcList.append(["Tourmaline Oil", "TOU", 7.05, 14.7, 18.86, sprEnums.GroupCodes.sell, 0.28299])
-        srcList.append(["Transcanada Pipelines", "TRP", 47.51, 73, 35.65, sprEnums.GroupCodes.buy, 0.2496])
+        srcList.append(["banco santander", "SAN", 1.3, 3.11, 2.0199,
+                        sprEnums.GroupCodes.middle, 0.39779])
+        srcList.append(["Bell Canada", "BCE", 48, 61, 56.1699,
+                        sprEnums.GroupCodes.middle, 0.6284])
+        srcList.append(["BMO US Preferred", "ZHP", 11.7, 23.75, 23.65,
+                        sprEnums.GroupCodes.near_sell, 0.9917])
+        srcList.append(["Canadian Pacific", "CP", 243, 418.9, 415.1099,
+                        sprEnums.GroupCodes.near_sell, 0.9784])
+        srcList.append(["Eli Lilly", "LLY", 93.1, 171.1, 141.6499,
+                        sprEnums.GroupCodes.middle, 0.6224])
+        srcList.append(["Encana", "OVV", 2.55, 18, 1.10999,
+                        sprEnums.GroupCodes.buy, 0.5647])
+        srcList.append(["Exxon", "XOM", 25.5, 73.1, 34.86,
+                        sprEnums.GroupCodes.near_buy, 0.1966])
+        srcList.append(["First Asset Tech Giant", "TXF", 13, 24, 19,
+                        sprEnums.GroupCodes.middle, 0.5454])
+        srcList.append(["Home Depot", "HD", 131.7, 334.8, 281.16,
+                        sprEnums.GroupCodes.middle, 0.7359])
+        srcList.append(["Horizons Preferred", "HPR", 4.1, 10.7, 7.65,
+                        sprEnums.GroupCodes.middle, 0.5378])
+        srcList.append(["Inter Pipeline", "IPL", 6.03, 24.9, 3.9399,
+                        sprEnums.GroupCodes.buy, 0.3466])
+        srcList.append(["Johnson and Johnson", "JNJ", 90, 170, 145.08,
+                        sprEnums.GroupCodes.middle, 0.6885])
+        srcList.append(["Manulife Financial", "MFC", 10, 29, 18.89,
+                        sprEnums.GroupCodes.middle, 0.4679])
+        srcList.append(["Microsoft", "MSFT", 115, 230.3, 214.8899,
+                        sprEnums.GroupCodes.near_sell, 0.8663])
+        srcList.append(["Suncor Energy", "SU", 15.03, 53, 16.07,
+                        sprEnums.GroupCodes.near_buy, 0.02739])
+        srcList.append(["TD Bank", "TD", 51.3, 87.8, 60.02,
+                        sprEnums.GroupCodes.near_buy, 0.2389])
+        srcList.append(["VG Dev Europe", "VE", 25, 49, 27.06,
+                        sprEnums.GroupCodes.near_buy, 0.08583])
+        srcList.append(["VG Emerg Mkt", "VWO", 26, 65, 45.15,
+                        sprEnums.GroupCodes.middle, 0.4910])
+        srcList.append(["VG Canada Index", "VCE", 13, 34.5, 34.54,
+                        sprEnums.GroupCodes.sell, 0.00115])
+        srcList.append(["Air Canada", "AC", 10.33, 48, 16.77,
+                        sprEnums.GroupCodes.near_buy, 0.17095])
+        srcList.append(["Alexion Pharma", "ALXN", 83.7, 315, 119.67,
+                        sprEnums.GroupCodes.near_buy, 0.1555])
+        srcList.append(["Algonquin Power", "AQN", 14.79, 20.5, 20.54,
+                        sprEnums.GroupCodes.sell, 0.0024])
+        srcList.append(["Apple", "AAPL", 48.3, 101.1, 115.75,
+                        sprEnums.GroupCodes.sell, 0.1449])
+        srcList.append(["Biogen", "BIIB", 241.3, 451, 266.7999,
+                        sprEnums.GroupCodes.near_buy, 0.1216])
+        srcList.append(["Boeing", "BA", 93.55, 380, 169.07,
+                        sprEnums.GroupCodes.middle, 0.26364])
+        srcList.append(["Boston Scientific", "BSX", 27.5, 43, 36.86,
+                        sprEnums.GroupCodes.middle, 0.6038])
+        srcList.append(["CAE Electronics", "CAE", 15.1, 32, 23.26,
+                        sprEnums.GroupCodes.middle, 0.4828])
+        srcList.append(["Canadian Apartment", "CAR", 41, 58, 44.15,
+                        sprEnums.GroupCodes.near_buy, 0.1853])
+        srcList.append(["CNH Industrial", "CNHI", 5.76, 10.75, 8.5,
+                        sprEnums.GroupCodes.middle, 0.5491])
+        srcList.append(["Delta Airlines", "DAL", 19.51, 53, 33.72,
+                        sprEnums.GroupCodes.middle, 0.4243])
+        srcList.append(["Disney", "DIS", 110, 210, 127.5599,
+                        sprEnums.GroupCodes.near_buy, 0.175599])
+        srcList.append(["Dollarama", "DOL", 37.95, 53, 50.39,
+                        sprEnums.GroupCodes.near_sell, 0.82657])
+        srcList.append(["Illumina", "ILMN", 245, 445, 325.92,
+                        sprEnums.GroupCodes.middle, 0.4046])
+        srcList.append(["InterRent", "IIP", 10.8, 38.5, 9.87,
+                        sprEnums.GroupCodes.buy, 0.0861])
+        srcList.append(["Norwegian Cruise", "NCLH", 8.51, 42, 17.7099,
+                        sprEnums.GroupCodes.middle, 0.2747])
+        srcList.append(["Peyto Exploration", "PEY", 0.92, 4.5, 3.0999,
+                        sprEnums.GroupCodes.middle, 0.6089])
+        srcList.append(["Riocan Real Estate", "REI", 13.5, 28.3, 14.77999,
+                        sprEnums.GroupCodes.near_buy, 0.08648])
+        srcList.append(["Seven Generations Energy", "VII", 1.31, 4.7, 4.78,
+                        sprEnums.GroupCodes.sell, 0.01702])
+        srcList.append(["T Rowe Price", "TROW", 96, 130, 146.36,
+                        sprEnums.GroupCodes.sell, 0.12584])
+        srcList.append(["Telus", "T", 20.3, 29.7, 24.04,
+                        sprEnums.GroupCodes.middle, 0.39787])
+        srcList.append(["TJX", "TJX", 35.71, 61, 56.02,
+                        sprEnums.GroupCodes.near_sell, 0.80308])
+        srcList.append(["Tourmaline Oil", "TOU", 7.05, 14.7, 18.86,
+                        sprEnums.GroupCodes.sell, 0.28299])
+        srcList.append(["Transcanada Pipelines", "TRP", 47.51, 73, 35.65,
+                        sprEnums.GroupCodes.buy, 0.2496])
 
         secList = []
         for stock in srcList:
@@ -323,7 +366,8 @@ class Test_security_groups:
 
         # Verify that each group has expected number of members.
         for groupCode in sprEnums.GroupCodes:
-            assert len(self.groups.get_results_for_group(groupCode)) == self._get_count_for_code(srcList, groupCode)
+            assert len(self.groups.get_results_for_group(groupCode)) == \
+                   self._get_count_for_code(srcList, groupCode)
 
         # Verify that each stock is in expected group and has expected rating.
         for stock in srcList:

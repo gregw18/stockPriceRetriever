@@ -12,7 +12,7 @@ import urllib3
 
 import requests
 
-from yahoo_fin.stock_info import get_live_price
+# from yahoo_fin.stock_info import get_live_price
 from yahoo_fin.stock_info import get_quote_table
 
 import security
@@ -63,8 +63,8 @@ def _get_price_alphavest(symbol, mysettings):
 
 def _split_price_range(priceRangeStr):
     """
-    Given a 52-week price range, in the format '99.99 - 99.99', where 99.99 can be any reasonable stock price,
-    return the low and high prices as floats.
+    Given a 52-week price range, in the format '99.99 - 99.99', where 99.99 can be any reasonable
+    stock price, return the low and high prices as floats.
     Remove commas so that conversion to float will work when price > 999.99.
     """
     cleanStr = priceRangeStr.replace(",", "")
@@ -91,7 +91,7 @@ def _get_price_yahoo(symbol, mysettings):
         priceInfo.currentPrice = quote_table['Quote Price']
         priceInfo.lastClosePrice = quote_table['Previous Close']
         priceInfo.low52Week, priceInfo.high52Week = _split_price_range(quote_table['52 Week Range'])
-    except:
+    except ValueError:
         E = sys.exc_info()[0]
         print("Failed to retrieve price for ", yahooSymbol)
         print(E)

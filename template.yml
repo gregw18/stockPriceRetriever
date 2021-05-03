@@ -14,7 +14,7 @@ Resources:
           Type: Schedule
           Properties:
             Schedule: cron(04 22 ? * MON-FRI *)
-      Timeout: 450
+      Timeout: 600
       # Function's execution role
       Policies:
         - AWSLambdaBasicExecutionRole
