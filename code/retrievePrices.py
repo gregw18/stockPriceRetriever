@@ -65,10 +65,12 @@ def _split_price_range(priceRangeStr):
     """
     Given a 52-week price range, in the format '99.99 - 99.99', where 99.99 can be any reasonable stock price,
     return the low and high prices as floats.
+    Remove commas so that conversion to float will work when price > 999.99.
     """
-    split_pos = priceRangeStr.find('-')
-    low = float(priceRangeStr[0:split_pos])
-    high = float(priceRangeStr[split_pos + 1:])
+    cleanStr = priceRangeStr.replace(",", "")
+    split_pos = cleanStr.find('-')
+    low = float(cleanStr[0:split_pos])
+    high = float(cleanStr[split_pos + 1:])
 
     return low, high
 
