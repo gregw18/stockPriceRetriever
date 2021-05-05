@@ -91,9 +91,11 @@ def _get_price_yahoo(symbol, mysettings):
         priceInfo.currentPrice = quote_table['Quote Price']
         priceInfo.lastClosePrice = quote_table['Previous Close']
         priceInfo.low52Week, priceInfo.high52Week = _split_price_range(quote_table['52 Week Range'])
-    except ValueError:
-        E = sys.exc_info()[0]
+    except (ValueError, IndexError, ImportError) as E:
+        # E = sys.exc_info()[0]
         print("Failed to retrieve price for ", yahooSymbol)
+        print(E)
+        E = sys.exc_info()[0]
         print(E)
 
     return priceInfo
