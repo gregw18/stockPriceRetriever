@@ -1,11 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 Description: An AWS Lambda application that retrieves prices for a given list of securities.
-Parameters:
-  EmailResults:
-    Type: String
-  EmailErrors:
-    Type: String
 Resources:
   function:
     Type: AWS::Serverless::Function
@@ -44,7 +39,7 @@ Resources:
       AlarmName: stock-retriever-error2
       ActionsEnabled: true
       AlarmActions:
-        - !Ref StockRetrieverTopic
+        - !Ref StockRetrieverErrorsTopic
       MetricName: Errors
       Namespace: AWS/Lambda
       Statistic: Sum
@@ -57,17 +52,17 @@ Resources:
       Threshold: 0.0
       ComparisonOperator: GreaterThanThreshold
       TreatMissingData: missing
-  StockRetrieverTopic:
+  StockRetrieverErrorsTopic:
     Type: 'AWS::SNS::Topic'
     Properties:
       Subscription:
-        - Endpoint: !Ref 'EmailErrors'
+        - Endpoint: greg_walker@sympatico.ca
           Protocol: email
   StockRetrieverResultsTopic:
     Type: 'AWS::SNS::Topic'
     Properties:
       Subscription:
-        - Endpoint: !Ref 'EmailResults'
+        - Endpoint: greg_walker@sympatico.ca
           Protocol: email
   StockRetrieverTopicPolicy:
     Type: 'AWS::SNS::TopicPolicy'
@@ -89,7 +84,7 @@ Resources:
               - 'SNS:Publish'
               - 'SNS:Receive'
             Resource:
-              !Ref StockRetrieverTopic
+              !Ref StockRetrieverErrorsTopic
             Condition:
               StringEquals:
                 'AWS:SourceOwner':
@@ -100,7 +95,7 @@ Resources:
               Service: events.amazonaws.com
             Action: 'sns:Publish'
             Resource:
-              !Ref StockRetrieverTopic
+              !Ref StockRetrieverErrorsTopic
       Topics:
-        - !Ref StockRetrieverTopic
+        - !Ref StockRetrieverErrorsTopic
         - !Ref StockRetrieverResultsTopic
