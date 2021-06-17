@@ -1,6 +1,11 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 Description: An AWS Lambda application that retrieves prices for a given list of securities.
+Parameters:
+  EmailResults:
+    Type: String
+  EmailErrors:
+    Type: String
 Resources:
   function:
     Type: AWS::Serverless::Function
@@ -56,13 +61,13 @@ Resources:
     Type: 'AWS::SNS::Topic'
     Properties:
       Subscription:
-        - Endpoint: greg_walker@sympatico.ca
+        - Endpoint: !Ref 'EmailErrors'
           Protocol: email
   StockRetrieverResultsTopic:
     Type: 'AWS::SNS::Topic'
     Properties:
       Subscription:
-        - Endpoint: greg_walker@sympatico.ca
+        - Endpoint: !Ref 'EmailResults'
           Protocol: email
   StockRetrieverTopicPolicy:
     Type: 'AWS::SNS::TopicPolicy'
