@@ -27,6 +27,9 @@ def _get_price_alphavest(symbol, mysettings):
     minute (and 500 per day) on the free tier, so am waiting 20s before each call, to stay legal.
     Also note that appears that if request a symbol that they don't recognize, they return
     an empty Global Quote object.
+    Getting pricing from alphavest doesn't currently work, because the GLOBAL_QUOTE method
+    doesn't return the 52 week range. Have hidden this option, may eventually try to find
+    another method that returns everything I need.
     """
     time.sleep(mysettings.alphaCallDelay)
     price = 0
