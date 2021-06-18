@@ -72,15 +72,23 @@ def display_graphs(fileName, resultsFile):
         graphSize = numCols * maxRows
 
         for graphNum in range(0, numSecurities, graphSize):
-            # Make sure we don't go past end of list.
-            if ((graphNum + 1) + graphSize) > numSecurities:
-                graph(secList[graphNum:], numCols)
-            else:
-                graph(secList[graphNum:(graphNum + graphSize)], numCols)
+            nextBatch = get_next_batch(secList, graphNum, graphSize)
+            graph(nextBatch, numCols)
 
     else:
         print("Unable to read any records from file: ", fileName)
 
+
+def get_next_batch(secList, graphNum, graphSize):
+    """
+    Return array containing next batch of up to graphSize elements, from secList array,
+    starting at graphNum.
+    """
+    if ((graphNum + 1) + graphSize) > len(secList):
+        return secList[graphNum:]
+    else:
+        return secList[graphNum:(graphNum + graphSize)]
+    
 
 def graph(secList, numCols):
     """
@@ -89,11 +97,10 @@ def graph(secList, numCols):
     """
 
     numSecurities = len(secList)
-    # print("numSecurities=", numSecurities)
     numRows = math.ceil(numSecurities/numCols)
 
     # Stupid logic - if ask for 1 row and y columns from plt.subplots, get axes.shape=(y,),
-    #  not (1,y). Thus, my kludge is to ask for a minimum of 2 rows, end up with empty
+    # not (1,y). Thus, my kludge is to ask for a minimum of 2 rows, end up with empty
     # row sometimes.
     if numRows == 1:
         numRows = 2
