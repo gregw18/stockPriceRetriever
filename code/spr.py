@@ -116,7 +116,7 @@ def graph(secList, numCols):
     plt.show(block=True)
 
 
-def symbol_lookup(searchText):
+def symbol_lookup(searchText, alphaApiKey, alphaBaseUrl, alphaApiTimeOut):
     """
     Use AlphaVest's Symbol_Search endpoint to try to find symbol for given search text.
     (Their symbols are rather nonstandard, especially for non-US securities.)
@@ -169,7 +169,10 @@ if __name__ == "__main__":
     if myArgs.action == Action.help:
         display_help()
     elif myArgs.action == Action.lookup:
-        symbol_lookup(myArgs.symbol)
+        symbol_lookup(myArgs.symbol, 
+                        mysettings.alphaApiKey, 
+                        mysettings.alphaBaseUrl, 
+                        mysettings.alphaApiTimeOut)
     elif myArgs.action == Action.graph:
         # mysettings = settings.Settings()
         myResultsFile = resultsFile.ResultsFile(mysettings.bucketName, mysettings.resultsPrefix)
