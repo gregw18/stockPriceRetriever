@@ -73,7 +73,7 @@ def display_graphs(fileName, resultsFile):
 
         for graphNum in range(0, numSecurities, graphSize):
             # Make sure we don't go past end of list.
-            if ((graphNum + 1) * graphSize) > numSecurities:
+            if ((graphNum + 1) + graphSize) > numSecurities:
                 graph(secList[graphNum:], numCols)
             else:
                 graph(secList[graphNum:(graphNum + graphSize)], numCols)
@@ -89,6 +89,7 @@ def graph(secList, numCols):
     """
 
     numSecurities = len(secList)
+    # print("numSecurities=", numSecurities)
     numRows = math.ceil(numSecurities/numCols)
 
     # Stupid logic - if ask for 1 row and y columns from plt.subplots, get axes.shape=(y,),
@@ -144,7 +145,8 @@ def display_help():
     Display help message.
     """
     print("Expect either 0, 1, 2 or 4 arguments:")
-    print("\t-l 'stock name' to look up a symbol,")
+    # Not showing this option as it requires an AlphaVest api key.
+    #print("\t-l 'stock name' to look up a symbol,")
     print("\t-g 'filename' to display results from a file,")
     print("\t-f 'filename' to look up and display results for symbols in a file.")
     print("\t-p yahoo/alpha to specify which provider to retrieve prices from.")
