@@ -155,12 +155,13 @@ def display_help():
     # Not showing this option as it requires an AlphaVest api key.
     #print("\t-l 'stock name' to look up a symbol,")
     print("\t-g 'filename' to display results from a file,")
-    print("\t-f 'filename' to look up and display results for symbols in a file.")
-    print("\t-p yahoo/alpha to specify which provider to retrieve prices from.")
+    print("\t-f 'filename' to retrieve and display results for symbols in a file.")
+    # Not showing this option as it requires an AlphaVest api key.
+    #print("\t-p yahoo/alpha to specify which provider to retrieve prices from.")
     print("\t-n no display - don't display graphs after retrieving prices.")
     print("\t-h display this help information.")
-    print("0 arguments results in looking up results for symbols in the default")
-    print("file 'Portfolio (copy).xls' in the default 'Current' tab.")
+    print("0 arguments results in retrieving results for symbols in the default")
+    print("file 'Portfolio.xls' in the default 'Current' tab.")
     print("If 1 argument is provided it is assumed to be the name of the file containing symbols ")
     print("to retrieve prices for.")
 

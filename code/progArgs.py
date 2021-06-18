@@ -16,7 +16,7 @@ class ProgArgs:
         self.action = Action.retrieve
         self.srcFile = ""
         self.srcTab = ""
-        self.priceProvider = PriceProvider.alphavest
+        self.priceProvider = PriceProvider.yahoo
         self.symbol = ""
         self.display = True
 
