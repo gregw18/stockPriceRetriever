@@ -9,6 +9,7 @@ import socket
 import sys
 import time
 import urllib3
+from urllib.error import HTTPError
 
 import requests
 
@@ -89,17 +90,21 @@ def _get_price_yahoo(symbol, mysettings):
     time.sleep(mysettings.yahooCallDelay)
     yahooSymbol = get_yahoo_ticker(symbol)
     priceInfo = security.PriceInfo()
-    try:
-        quote_table = get_quote_table(yahooSymbol)
-        priceInfo.currentPrice = quote_table['Quote Price']
-        priceInfo.lastClosePrice = quote_table['Previous Close']
-        priceInfo.low52Week, priceInfo.high52Week = _split_price_range(quote_table['52 Week Range'])
-    except (ValueError, IndexError, ImportError) as E:
-        # E = sys.exc_info()[0]
-        print("Failed to retrieve price for ", yahooSymbol)
-        print(E)
-        E = sys.exc_info()[0]
-        print(E)
+
+    # Try up to three times if fail.
+    for i in range(0, 3):
+        try:
+            quote_table = get_quote_table(yahooSymbol)
+            priceInfo.currentPrice = quote_table['Quote Price']
+            priceInfo.lastClosePrice = quote_table['Previous Close']
+            priceInfo.low52Week, priceInfo.high52Week = _split_price_range(quote_table['52 Week Range'])
+            break
+        except (ValueError, IndexError, ImportError, HTTPError) as E:
+            # E = sys.exc_info()[0]
+            print("Failed to retrieve price for ", yahooSymbol)
+            print(E)
+            E = sys.exc_info()[0]
+            print(E)
 
     return priceInfo
 

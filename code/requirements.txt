@@ -3,6 +3,6 @@ pandas
 xlrd
 requests==2.18.4
 urllib3==1.22
-yahoo-fin==0.8.5
+yahoo-fin==0.8.9
 lxml
 
