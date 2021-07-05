@@ -10,7 +10,7 @@ defltFile = "defltFile.xls"
 defltTab = "defltTab"
 testFile = "goodFile.xls"
 testTab = "goodTab"
-defltProvider = PriceProvider.alphavest
+defltProvider = PriceProvider.yahoo
 
 
 def test_noArgs_retrieveDefaults():

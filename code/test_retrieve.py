@@ -11,7 +11,7 @@ badBucketNameFile = "nobucket-name.txt"
 bucketNameFile = "bucket-name.txt"
 myPrefix = "noprefix"
 mysettings = settings.Settings()
-symbolGoogle = "GOOGL"
+symbolAmazon = "AMZN"
 
 
 class TestRetrievePrices():
@@ -24,7 +24,7 @@ class TestRetrievePrices():
         Confirm that both values that are used as denominators are > 0.
         """
         mySettings = settings.Settings()
-        myInfo = retrievePrices._get_price_yahoo(symbolGoogle, mySettings)
+        myInfo = retrievePrices._get_price_yahoo(symbolAmazon, mySettings)
         assert myInfo.high52Week > 0
         assert myInfo.lastClosePrice > 0
 
