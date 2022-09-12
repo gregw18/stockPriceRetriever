@@ -1,0 +1,15 @@
+.chartCard {
+    width: 100vw;
+    height: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .chartBox {
+    width: 20vw;
+    border: solid 3px;
+  }
+  .dataText {
+    text-align: left;
+    color: blue;
+  }

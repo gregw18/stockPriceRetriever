@@ -1,13 +1,30 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 Description: An AWS Lambda application that retrieves prices for a given list of securities.
+Parameters:
+  DbUsername:
+    NoEcho: "true"
+    Description: Admin username for mySql database
+    Type: String
+    MinLength: "6"
+    MaxLength: "16"
+    AllowedPattern: "[a-zA-Z][a-zA-z0-9]*"
+    ConstraintDescription: Must begin with a letter and contain only alphanumeric characters
+  DbPassword:
+    NoEcho: "true"
+    Description: mySql password
+    Type: String
+    MinLength: "8"
+    MaxLength: "41"
+    AllowedPattern: "[a-zA-z0-9]*"
+    ConstraintDescription: Must contain only alphanumeric characters
 Resources:
   function:
     Type: AWS::Serverless::Function
     Properties:
       Handler: lambda_retrieve.lambda_handler
       Runtime: python3.8
-      CodeUri: code/.
+      CodeUri: src/code/.
       Description: Retrieve prices for listed securities.
       Events:
         RetrieveScheduledEvent:
@@ -32,6 +49,79 @@ Resources:
       ContentUri: package/.
       CompatibleRuntimes:
         - python3.8
+
+  websiteFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: web_endpoint.lambda_handler
+      Runtime: python3.8
+      CodeUri: src/code/.
+      Description: Retrieve data for listed securities for website.
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /data
+            Method: get
+            RequestParameters: 
+              - method.request.querystring.timeframe
+                #Required: true
+            #RestApiId:
+            #  Ref: websiteApi
+        OptionsEvent:
+          Type: Api
+          Properties:
+            Path: /data
+            Method: options
+      Timeout: 60
+      # Function's execution role
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AmazonS3FullAccess
+        - AmazonRDSDataFullAccess
+        - Statement:
+          - Sid: IAMDbAccess
+            Effect: Allow
+            Action:
+              - "rds-db:connect"
+            Resource: "*"
+      Tracing: PassThrough
+      Layers:
+        - !Ref libs
+
+  StockRetrieverDatabase:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      AllocatedStorage: "5"
+      DBInstanceClass: db.t4g.micro
+      DBSubnetGroupName: !Ref dbSubnetGroup
+      EnableIAMDatabaseAuthentication: "true"
+      Engine: mysql
+      MasterUsername: !Ref DbUsername
+      MasterUserPassword: !Ref DbPassword
+      PubliclyAccessible: "true"
+      VPCSecurityGroups:
+        - !GetAtt DbSecurityGroup.GroupId
+    DeletionPolicy: Snapshot
+    UpdateReplacePolicy: Snapshot
+
+  DbSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow mySql inbound/outbound traffic
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+          CidrIp: 0.0.0.0/0
+      VpcId: !GetAtt stockRetrieverPubVPC.VpcId
+
 
   # Manually create log group with a retention policy of 30 days, so that automatic one
   # isn't created with indefinite retention.
@@ -108,3 +198,75 @@ Resources:
       Topics:
         - !Ref StockRetrieverErrorsTopic
         - !Ref StockRetrieverResultsTopic
+
+  # Networking incantations
+  stockRetrieverPubVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 172.31.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+  
+  publicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref stockRetrieverPubVPC
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""
+      CidrBlock: 172.31.0.0/24
+      MapPublicIpOnLaunch: false
+
+  publicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref stockRetrieverPubVPC
+      AvailabilityZone:
+        Fn::Select:
+          - 1
+          - Fn::GetAZs: ""
+      CidrBlock: 172.31.1.0/24
+      MapPublicIpOnLaunch: false
+
+  internetGateway:
+    Type: AWS::EC2::InternetGateway
+
+  gatewayToInternet:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref stockRetrieverPubVPC
+      InternetGatewayId: !Ref internetGateway
+
+  publicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref stockRetrieverPubVPC
+
+  publicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: gatewayToInternet
+    Properties:
+      RouteTableId: !Ref publicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref internetGateway
+
+  publicSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref publicSubnet1
+      RouteTableId: !Ref publicRouteTable
+
+  publicSubnet2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref publicSubnet2
+      RouteTableId: !Ref publicRouteTable
+
+  dbSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: group of subnets for rds db
+      SubnetIds:
+        - !Ref publicSubnet1
+        - !Ref publicSubnet2

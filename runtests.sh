@@ -1,5 +1,5 @@
 #!/bin/bash
 
-pytest test_*.py
+pytest ../../tests/test_*.py
 
 

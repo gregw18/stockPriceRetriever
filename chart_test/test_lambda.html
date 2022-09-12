@@ -1,0 +1,91 @@
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>My Website Home Page</title>
+</head>
+<script>
+  const requestDataLambda = async () => {
+    console.log("starting requestData");
+    const api_endpoint = "https://jep1avv9ui.execute-api.us-east-1.amazonaws.com/Prod/data";
+    var params = {timeframe: "1week"};
+    const urlStr = api_endpoint + "?" + new URLSearchParams(params);
+    console.log("urlStr=", urlStr);
+    var url = new URL(urlStr);
+    //url.search = new URLSearchParams(params).toString();
+    //console.log("searchParams=", url.searchParams.toString());
+    console.log("url=", url.toString());
+
+    /*const response = await fetch(url, {
+        mode: 'no-cors'
+      });
+
+    if (await response.ok) {
+    //const resp = Promise.resolve(response);
+    //console.log("finished fetch requestData, response=", resp);
+    const myJson = await response.json();
+    console.log("finished await questData");
+    console.log(myJson);
+    console.log("finished requestData");
+    } else {
+      console.log("fetch failed");
+    }
+    */
+
+    const fetchPromise = fetch(url);
+    //const fetchPromise = fetch(url, { mode: 'no-cors' });
+    
+    console.log("1. promise=", fetchPromise);
+    fetchPromise.then((response) => {
+      console.log("2. promise=", fetchPromise);
+      console.log("1. status=", response.status);
+      if (response.ok) {
+        const jsonPromise = response.json();
+        console.log("1. jsonPromise=", jsonPromise);
+        jsonPromise.then((data) => {
+          console.log("2. jsonPromise=", jsonPromise);
+          
+          //console.log("response.ok= ", response.ok);
+          //console.log("response.headers=", response.headers);
+          //console.log("response.status=", response.status);
+          //console.log("response.type=", response.type);
+          //console.log("response.body=", response.body);
+          //if (response.ok) {
+          //response.json().then((myJson) => {
+            console.log("data= ", data);
+        });
+      }
+    });
+      //});
+    //} else {
+      //console.log("response was not ok");
+    //}
+    //});
+    
+
+    /*
+    var xhttp = new XMLHttpRequest();
+    //xhttp.onreadystatechange = function() {
+    xhttp.onloadend = function() {
+      if (this.readyState ==4 && this.status == 200) {
+        console.log("responseText= ", xhttp.responseText);
+        console.log("responseHeaders= ", xhttp.getAllResponseHeaders());
+        const myjson = JSON.parse(xhttp.responseText);
+        for (const security of myjson) {
+          console.log("currentPrice: ", security.currentPrice);
+          console.log("periodPrices: ", security.periodPrices);
+        }
+      } else {
+        console.log("request failed again.");
+      }
+    }
+    xhttp.open("GET", api_endpoint + "?timeframe=1week", false);
+    xhttp.setRequestHeader("mode", "no-cors");
+    xhttp.send();
+  */
+}
+</script>
+<body>
+  <h1>Welcome to my website</h1>
+  <p>Now hosted on Amazon S3!</p>
+  <button onclick="requestDataLambda()">Retrieve Data</button>
+</body>
+</html>

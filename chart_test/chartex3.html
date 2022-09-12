@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+      .chartCard {
+        width: 100vw;
+        height: 10vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .chartBox {
+        width: 20vw;
+        border: solid 3px;
+      }
+      .dataText {
+        text-align: left;
+        color: blue;
+      }
+  </style>
+</head>
+
+<body>
+  <!-- Identify where the chart should be drawn. -->
+  <div class="chartCard">
+    <span class="dataText">
+      My Company Name
+      123.45
+      More data here
+    </span>
+    <div class="chartBox">
+      <canvas id='gainChart'></canvas>
+    </div>
+    <div class="chartBox">
+      <canvas id='52weekChart'></canvas>
+    </div>
+    <div class="chartBox">
+      <canvas id='buySellChart'></canvas>
+    </div>
+    <div class="chartBox">
+      <canvas id='priceHistoryChart'></canvas>
+    </div>
+  </div>
+
+<script>
+new Chart(document.getElementById("gainChart"), {
+    type: 'bar',
+    data: {
+      labels: ["1"],
+      datasets: [
+        {
+          label: "",
+          backgroundColor: ["#FF5733"],
+          data: [-24.7]
+        }
+      ]
+    },
+    options: {
+      aspectRatio: 3.5,
+      indexAxis: 'y',
+      plugins: {
+        legend: { 
+          display: false },
+        title: {
+          display: false,
+        }
+      },
+      scales: {
+        grid: {
+          tickLength: 0,
+          display: false
+        },
+        x: {
+          ticks: {
+            font: {
+              size: 8,
+              padding: 0
+            }
+          }
+        },
+        y: {
+          display:false, 
+        }
+      }
+    }
+});</script>
+
+<script>
+    const addCurrentPriceLine = {
+        id: 'addCurrentPriceLine',
+        afterDatasetDraw(chart, args, options) {
+            const {ctx, chartArea: {top, bottom, left, right, width, height},
+                scales: {x, y}} = chart;
+            //console.log(ctx);
+            //console.log(args.meta.data[0].height);
+            //console.log(options);
+            ctx.save();
+            
+            let lineExtension = 3;
+
+            function drawLine(xValue) {
+              let yStart = y.getPixelForValue(0) + (args.meta.data[0].height/2 + lineExtension);
+              let yEnd = y.getPixelForValue(0) - (args.meta.data[0].height/2 + lineExtension);
+              ctx.strokeStyle = 'black';
+              ctx.lineWidth=3;
+              ctx.beginPath();
+              ctx.moveTo(x.getPixelForValue(xValue), yStart);
+              ctx.lineTo(x.getPixelForValue(xValue), yEnd);
+              ctx.stroke();
+              ctx.closePath();
+              ctx.restore();
+            }
+            
+            drawLine(options.xValue);
+        }
+    }
+        
+new Chart(document.getElementById("52weekChart"), {
+    type: 'bar',
+    data: {
+      labels: ["XYZ"],
+      datasets: [
+        {
+          label: "",
+          backgroundColor: ["#FF5733"],
+          data: [ [24.7, 56.4]]
+        }
+      ]
+    },
+    options: {
+      aspectRatio: 3.5,
+      indexAxis: 'y',
+      plugins: {
+        legend: { 
+          display: false },
+        title: {
+          display: false,
+        },
+        addCurrentPriceLine: {
+          xValue: 30
+        }
+        
+      },
+      scales: {
+        x: {
+          ticks: {
+            font: {
+              size: 8
+            }
+          },
+          beginAtZero: false,
+          min: -10,
+          max: 150
+        },
+        y: {
+          display: false,
+          beginAtZero: false,
+          min: 0,
+          max: 60
+        }
+      }
+    },
+    plugins: [addCurrentPriceLine]
+});</script>
+
+<script>
+new Chart(document.getElementById("buySellChart"), {
+    type: 'bar',
+    data: {
+      labels: ["buy"],
+      datasets: [
+        {
+          backgroundColor: ["yellow"],
+          data: [ [24.7, 56.4]]
+        },
+        {
+          backgroundColor: ["green"],
+          data: [ [56.4, 80.4]]
+        },
+        {
+          backgroundColor: ["red"],
+          data: [ [80.4, 98.5]]
+        }
+      ]
+    },
+    options: {
+      aspectRatio: 3.5,
+      indexAxis: 'y',
+      plugins: {
+        legend: { 
+          display: false },
+        title: {
+          display: false,
+        },
+        addCurrentPriceLine: {
+          xValue: 50
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            font: {
+              size: 8
+            }
+          },
+          beginAtZero: false,
+          min: -10,
+          max: 150,
+          stacked: false
+        },
+        y: {
+          display: false,
+          beginAtZero: false,
+          min: 0,
+          max: 60,
+          stacked: true
+        }
+      }
+    },
+    plugins: [addCurrentPriceLine]
+});
+</script>
+
+<script>
+new Chart(document.getElementById("priceHistoryChart"), {
+    type: 'line',
+    data: {
+      labels: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+      datasets: [
+        {
+          backgroundColor: ["#FF5733"],
+          data: [24.7, 26.5, 23,4, 34.3, 32.1, 40.3, 38.6, 35.4, 33.2]
+        }
+      ]
+    },
+    options: {
+      aspectRatio: 3.5,
+      indexAxis: 'x',
+      plugins: {
+        legend: { 
+          display: false },
+        title: {
+          display: false,
+        }
+      },
+      scales: {
+        grid: {
+          tickLength: 0,
+          display: false
+        },
+        x: {
+          ticks: {
+            font: {
+              size: 8,
+              padding: 0
+            }
+          }
+        },
+        y: {
+          ticks: {
+            font: {
+              size: 8,
+              padding: 0
+            }
+          }
+        }
+      }
+    }
+});</script>
+
+
+</body>

@@ -1,0 +1,119 @@
+<html lang="en">
+   <head> 
+      <style>
+        table ,tr, td,th {
+                border:1px solid black;
+        }
+
+
+      </style> 
+   </head> 
+   <body translate="no"> 
+      <table> 
+         <tbody>
+            <tr> 
+               <th>Property</th> 
+               <th>France</th> 
+               <th>Germany</th> 
+               <th>Italy</th> 
+               <th>UK</th> 
+               <th>Chart</th> 
+            </tr> 
+            <tr> 
+               <th>Coastline</th> 
+               <td>4853</td> 
+               <td>2389</td> 
+               <td>7600</td> 
+               <td>12429</td> 
+               <td></td> 
+            </tr> 
+            <tr> 
+               <th>Life Expectancy</th> 
+               <td>81.8</td> 
+               <td>80.7</td> 
+               <td>82.2</td> 
+               <td>80.7</td> 
+               <td></td> 
+            </tr> 
+            <tr> 
+               <th>Elevation</th> 
+               <td>375</td> 
+               <td>263</td> 
+               <td>538</td> 
+               <td>162</td> 
+               <td></td> 
+            </tr> 
+            <tr> 
+               <th>Population</th> 
+               <td>66836154</td> 
+               <td>80722792</td> 
+               <td>62007540</td> 
+               <td>64430428</td> 
+               <td></td> 
+            </tr> 
+            <tr> 
+               <th>Age</th> 
+               <td>41.2</td> 
+               <td>46.8</td> 
+               <td>45.1</td> 
+               <td>40.5</td> 
+               <td></td> 
+            </tr> 
+         </tbody>
+      </table> 
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script> 
+      <script>
+              var table = document.querySelector('table')
+              var tableArr = [];// www.  j  a  va2s . c o m
+              var tableLab = [];
+              for ( var i = 1; i < table.rows.length; i++ ) {
+                    tableArr.push([
+                             table.rows[i].cells[1].innerHTML,
+                             table.rows[i].cells[2].innerHTML,
+                             table.rows[i].cells[3].innerHTML,
+                             table.rows[i].cells[4].innerHTML
+                    ]);
+                    tableLab.push(table.rows[i].cells[0].innerHTML)
+                    var canvas = document.createElement("canvas");
+                    canvas.setAttribute("id", "myChart"+i);
+                    table.rows[i].cells[5].appendChild(canvas);
+              }
+              tableArr.forEach(function(e,i){
+                var chartID = "myChart"+ (i+1)
+                var ctx = document.getElementById(chartID).getContext('2d');
+                var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: ["France", "Germany", "Italy", "UK"],
+                            datasets: [{
+                                label: tableLab[i],
+                                data: e,
+                                backgroundColor: [
+                                        'rgba(255, 99, 132, 0.2)',
+                                        'rgba(54, 162, 235, 0.2)',
+                                        'rgba(255, 206, 86, 0.2)',
+                                        'rgba(75, 192, 192, 0.2)'
+                                ],
+                                borderColor: [
+                                        'rgba(255,99,132,1)',
+                                        'rgba(54, 162, 235, 1)',
+                                        'rgba(255, 206, 86, 1)',
+                                        'rgba(75, 192, 192, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                                scales: {
+                                        yAxes: [{
+                                                ticks: {
+                                                        beginAtZero:true
+                                                }
+                                        }]
+                                }
+                        }
+                });
+              })
+      </script>  
+   </body>
+</html>
