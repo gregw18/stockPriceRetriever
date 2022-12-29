@@ -8,6 +8,7 @@ import datetime
 import boto3
 import botocore
 from moto import mock_s3
+import pytest
 
 from . import addSrcToPath
 

@@ -7,6 +7,7 @@ V0.01, October 13, 2020
 
 import boto3
 from moto import mock_sns
+import pytest
 
 from . import addSrcToPath
 
