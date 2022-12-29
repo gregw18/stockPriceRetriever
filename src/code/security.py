@@ -4,6 +4,7 @@ Includes price DTO (data transfer object) class.
 V0.02, February 28, 2021, GAW
 """
 
+from decimal import Decimal
 import math
 from datetime import date
 
@@ -164,18 +165,18 @@ class Security:
         """
         Populate from a dictionary taken from securities table.
         """
-        self.id = secDict["id"]
-        self.name = secDict["name"]
-        self.symbol = secDict["symbol"]
-        self.buyPrice = secDict["buyPrice"]
-        self.sellPrice = secDict["sellPrice"]
-        self.currentPrice = secDict["currentPrice"]
-        self.currentPriceDate = secDict["currentPriceDate"]
-        self.lastClosePrice = secDict["previousClosePrice"]
-        self.low52Week = secDict["52weekLowPrice"]
-        self.high52Week = secDict["52weekHighPrice"]
-        self.status = self.get_status()        # 0 = buy, 1 = sell, 2 = no action. Numbers chosen for sorting.
-        self.fullHistoryDownloaded = secDict["fullHistoryDownloaded"]
+        self.id                     = secDict["id"]
+        self.name                   = secDict["name"]
+        self.symbol                 = secDict["symbol"]
+        self.buyPrice               = self._to_dec(secDict["buyPrice"])
+        self.sellPrice              = self._to_dec(secDict["sellPrice"])
+        self.currentPrice           = self._to_dec(secDict["currentPrice"])
+        self.currentPriceDate       = secDict["currentPriceDate"]
+        self.lastClosePrice         = secDict["previousClosePrice"]
+        self.low52Week              = self._to_dec(secDict["52weekLowPrice"])
+        self.high52Week             = self._to_dec(secDict["52weekHighPrice"])
+        self.status                 = self.get_status()        # 0 = buy, 1 = sell, 2 = no action. Numbers chosen for sorting.
+        self.fullHistoryDownloaded  = secDict["fullHistoryDownloaded"]
 
     def get_sort_string(self):
         """
@@ -278,6 +279,13 @@ class Security:
         self.lastClosePrice = newPriceInfo.lastClosePrice
         self.low52Week = newPriceInfo.low52Week
         self.high52Week = newPriceInfo.high52Week
+    
+    def _to_dec(self, origVal):
+        returnVal = 0
+        if not (origVal is None):
+            returnVal = Decimal(origVal)
+        
+        return returnVal
 
 
 class StkGraphData:
