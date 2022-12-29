@@ -31,6 +31,12 @@ def connect():
             token = client.generate_db_auth_token(DBHostname=mysettings.rds_endpoint,
                                                     Port=mysettings.rds_port,
                                                     DBUsername=mysettings.rds_user_name)
+            print("rds_endpoint: ", mysettings.rds_endpoint)
+            print("rds port: ", mysettings.rds_port)
+            print("rds_user: ", mysettings.rds_user_name)
+            print("db_name: ", mysettings.rds_db_name)
+            print(f"rds token length: {len(token)}")
+            print(f"{token=}")
             ssl = {'ca': 'rds-combined-ca-bundle.pem'}
             dbConn = pymysql.connect(host=mysettings.rds_endpoint,
                                     user=mysettings.rds_user_name,
