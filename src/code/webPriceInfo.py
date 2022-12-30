@@ -18,6 +18,7 @@ class WebPriceInfo:
         self.periodHighPrice = 0
         self.status = ""
         self.periodPrices = []
+        self.periodDates = []
 
     def populate(self, mySecurity, myPrices):
         """
@@ -30,6 +31,7 @@ class WebPriceInfo:
         self.status = mySecurity.status
         #self.periodPrices = myPrices
         self.periodPrices = self._get_prices_only(myPrices)
+        self.periodDates = self._get_dates(myPrices)
         if len(myPrices) > 0:
             self.periodStartPrice = myPrices[0]["price"]  # Price from first pair.
             self._set_high_low_prices()
@@ -48,6 +50,7 @@ class WebPriceInfo:
         myDict["periodHighPrice"] = self.periodHighPrice
         myDict["status"] = self.status
         myDict["periodPrices"] = self.periodPrices
+        myDict["periodDate"] = self.periodDates
         print(f"getDict, {myDict = }")
         
         return myDict
@@ -78,3 +81,13 @@ class WebPriceInfo:
             prices.append(pair["price"])
 
         return prices
+
+    def _get_dates(self, myPrices):
+        """
+        Convert historical prices from date/price pairs to a list of dates.
+        """
+        dates = []
+        for pair in myPrices:
+            dates.append(pair["priceDate"])
+
+        return dates
