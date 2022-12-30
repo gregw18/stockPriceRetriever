@@ -180,7 +180,8 @@ export const PriceHistoryChart = ( {chartData} ) => {
     let myOptions = JSON.parse(JSON.stringify(defltBarOptions));
 
     const chartDataSet = {
-        labels: [...Array(chartData.periodPrices.length).keys()],
+        //labels: [...Array(chartData.periodPrices.length).keys()],
+        labels: chartData.periodDates,
         datasets: [
             {
                 backgroundColor: ["#FF5733"],

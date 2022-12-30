@@ -50,7 +50,7 @@ class WebPriceInfo:
         myDict["periodHighPrice"] = self.periodHighPrice
         myDict["status"] = self.status
         myDict["periodPrices"] = self.periodPrices
-        myDict["periodDate"] = self.periodDates
+        myDict["periodDates"] = self.periodDates
         print(f"getDict, {myDict = }")
         
         return myDict
