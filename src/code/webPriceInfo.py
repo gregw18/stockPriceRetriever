@@ -28,7 +28,8 @@ class WebPriceInfo:
         self.buyPrice = mySecurity.buyPrice
         self.sellPrice = mySecurity.sellPrice
         self.status = mySecurity.status
-        self.periodPrices = myPrices
+        #self.periodPrices = myPrices
+        self.periodPrices = self._get_prices_only(myPrices)
         if len(myPrices) > 0:
             self.periodStartPrice = myPrices[0]["price"]  # Price from first pair.
             self._set_high_low_prices()
@@ -56,13 +57,24 @@ class WebPriceInfo:
         Find lowest and highest prices from list, store in periodLow/High
         """
 
-        min = self.periodPrices[0]["price"]
+        min = self.periodPrices[0]
+        #min = self.periodPrices[0]["price"]
         max = min
         for val in self.periodPrices:
-            if val["price"] < min:
-                min = val["price"]
-            if val["price"] > max:
-                max = val["price"]
+            if val < min:
+                min = val
+            if val > max:
+                max = val
         
         self.periodLowPrice = min
         self.periodHighPrice = max
+
+    def _get_prices_only(self, myPrices):
+        """
+        Convert historical prices from date/price pairs to a list of prices.
+        """
+        prices = []
+        for pair in myPrices:
+            prices.append(pair["price"])
+
+        return prices
