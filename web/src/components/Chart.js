@@ -167,6 +167,7 @@ export const BuySellChart = ( {chartData} ) => {
     myOptions.scales.x.min = Math.floor(0.9 * Math.min(chartData.currentPrice, chartData.buyLowPrice));
     myOptions.scales.x.max = Math.ceil(1.1 * Math.max(chartData.currentPrice, chartData.sellHighPrice));
     myOptions.plugins.addCurrentPriceLine = {xValue: chartData.currentPrice};
+    console.log("x.min=", myOptions.scales.x.min, ", buyLowPrice=", chartData.buyLowPrice);
     return (
         <Bar 
         data={chartDataSet}

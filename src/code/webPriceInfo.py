@@ -39,15 +39,18 @@ class WebPriceInfo:
     def getDict(self):
         """
         Convert this instance to a dictionary.
+        Found that if left numbers as decimals, website received, for example \"1.234\",
+        which it interpreted as a string, resulting in some strange comparisons. Hence,
+        now converting numbers to floats.
         """
         myDict = {}
         myDict["name"] = self.name
-        myDict["currentPrice"] = self.currentPrice
-        myDict["buyPrice"] = self.buyPrice
-        myDict["sellPrice"] = self.sellPrice
-        myDict["periodStartPrice"] = self.periodStartPrice
-        myDict["periodLowPrice"] = self.periodLowPrice
-        myDict["periodHighPrice"] = self.periodHighPrice
+        myDict["currentPrice"] = float(self.currentPrice)
+        myDict["buyPrice"] = float(self.buyPrice)
+        myDict["sellPrice"] = float(self.sellPrice)
+        myDict["periodStartPrice"] = float(self.periodStartPrice)
+        myDict["periodLowPrice"] = float(self.periodLowPrice)
+        myDict["periodHighPrice"] = float(self.periodHighPrice)
         myDict["status"] = self.status
         myDict["periodPrices"] = self.periodPrices
         myDict["periodDates"] = self.periodDates
@@ -78,7 +81,7 @@ class WebPriceInfo:
         """
         prices = []
         for pair in myPrices:
-            prices.append(pair["price"])
+            prices.append(float(pair["price"]))
 
         return prices
 

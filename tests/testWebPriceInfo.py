@@ -144,6 +144,8 @@ class TestWebPriceInfo():
         mySec = self.applesec
         myInfo = WebPriceInfo()
         prices = []
+        pricesOnly = []
+        datesOnly = []
         lowPrice = 20
         incPrice = 1.32
         numRows = 20
@@ -152,6 +154,8 @@ class TestWebPriceInfo():
             curDate += timedelta(1)
             curPrice = lowPrice + i * incPrice
             prices.append({"priceDate": curDate, "price": curPrice})
+            pricesOnly.append(curPrice)
+            datesOnly.append(curDate)
 
         myInfo.populate(mySec, prices)
         myDict = myInfo.getDict()
@@ -164,4 +168,5 @@ class TestWebPriceInfo():
         assert myDict["periodStartPrice"] == prices[0]["price"]
         assert myDict["periodLowPrice"] == lowPrice
         assert myDict["periodHighPrice"] == prices[numRows - 1]["price"]
-        assert myDict["periodPrices"] == prices
+        assert myDict["periodPrices"] == pricesOnly
+        assert myDict["periodDates"] == datesOnly

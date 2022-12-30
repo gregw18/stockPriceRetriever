@@ -48,7 +48,7 @@ function logSecurities(securityData) {
   })
 }
 
-function GenerateTable({securityData, minMaxGain, setChartData, sortByCol}) {
+function GenerateTable({securityData, minMaxGain,  setChartData, sortByCol}) {
   return (
     <table style={{width: "100%"}}>
       <tbody>
@@ -96,10 +96,12 @@ function generateRows(securityData, minMaxGain) {
 // For both, if current not outside buy/sell range, are equal to buy/sell,
 // otherwise, are equal to current.
 function addCalculatedData(chartData) {
+  console.log("running addCalculatedData");
   chartData.forEach(function (security) {
     let buyLowPrice = security.data.buyPrice;
     if (security.data.currentPrice < buyLowPrice){
       buyLowPrice = security.data.currentPrice;
+      console.log("using current for buyLow, ", security.data.currentPrice, ", buyPrice=", security.data.buyPrice);
     }
     security.data.buyLowPrice = buyLowPrice;
 
@@ -177,26 +179,26 @@ export default function App() {
             return mySecurities;
       }
 
-    const fetchPricesHttp = async () => {
+    //const fetchPricesHttp = async () => {
       //const requestDataLambda = function() {
-        var xhttp = new XMLHttpRequest();
-        xhttp.onloadend = function() {
-          if (this.readyState ==4 && this.status == 200) {
-            console.log("responseText= ", xhttp.responseText);
-            console.log("responseHeaders= ", xhttp.getAllResponseHeaders());
-            const myjson = JSON.parse(xhttp.responseText);
-            let mySecurities = parseJson(myjson);
+    //    var xhttp = new XMLHttpRequest();
+    //    xhttp.onloadend = function() {
+    //      if (this.readyState ==4 && this.status == 200) {
+    //        console.log("responseText= ", xhttp.responseText);
+    //        console.log("responseHeaders= ", xhttp.getAllResponseHeaders());
+    //        const myjson = JSON.parse(xhttp.responseText);
+    //        let mySecurities = parseJson(myjson);
 
-            setChartData(mySecurities);
-            setHaveData(true);
-          } else {
-            console.log("request failed again.");
-          }
-        }
-        xhttp.open("GET", api_endpoint + "?timeframe=30days", false);
-        xhttp.setRequestHeader("mode", "no-cors");
-        xhttp.send();
-      }
+    //        setChartData(mySecurities);
+    //        setHaveData(true);
+    //      } else {
+    //        console.log("request failed again.");
+    //      }
+    //    }
+    //    xhttp.open("GET", api_endpoint + "?timeframe=30days", false);
+    //    xhttp.setRequestHeader("mode", "no-cors");
+    //    xhttp.send();
+    //  }
 
 
     const fetchPrices = async () => {
