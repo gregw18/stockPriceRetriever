@@ -73,7 +73,7 @@ class TestSecuritiesWebData():
 
         myEnum = sprEnums.get_timePeriod_from_text(name)
 
-        assert myEnum == 0
+        assert myEnum == sprEnums.timePeriods.days30
 
     """
     get_web_data tests. Returns nothing if nothing in securities dictionary, expected
@@ -127,7 +127,7 @@ class TestSecuritiesWebData():
             myPi = mySecs.get_web_data("30days")
 
             assert len(myPi) == 2
-            assert myPi[0].periodPrices[0]["priceDate"] == date.today() - timedelta(numDays)
+            assert myPi[0].periodDates[0] == date.today() - timedelta(numDays)
             mock_get.assert_called_with(msftSec.id, self.dailyDbName, numDays)
 
     def test_90Days_three_item(self, getSecurities):
@@ -144,7 +144,7 @@ class TestSecuritiesWebData():
             myPi = mySecs.get_web_data("3months")
 
             assert len(myPi) == 3
-            assert myPi[0].periodPrices[0]["priceDate"] == date.today() - timedelta(numDays)
+            assert myPi[0].periodDates[0] == date.today() - timedelta(numDays)
             mock_get.assert_called_with(self.secsDict["GOOGL"].id, self.dailyDbName, numDays)
 
 
@@ -165,7 +165,7 @@ class TestSecuritiesWebData():
             myPi = mySecs.get_web_data(timePeriod)
 
             assert len(myPi) == 3
-            assert myPi[0].periodPrices[0]["priceDate"] == date.today() - timedelta(numDays)
+            assert myPi[0].periodDates[0] == date.today() - timedelta(numDays)
             mock_get.assert_called_with(self.secsDict["GOOGL"].id, self.weeklyDbName, numDays)
 
     def _get_historical_prices(self, numDays):

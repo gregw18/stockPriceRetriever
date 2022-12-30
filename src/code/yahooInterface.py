@@ -61,8 +61,8 @@ def retrieve_historical_prices(symbol, oldestDate, newestDate, priceFrequency):
             srcData = get_data(yahooSymbol, start_date = oldestDate, 
                                 end_date = newestDate, interval = priceFrequency)
             break
-        except (AssertionError) as E:
-            # Generally assertion means symbol not found, so no point retrying.
+        except (AssertionError, KeyError) as E:
+            # Generally means symbol not found, so no point retrying.
             print("retrieve_historical_prices failed to retrieve price for ", yahooSymbol)
             print(E)
             E = sys.exc_info()[0]
