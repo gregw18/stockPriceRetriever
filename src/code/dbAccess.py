@@ -16,12 +16,12 @@ import settings
 import sprEnums
 
 
-print("Starting dbAccess init")
+#print("Starting dbAccess init")
 client = boto3.client('rds')
 mysettings = settings.Settings.instance()
 dbConn = None
 connected_status = False
-print("Finished dbAccess init, connected_status=", connected_status)
+#print("Finished dbAccess init, connected_status=", connected_status)
 
 # Connect to RDS.
 def connect():
@@ -35,8 +35,8 @@ def connect():
             print("rds port: ", mysettings.rds_port)
             print("rds_user: ", mysettings.rds_user_name)
             print("db_name: ", mysettings.rds_db_name)
-            print(f"rds token length: {len(token)}")
-            print(f"{token=}")
+            #print(f"rds token length: {len(token)}")
+            #print(f"{token=}")
             ssl = {'ca': 'rds-combined-ca-bundle.pem'}
             dbConn = pymysql.connect(host=mysettings.rds_endpoint,
                                     user=mysettings.rds_user_name,

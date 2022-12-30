@@ -193,14 +193,14 @@ export default function App() {
             console.log("request failed again.");
           }
         }
-        xhttp.open("GET", api_endpoint + "?timeframe=1week", false);
+        xhttp.open("GET", api_endpoint + "?timeframe=30days", false);
         xhttp.setRequestHeader("mode", "no-cors");
         xhttp.send();
       }
 
 
     const fetchPrices = async () => {
-      var params = {timeframe: "1week"};
+      var params = {timeframe: "30days"};
       const urlStr = api_endpoint + "?" + new URLSearchParams(params);
       console.log("urlStr=", urlStr);
       var url = new URL(urlStr);

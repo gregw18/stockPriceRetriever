@@ -65,4 +65,4 @@ def get_timePeriod_from_text(timeDesc):
             return conversions[timeDesc]
         else:
             print(f"sprEnums.get_member_from_text received unknown timeDesc: {timeDesc}")
-            return 0
+            return timePeriods.days30
