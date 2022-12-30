@@ -238,6 +238,11 @@ class Securities:
         maxAge = self._get_price_max_age(timeEnum)
 
         self.utilsInter.connect()
+
+        # Verify have loaded securities list from database.
+        if len(self.securitiesDict) == 0:
+            self.load()
+
         webSecs = []
         for tmpSec in self.securitiesDict.values():
             historicalPrices = self.historyInter.get_historical_prices(tmpSec.id, 
