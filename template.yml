@@ -38,6 +38,13 @@ Resources:
         - AWSLambda_ReadOnlyAccess
         - AmazonS3FullAccess
         - AmazonSNSFullAccess
+        - AmazonRDSDataFullAccess
+        - Statement:
+          - Sid: IAMDbAccess
+            Effect: Allow
+            Action:
+              - "rds-db:connect"
+            Resource: "*"
       Tracing: PassThrough
       Layers:
         - !Ref libs
