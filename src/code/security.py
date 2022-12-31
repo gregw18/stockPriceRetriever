@@ -168,13 +168,13 @@ class Security:
         self.id                     = secDict["id"]
         self.name                   = secDict["name"]
         self.symbol                 = secDict["symbol"]
-        self.buyPrice               = self._to_dec(secDict["buyPrice"])
-        self.sellPrice              = self._to_dec(secDict["sellPrice"])
-        self.currentPrice           = self._to_dec(secDict["currentPrice"])
+        self.buyPrice               = self._to_float(secDict["buyPrice"])
+        self.sellPrice              = self._to_float(secDict["sellPrice"])
+        self.currentPrice           = self._to_float(secDict["currentPrice"])
         self.currentPriceDate       = secDict["currentPriceDate"]
-        self.lastClosePrice         = secDict["previousClosePrice"]
-        self.low52Week              = self._to_dec(secDict["52weekLowPrice"])
-        self.high52Week             = self._to_dec(secDict["52weekHighPrice"])
+        self.lastClosePrice         = self._to_float(secDict["previousClosePrice"])
+        self.low52Week              = self._to_float(secDict["52weekLowPrice"])
+        self.high52Week             = self._to_float(secDict["52weekHighPrice"])
         self.status                 = self.get_status()        # 0 = buy, 1 = sell, 2 = no action. Numbers chosen for sorting.
         self.fullHistoryDownloaded  = secDict["fullHistoryDownloaded"]
 
@@ -280,10 +280,10 @@ class Security:
         self.low52Week = newPriceInfo.low52Week
         self.high52Week = newPriceInfo.high52Week
     
-    def _to_dec(self, origVal):
+    def _to_float(self, origVal):
         returnVal = 0
         if not (origVal is None):
-            returnVal = Decimal(origVal)
+            returnVal = float(origVal)
         
         return returnVal
 

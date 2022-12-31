@@ -3,7 +3,7 @@ Group and sort security_ratings.
 V0.01, October 21, 2020
 """
 
-from decimal import Decimal
+#from decimal import Decimal
 
 import security_rating
 import sprEnums
@@ -113,14 +113,14 @@ class security_groups:
           If > 75% into buy-sell range, near sell
           Otherwise, middle
         """
-        middle_range = this_security.sellPrice - this_security.buyPrice
+        middle_range = float(this_security.sellPrice - this_security.buyPrice)
         if this_security.currentPrice < this_security.buyPrice:
             myGroup = sprEnums.GroupCodes.buy
-        elif this_security.currentPrice - this_security.buyPrice < (Decimal(.25) * middle_range):
+        elif this_security.currentPrice - this_security.buyPrice < (.25 * middle_range):
             myGroup = sprEnums.GroupCodes.near_buy
         elif this_security.currentPrice > this_security.sellPrice:
             myGroup = sprEnums.GroupCodes.sell
-        elif this_security.currentPrice - this_security.buyPrice > (Decimal(0.75) * middle_range):
+        elif this_security.currentPrice - this_security.buyPrice > (0.75 * middle_range):
             myGroup = sprEnums.GroupCodes.near_sell
         else:
             myGroup = sprEnums.GroupCodes.middle
