@@ -127,7 +127,7 @@ class Securities:
         symbolsToUpdate = self._get_symbols_needing_price_update(currentDate)
         if len(symbolsToUpdate) == 0:
             print(f"Exiting do_daily_price_update because already ran today.")
-            return
+            return numUpdated
 
         if not self._are_all_downloaded(self.securitiesDict):
             self.retrieve_full_price_histories()
@@ -139,20 +139,23 @@ class Securities:
         for tmpSymbol in symbolsToUpdate:
             newPrice = retrieve_daily_data(tmpSymbol, self.mySettings)
             print(f"newPrice={newPrice}")
-            tmpSecurity = self.securitiesDict[tmpSymbol]
-            changedFieldNames, newValues = tmpSecurity.get_changed_fields(newPrice, currentDate)
-            print(f"changedFieldNames={changedFieldNames}, newValues={newValues}")
-            if len(changedFieldNames) > 0:
-                print(f"Attempting to do updates for {tmpSecurity}.")
-                self.securitiesInter.update_security(tmpSecurity.id, changedFieldNames, newValues)
-                self.historyInter.save_daily_price_for_security(tmpSecurity.id, 
-                                                                newPrice.currentPrice, 
-                                                                currentDate)
-                if weeklyUpdateDue:
-                    self.historyInter.save_weekly_price_for_security(tmpSecurity.id, 
-                                                                    weeklyPriceDate)
-                tmpSecurity.update_values(newPrice)
-                numUpdated += 1
+            if newPrice.currentPrice > 0:
+                tmpSecurity = self.securitiesDict[tmpSymbol]
+                changedFieldNames, newValues = tmpSecurity.get_changed_fields(newPrice, currentDate)
+                print(f"changedFieldNames={changedFieldNames}, newValues={newValues}")
+                if len(changedFieldNames) > 0:
+                    print(f"Attempting to do updates for {tmpSecurity}.")
+                    self.securitiesInter.update_security(tmpSecurity.id, changedFieldNames, newValues)
+                    self.historyInter.save_daily_price_for_security(tmpSecurity.id, 
+                                                                    newPrice.currentPrice, 
+                                                                    currentDate)
+                    if weeklyUpdateDue:
+                        self.historyInter.save_weekly_price_for_security(tmpSecurity.id, 
+                                                                        weeklyPriceDate)
+                    tmpSecurity.update_values(newPrice)
+                    numUpdated += 1
+            else:
+                print(f"Failed to retrieve daily price for {tmpSymbol}, so didn't save anything.")
 
         if weeklyUpdateDue:
             self.utilsInter.set_last_weekly_update_date()

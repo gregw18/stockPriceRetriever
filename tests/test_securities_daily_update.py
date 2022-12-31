@@ -224,6 +224,36 @@ class TestSecurities():
             mock_update_weekly.assert_not_called()
 
     @pytest.mark.integration
+    def test_do_daily_bad_symbol(self, getUtils, getSecurities, 
+                                    getSecuritiesInter, getDict):
+        """
+        Verify that when call do_daily_price_update, with bad symbol,
+        no data is saved.
+        """
+        getUtils.connect()
+
+        # Security with bad symbol
+        oldDay = date(1999, 12, 31)
+        badSymbol = "ALXN"
+        badsec = Security()
+        badsec.pop("Alexion", badSymbol, 123.45, 543.21, 200.33)
+        badsec.fullHistoryDownloaded = True
+        badsec.currentPriceDate = oldDay
+        secsDict = {}
+        secsDict[badSymbol] = badsec
+        getSecurities.securitiesDict = secsDict
+
+        with patch('security.Security.get_changed_fields', 
+                    return_value=Mock()) as mock_get_changed:
+            mock_get_changed.return_value = None
+            numUpdated = getSecurities.do_daily_price_update(date.today())
+
+            getUtils.disconnect()
+
+            assert numUpdated == 0
+            mock_get_changed.assert_not_called()
+
+    @pytest.mark.integration
     def test_reset_daily_prices(self, getUtils, getSecurities, getDict, getSecuritiesInter):
         """ 
         Test that tables are in expected condition after doing reset. I.e. currentPriceDate
