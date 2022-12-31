@@ -195,24 +195,25 @@ class Securities:
                                                             dailyHistoryStart,
                                                             today,
                                                             self.mySettings.daily_price_code)
-                downloaded = self.historyInter.save_daily_historical_prices(tmpSecurity.id, dailyPrices)
-                print(f"retrieve_full_price_history saved daily prices.")
+                if len(dailyPrices) > 0:
+                    # Don't go any further if first download failed.
+                    downloaded = self.historyInter.save_daily_historical_prices(tmpSecurity.id, dailyPrices)
+                    print(f"retrieve_full_price_history saved daily prices.")
 
-                weeklyPrices = retrieve_historical_prices(tmpSecurity.symbol,
-                                                            weeklyHistoryStart,
-                                                            today,
-                                                            self.mySettings.weekly_price_code)
-                if downloaded:
-                    downloaded = downloaded and self.historyInter.save_weekly_historical_prices(tmpSecurity.id, weeklyPrices)
-                print(f"retrieve_full_price_history saved weekly prices.")
-                if downloaded:
-                    self.securitiesInter.mark_historical_data_retrieved(tmpSecurity.id)
-                    tmpSecurity.fullHistoryDownloaded = True
-                    numDownloaded += 1
-                else:
-                    print(f"retrieve_full_price_histories failed to save data for "
-                            f"symbol: {tmpSecurity.symbol}")
-                    #break
+                    weeklyPrices = retrieve_historical_prices(tmpSecurity.symbol,
+                                                                weeklyHistoryStart,
+                                                                today,
+                                                                self.mySettings.weekly_price_code)
+                    if downloaded:
+                        downloaded = downloaded and self.historyInter.save_weekly_historical_prices(tmpSecurity.id, weeklyPrices)
+                    print(f"retrieve_full_price_history saved weekly prices.")
+                    if downloaded:
+                        self.securitiesInter.mark_historical_data_retrieved(tmpSecurity.id)
+                        tmpSecurity.fullHistoryDownloaded = True
+                        numDownloaded += 1
+                    else:
+                        print(f"retrieve_full_price_histories failed to save data for "
+                                f"symbol: {tmpSecurity.symbol}")
 
         return numDownloaded
 

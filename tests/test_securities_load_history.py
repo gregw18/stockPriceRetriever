@@ -71,6 +71,7 @@ class TestSecuritiesLoadHistory():
         googlsec.id = 5
         googlsec.fullHistoryDownloaded = False
         self.secsDict["GOOGL"] = googlsec
+
         print("Setup complete")
 
     @pytest.fixture(scope='class')
@@ -146,6 +147,35 @@ class TestSecuritiesLoadHistory():
         self.confirm_no_saved_data_for_security(tmpSec)
 
         self._wipe_history_tables(self.secsDict)
+        getUtils.disconnect()
+
+        assert numDownloaded == 0
+
+    def test_bad_symbol(self, getUtils, getSecurities):
+        """
+        One bad symbol, shouldn't call any save routines.
+        """
+        # Create a dictionary containing one security, which has an invalid symbol.
+        badSymbol = "ALXN"
+        badsec = Security()
+        badsec.pop("Alexion", badSymbol, 123.45, 543.21, 200.33)
+        badsec.id = 6
+        badsec.fullHistoryDownloaded = False
+
+        noDownload = {}
+        noDownload[badSymbol] = badsec
+        getSecurities.securitiesDict = noDownload
+
+        getUtils.connect()
+
+        # Retrieve historic prices from web and save in tables.
+        numDownloaded = getSecurities.retrieve_full_price_histories()
+
+        # Confirm that didn't download any data for security that was already downloaded.
+        tmpSec = noDownload[badSymbol]
+        self.confirm_no_saved_data_for_security(tmpSec)
+
+        self._wipe_history_tables(noDownload)
         getUtils.disconnect()
 
         assert numDownloaded == 0

@@ -36,9 +36,11 @@ def retrieve_daily_data(symbol, mysettings):
             break
         except (ValueError, IndexError, ImportError, HTTPError) as E:
             print("retrieve_daily_data failed to retrieve price for ", yahooSymbol)
-            print(E)
+            print(f"{E=}")
+            if E.args[0] == "No tables found" or E.args[0] == "list index out of range":
+                break
             E = sys.exc_info()[0]
-            print(E)
+            print(f"exc_info, {E=}")
 
     return priceInfo
 
@@ -64,9 +66,9 @@ def retrieve_historical_prices(symbol, oldestDate, newestDate, priceFrequency):
         except (AssertionError, KeyError) as E:
             # Generally means symbol not found, so no point retrying.
             print("retrieve_historical_prices failed to retrieve price for ", yahooSymbol)
-            print(E)
+            print(f"{E=}")
             E = sys.exc_info()[0]
-            print(E)
+            print(f"exc_info, {E=}")
             break
         except (IndexError, ImportError, HTTPError) as E:
             print("retrieve_historical_prices failed to retrieve price for ", yahooSymbol)

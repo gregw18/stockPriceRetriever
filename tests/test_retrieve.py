@@ -52,6 +52,14 @@ class TestRetrievePrices():
 
         assert priceInfo.currentPrice == 0
 
+    def test_yahoo_daily_bad_symbol2(self):
+        """
+        Try to retrieve daily data for bad symbol.
+        """
+        priceInfo = yahooInterface.retrieve_daily_data('ALXN', mysettings)
+
+        assert priceInfo.currentPrice == 0
+
     def test_yahoo_historical_daily_1week(self):
         """
         Retrieve daily prices for amazon for last week. Should all be > 0.
