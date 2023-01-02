@@ -4,6 +4,8 @@ Should not communicate directly with mySql.
 V0.01, November 23, 2022
 """
 
+from memory_profiler import profile
+
 from datetime import datetime, date, timedelta
 import json
 import os
@@ -109,6 +111,7 @@ class Securities:
 
         return updated
 
+    @profile
     def do_daily_price_update(self, currentDate):
         """
         Daily price update process. Ensures that have full price history downloaded for

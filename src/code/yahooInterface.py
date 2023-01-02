@@ -30,8 +30,8 @@ def retrieve_daily_data(symbol, mysettings):
     for i in range(0, 3):
         try:
             quote_table = get_quote_table(yahooSymbol)
-            priceInfo.currentPrice = quote_table['Quote Price']
-            priceInfo.lastClosePrice = quote_table['Previous Close']
+            priceInfo.currentPrice = round(float(quote_table['Quote Price']),2)
+            priceInfo.lastClosePrice = round(float(quote_table['Previous Close']),2)
             priceInfo.low52Week, priceInfo.high52Week = _split_price_range(quote_table['52 Week Range'])
             break
         except (ValueError, IndexError, ImportError, HTTPError) as E:
@@ -114,7 +114,7 @@ def _split_price_range(priceRangeStr):
     """
     cleanStr = priceRangeStr.replace(",", "")
     split_pos = cleanStr.find('-')
-    low = float(cleanStr[0:split_pos])
-    high = float(cleanStr[split_pos + 1:])
+    low = round(float(cleanStr[0:split_pos]),2)
+    high = round(float(cleanStr[split_pos + 1:]),2)
 
     return low, high
