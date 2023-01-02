@@ -61,6 +61,23 @@ class TestSecurity2():
         assert len(changedFieldNames) == 1
         assert len(newValues) == 1
 
+    def test_get_changed_fields_date_only(self):
+        """
+        Test that recognizes when only currentPriceDate field changes.
+        """
+        #Create a security with data from PriceInfo.
+        newInfo = self._create_priceInfo()
+        testSecurity = Security()
+        testSecurity.pop_with_priceInfo("TEST1", "TST1", 85, 110, newInfo)
+        testSecurity.currentPriceDate = date(2022, 12, 30)
+
+        changedFieldNames, newValues = testSecurity.get_changed_fields(newInfo, date.today())
+
+        assert changedFieldNames[0] == "currentPriceDate"
+        assert newValues[0] == date.today()
+        assert len(changedFieldNames) == 1
+        assert len(newValues) == 1
+
     def test_get_changed_fields_all_fields(self):
         """
         Test updating all fields.

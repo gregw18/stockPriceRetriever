@@ -35,7 +35,7 @@ class Settings:
         self.alphaApiTimeOut = 4
         self.alphaApiKey = self._read_setting_from_file(alphaFile)
 
-        self.yahooCallDelay = 1
+        self.yahooCallDelay = 0.5
         self.errFile = "errors.txt"
 
         self.fileMaxAge = 30                    # Keep results files for this many days.

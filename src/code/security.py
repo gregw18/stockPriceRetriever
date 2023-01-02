@@ -255,6 +255,12 @@ class Security:
             newValues.append(newPriceInfo.currentPrice)
             changedFields.append("currentPriceDate")
             newValues.append(currentDate)
+
+        if currentDate != self.currentPriceDate:
+            # If it happens that the closing price didn't change between
+            # two consecutive days, still want to update the date field.
+            changedFields.append("currentPriceDate")
+            newValues.append(currentDate)
         
         if newPriceInfo.lastClosePrice != self.lastClosePrice:
             changedFields.append("previousClosePrice")
