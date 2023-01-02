@@ -50,6 +50,7 @@ def send_from_db(resultsTopicName):
     else:
         print("Didn't find any securities to send an email regarding.")
     #print(f"send_from_db hpy 5: {h.heap()}")
+    print("finished deaily_email.send_from_db")
     
     return sent
 
@@ -69,15 +70,18 @@ def _generate_and_send(securitiesList, resultsTopicName):
     """
     Receives list of security, uses that to generate and send email.
     """
+    print(f"starting daily_email._generate_and_send, len={len(securitiesList)}")
     myGroups = security_groups.security_groups()
     myGroups.populate(securitiesList)
 
     emailSubject, emailBody = get_email(myGroups)
+    print(f"finished get_email")
 
     if emailSubject:
         myNotifier = notification_interface.notification_interface()
         if myNotifier.findArnForTopicName(resultsTopicName):
             myNotifier.sendEmail(emailSubject, emailBody)
+            print("sent email.")
 
     print("Finished daily_email._generate_and_send")
 

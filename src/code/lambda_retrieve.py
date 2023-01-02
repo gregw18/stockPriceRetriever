@@ -37,7 +37,7 @@ def lambda_handler(event, context):
     #                                                   mysettings=mysettings,
     #                                                   myResultsFile=myResultsFile)
     #print("Finished retrieve")
-    retrievePrices.retrieve_prices_using_db()
+    #retrievePrices.retrieve_prices_using_db()
 
     #if resFile:
         # Send daily email summarizing results.

@@ -128,6 +128,7 @@ class Securities:
         
         # Check if we've already run today.
         symbolsToUpdate = self._get_symbols_needing_price_update(currentDate)
+        print(f"{symbolsToUpdate=}")
         if len(symbolsToUpdate) == 0:
             print(f"Exiting do_daily_price_update because already ran today.")
             return numUpdated
@@ -141,7 +142,7 @@ class Securities:
         # Do prices for all securities that we haven't previously done today.
         for tmpSymbol in symbolsToUpdate:
             newPrice = retrieve_daily_data(tmpSymbol, self.mySettings)
-            print(f"newPrice={newPrice}")
+            print(f"retrieved new price for {tmpSymbol}")
             if newPrice.currentPrice > 0:
                 tmpSecurity = self.securitiesDict[tmpSymbol]
                 changedFieldNames, newValues = tmpSecurity.get_changed_fields(newPrice, currentDate)
@@ -232,6 +233,7 @@ class Securities:
             emailSecs.append(tmpSec)
         
         emailSecs.sort(key=lambda x: x.get_sort_string())
+        print(f"Finished retrieve_email_info, num securities ={len(emailSecs)}")
 
         return emailSecs
 
