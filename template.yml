@@ -25,6 +25,7 @@ Resources:
       Handler: lambda_retrieve.lambda_handler
       Runtime: python3.8
       CodeUri: src/code/.
+      MemorySize: 200
       Description: Retrieve prices for listed securities.
       Events:
         RetrieveScheduledEvent:
