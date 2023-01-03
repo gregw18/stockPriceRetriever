@@ -69,8 +69,14 @@ function GenerateTable({securityData, minMaxGain,  setChartData, sortByCol}) {
             <button id="sort_name" type="button" 
               onClick={() => sortByCol('name')}>Name</button>
           </th>
-          <th style={{width: "5%"}}>Group</th>
-          <th style={{width: "5%"}}>Rating</th>
+          <th style={{width: "5%"}}>
+            <button id="sort_group" type="button"
+            onClick={() => sortByCol('group')}>Group</button>
+          </th>
+          <th style={{width: "5%"}}>
+            <button id="sort_rating" type="button"
+            onClick={() => sortByCol('rating')}>Rating</button>
+          </th>
           <th style={{width: "5%"}}>Current</th>
           <th style={{width: "15%"}}>
             <button id="sort_gain" type="button" 
@@ -159,6 +165,7 @@ function getMinMaxGain(chartData) {
 
 export default function App() {
   useEffect(() => {
+    
     const fetchTestPrices = async () => {
       let mySecurities = [];
       mySecurities.push( 
@@ -263,21 +270,23 @@ export default function App() {
   }
 
   function sortByCol(colName) {
-    console.log("Sort me by name");
+    console.log("Resorting");
     let thisOrder = sortOrder;
     if (sortColumn === colName) {
+      // If we're already sorted on the same column, just reverse the order
       console.log("column=", colName);
       thisOrder = !sortOrder;
       setSortOrder(thisOrder);
     }
     else {
+      // If we're changing the sort column, default to the standard order for that column.
       setSortOrder(false);
       setSortColumn(colName);
     }
     console.log("thisOrder=", thisOrder, ", sortColumn=", sortColumn);
 
     let getVal = function(security) { return security.data[colName].toUpperCase()};
-    if (colName ==="percentGain") {
+    if (colName ==="percentGain" || colName ==="rating") {
       getVal = function(security) {return security.data[colName]};
     }
 
