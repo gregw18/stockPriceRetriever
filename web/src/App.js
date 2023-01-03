@@ -57,14 +57,16 @@ function GenerateTable({securityData, minMaxGain,  setChartData, sortByCol}) {
             <button id="sort_name" type="button" 
               onClick={() => sortByCol('name')}>Name</button>
           </th>
+          <th style={{width: "5%"}}>Group</th>
+          <th style={{width: "5%"}}>Rating</th>
           <th style={{width: "5%"}}>Current</th>
-          <th style={{width: "20%"}}>
+          <th style={{width: "15%"}}>
             <button id="sort_gain" type="button" 
               onClick={() => sortByCol('percentGain')}>Gain</button>
           </th>
-          <th style={{width: "20%"}}>Price Range</th>
-          <th style={{width: "20%"}}>Buy/Sell Range</th>
-          <th style={{width: "20%"}}>Price History</th>
+          <th style={{width: "15%"}}>Price Range</th>
+          <th style={{width: "15%"}}>Buy/Sell Range</th>
+          <th style={{width: "25%"}}>Price History</th>
         </tr>
         {generateRows(securityData, minMaxGain)}
       </tbody>
@@ -80,6 +82,8 @@ function generateRows(securityData, minMaxGain) {
         d => (
           <tr>
             <td>{d.data.name}</td>
+            <td>{d.data.group}</td>
+            <td>{d.data.rating}</td>
             <td>{d.data.currentPrice}</td>
             <td><GainChart chartData={d.data} minMax={minMaxGain} /></td>
             <td><TimeRangeChart chartData={d.data} /></td>
@@ -142,29 +146,29 @@ function getMinMaxGain(chartData) {
 
 export default function App() {
   useEffect(() => {
-    const fetchTestPrices = async () => {
-      let mySecurities = [];
-      mySecurities.push( 
-        {
-          id: 1,
-          data: securityAmazon
-        }
-      );
-      mySecurities.push( 
-        {
-          id: 2,
-          data: securityMicrosoft
-        }
-      );
-      mySecurities.push( 
-        {
-          id: 2,
-          data: securityLilly
-        }
-      );
-      setChartData(mySecurities);
-      setHaveData(true);
-    }
+    //const fetchTestPrices = async () => {
+    //  let mySecurities = [];
+    //  mySecurities.push( 
+    //    {
+    //      id: 1,
+    //      data: securityAmazon
+    //    }
+    //  );
+    //  mySecurities.push( 
+    //    {
+    //      id: 2,
+    //      data: securityMicrosoft
+    //    }
+    //  );
+    //  mySecurities.push( 
+    //    {
+    //      id: 2,
+    //      data: securityLilly
+    //    }
+    //  );
+    //  setChartData(mySecurities);
+    //  setHaveData(true);
+    //}
 
     const parseJson = function (srcData) {
             let mySecurities = [];
