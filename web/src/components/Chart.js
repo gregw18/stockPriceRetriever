@@ -57,7 +57,7 @@ const defltAxisOptions = {
     ticks: {
         display: true,
         font: {
-            size: 8,
+            size: 10,
             padding: 0
         }
     }
@@ -67,7 +67,7 @@ const scales = {
         tickLength: 0,
         display: false
     },
-    x: { defltAxisOptions },
+    x: defltAxisOptions,
     y: {
         display: false
     }
@@ -180,9 +180,8 @@ export const BuySellChart = ( {chartData} ) => {
 
 export const PriceHistoryChart = ( {chartData} ) => {
     let myOptions = JSON.parse(JSON.stringify(defltBarOptions));
-    console.log("myOptions=", myOptions);
+    console.log("PriceHistoryChart 1, myOptions=", myOptions);
     const chartDataSet = {
-        //labels: [...Array(chartData.periodPrices.length).keys()],
         labels: chartData.periodDates,
         datasets: [
             {
@@ -193,8 +192,10 @@ export const PriceHistoryChart = ( {chartData} ) => {
     };
 
     myOptions.indexAxis = 'x';
-    //myOptions.scales.x.ticks.display = false;
-    myOptions.scales.y = defltAxisOptions;
+    myOptions.scales.x.ticks.display = false;
+    myOptions.scales.y = JSON.parse(JSON.stringify(defltAxisOptions));
+    myOptions.scales.y.ticks.font.size = 8;
+    console.log("PriceHistoryChart 2, myOptions=", myOptions);
     return (
         <Line 
         data={chartDataSet}
