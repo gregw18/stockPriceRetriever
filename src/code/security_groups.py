@@ -43,6 +43,13 @@ class security_groups:
         self.sort_reverse[sprEnums.GroupCodes.near_sell] = False
         self.sort_reverse[sprEnums.GroupCodes.sell] = False
 
+        self.group_text = {}
+        self.group_text[sprEnums.GroupCodes.buy] = "1.buy"
+        self.group_text[sprEnums.GroupCodes.near_buy] = "2.near buy"
+        self.group_text[sprEnums.GroupCodes.middle] = "3.middle"
+        self.group_text[sprEnums.GroupCodes.near_sell] = "4.near sell"
+        self.group_text[sprEnums.GroupCodes.sell] = "5.sell"
+
     def populate(self, securitiesList):
         """
         Group given securities into groups, calculate rating for each security,
@@ -81,6 +88,23 @@ class security_groups:
             for rating in self.get_results_for_group(groupCode):
                 new_sec_list.append(rating.security)
         return new_sec_list
+
+    def get_values_for_webPriceInfo(self, myWebInfo):
+        """
+        Calculates group and rating for given webPriceInfo.
+        Saves group as text. Saves rating as negative number if in buy zone,
+        so that when sort by rating get desired order.
+        """
+        rating = 0
+        group = ""
+
+        group_code = self._get_group_code(myWebInfo)
+        group = self._get_group_text(group_code)
+        rating = self.rating_methods[group_code](myWebInfo)
+        if group_code == sprEnums.GroupCodes.buy:
+            rating = 0 - rating
+
+        return rating, group
 
     def _calc_rating_buy(self, this_security):
         """
@@ -125,6 +149,17 @@ class security_groups:
         else:
             myGroup = sprEnums.GroupCodes.middle
         return myGroup
+
+    def _get_group_text(self, group_code):
+        """
+        Convert from group code to text.
+        """
+        text = "unknown"
+
+        if group_code in self.group_text:
+            text = self.group_text[group_code]
+
+        return text
 
     def print_groups(self):
         """

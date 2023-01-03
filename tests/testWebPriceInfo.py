@@ -168,5 +168,42 @@ class TestWebPriceInfo():
         assert myDict["periodStartPrice"] == prices[0]["price"]
         assert myDict["periodLowPrice"] == lowPrice
         assert myDict["periodHighPrice"] == prices[numRows - 1]["price"]
+        assert myDict["group"] == myInfo.group
+        assert myDict["rating"] == myInfo.rating
         assert myDict["periodPrices"] == pricesOnly
         assert myDict["periodDates"] == datesOnly
+
+    """
+    Group/rating tests:
+        Test that get expected text for each group
+        Test that get expected rating - negative if buy group.
+    """
+    def test_group_text_buy(self):
+        """
+        Verify that get expected text.
+        """
+        mySec = self.applesec
+        mySec.currentPrice = 48
+        mySec.buyPrice = 50
+        mySec.sellPrice = 100
+        myInfo = WebPriceInfo()
+        prices = []
+        myInfo.populate(mySec, prices)
+
+        assert myInfo.group == "1.buy"
+        assert myInfo.rating == 0 - (mySec.buyPrice - mySec.currentPrice) / mySec.buyPrice
+
+    def test_group_text_near_sell(self):
+        """
+        Verify that get expected text.
+        """
+        mySec = self.applesec
+        mySec.currentPrice = 90
+        mySec.buyPrice = 50
+        mySec.sellPrice = 100
+        myInfo = WebPriceInfo()
+        prices = []
+        myInfo.populate(mySec, prices)
+
+        assert myInfo.group == "4.near sell"
+        assert myInfo.rating == (mySec.currentPrice - mySec.buyPrice) / (mySec.sellPrice - mySec.buyPrice)

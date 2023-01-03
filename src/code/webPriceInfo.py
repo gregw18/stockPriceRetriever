@@ -6,6 +6,8 @@ V0.01, December 19, 2022, GAW
 
 from datetime import date
 
+from security_groups import security_groups
+
 class WebPriceInfo:
 
     def __init__(self):
@@ -17,6 +19,8 @@ class WebPriceInfo:
         self.periodLowPrice = 0
         self.periodHighPrice = 0
         self.status = ""
+        self.group = ""
+        self.rating = 0
         self.periodPrices = []
         self.periodDates = []
 
@@ -29,9 +33,10 @@ class WebPriceInfo:
         self.buyPrice = mySecurity.buyPrice
         self.sellPrice = mySecurity.sellPrice
         self.status = mySecurity.status
-        #self.periodPrices = myPrices
         self.periodPrices = self._get_prices_only(myPrices)
         self.periodDates = self._get_dates(myPrices)
+        myGroups = security_groups()
+        self.rating, self.group = myGroups.get_values_for_webPriceInfo(self)
         if len(myPrices) > 0:
             self.periodStartPrice = myPrices[0]["price"]  # Price from first pair.
             self._set_high_low_prices()
@@ -52,6 +57,8 @@ class WebPriceInfo:
         myDict["periodLowPrice"] = float(self.periodLowPrice)
         myDict["periodHighPrice"] = float(self.periodHighPrice)
         myDict["status"] = self.status
+        myDict["group"] = self.group
+        myDict["rating"] = self.rating
         myDict["periodPrices"] = self.periodPrices
         myDict["periodDates"] = self.periodDates
         print(f"getDict, {myDict = }")
