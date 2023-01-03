@@ -55,6 +55,7 @@ const addCurrentPriceLine = {
 
 const defltAxisOptions = {
     ticks: {
+        display: true,
         font: {
             size: 8,
             padding: 0
@@ -167,7 +168,7 @@ export const BuySellChart = ( {chartData} ) => {
     myOptions.scales.x.min = Math.floor(0.9 * Math.min(chartData.currentPrice, chartData.buyLowPrice));
     myOptions.scales.x.max = Math.ceil(1.1 * Math.max(chartData.currentPrice, chartData.sellHighPrice));
     myOptions.plugins.addCurrentPriceLine = {xValue: chartData.currentPrice};
-    console.log("x.min=", myOptions.scales.x.min, ", buyLowPrice=", chartData.buyLowPrice);
+    //console.log("x.min=", myOptions.scales.x.min, ", buyLowPrice=", chartData.buyLowPrice);
     return (
         <Bar 
         data={chartDataSet}
@@ -179,7 +180,7 @@ export const BuySellChart = ( {chartData} ) => {
 
 export const PriceHistoryChart = ( {chartData} ) => {
     let myOptions = JSON.parse(JSON.stringify(defltBarOptions));
-
+    console.log("myOptions=", myOptions);
     const chartDataSet = {
         //labels: [...Array(chartData.periodPrices.length).keys()],
         labels: chartData.periodDates,
@@ -192,6 +193,7 @@ export const PriceHistoryChart = ( {chartData} ) => {
     };
 
     myOptions.indexAxis = 'x';
+    //myOptions.scales.x.ticks.display = false;
     myOptions.scales.y = defltAxisOptions;
     return (
         <Line 

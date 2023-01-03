@@ -15,7 +15,11 @@ const securityAmazon= {
   periodLowPrice: 113.23,
   buyPrice: 115.8,
   sellPrice: 150.3,
-  periodPrices: [24.7, 26.5, 23.4, 34.3, 32.1, 40.3, 38.6, 35.4, 33.2]
+  group: "2.near buy",
+  rating: 5.43,
+  periodPrices: [24.7, 26.5, 23.4, 34.3, 32.1, 40.3, 38.6, 35.4, 33.2],
+  periodDates: ["2022-12-05", "2022-12-06", "2022-12-07", "2022-12-08", "2022-12-09",
+           "2022-12-12", "2022-12-13", "2022-12-14", "2022-12-15" ]
 };
 
 const securityMicrosoft= {
@@ -26,7 +30,11 @@ const securityMicrosoft= {
   periodLowPrice: 235.2,
   buyPrice: 170.90,
   sellPrice: 274.70,
-  periodPrices: [283.11, 349.67, 323.4, 334.3, 232.1, 240.3, 338.6, 235.4, 233.2]
+  group: "3.middle",
+  rating: 54.32,
+  periodPrices: [283.11, 349.67, 323.4, 334.3, 232.1, 240.3, 338.6, 235.4, 233.2],
+  periodDates: ["2022-12-05", "2022-12-06", "2022-12-07", "2022-12-08", "2022-12-09",
+           "2022-12-12", "2022-12-13", "2022-12-14", "2022-12-15" ]
 };
 
 const securityLilly= {
@@ -37,7 +45,11 @@ const securityLilly= {
   periodLowPrice: 224.85,
   buyPrice: 93.10,
   sellPrice: 171.10,
-  periodPrices: [224.85, 265.67, 245.4, 277.3, 237.1, 249.3, 289.6, 324.4, 307.72]
+  group: "5.sell",
+  rating: 80.54,
+  periodPrices: [224.85, 265.67, 245.4, 277.3, 237.1, 249.3, 289.6, 324.4, 307.72],
+  periodDates: ["2022-12-05", "2022-12-06", "2022-12-07", "2022-12-08", "2022-12-09",
+           "2022-12-12", "2022-12-13", "2022-12-14", "2022-12-15" ]
 };
 
 //const sortContext = createContext(null);
@@ -105,7 +117,7 @@ function addCalculatedData(chartData) {
     let buyLowPrice = security.data.buyPrice;
     if (security.data.currentPrice < buyLowPrice){
       buyLowPrice = security.data.currentPrice;
-      console.log("using current for buyLow, ", security.data.currentPrice, ", buyPrice=", security.data.buyPrice);
+      //console.log("using current for buyLow, ", security.data.currentPrice, ", buyPrice=", security.data.buyPrice);
     }
     security.data.buyLowPrice = buyLowPrice;
 
@@ -147,29 +159,29 @@ function getMinMaxGain(chartData) {
 
 export default function App() {
   useEffect(() => {
-    //const fetchTestPrices = async () => {
-    //  let mySecurities = [];
-    //  mySecurities.push( 
-    //    {
-    //      id: 1,
-    //      data: securityAmazon
-    //    }
-    //  );
-    //  mySecurities.push( 
-    //    {
-    //      id: 2,
-    //      data: securityMicrosoft
-    //    }
-    //  );
-    //  mySecurities.push( 
-    //    {
-    //      id: 2,
-    //      data: securityLilly
-    //    }
-    //  );
-    //  setChartData(mySecurities);
-    //  setHaveData(true);
-    //}
+    const fetchTestPrices = async () => {
+      let mySecurities = [];
+      mySecurities.push( 
+        {
+          id: 1,
+          data: securityAmazon
+        }
+      );
+      mySecurities.push( 
+        {
+          id: 2,
+          data: securityMicrosoft
+        }
+      );
+      mySecurities.push( 
+        {
+          id: 2,
+          data: securityLilly
+        }
+      );
+      setChartData(mySecurities);
+      setHaveData(true);
+    }
 
     const parseJson = function (srcData) {
             let mySecurities = [];
@@ -236,9 +248,9 @@ export default function App() {
       });
     }
 
-    //fetchTestPrices();
+    fetchTestPrices();
     //fetchPricesHttp();
-    fetchPrices();
+    //fetchPrices();
   }, []);
 
   const [chartData, setChartData] = useState({});

@@ -52,10 +52,10 @@
           console.log("responseText= ", xhttp.responseText);
           console.log("responseHeaders= ", xhttp.getAllResponseHeaders());
           const myjson = JSON.parse(xhttp.responseText);
-          for (const security of myjson) {
-            console.log("currentPrice: ", security.currentPrice);
-            console.log("periodPrices: ", security.periodPrices);
-          }
+          //for (const security of myjson) {
+            //console.log("currentPrice: ", security.currentPrice);
+            //console.log("periodPrices: ", security.periodPrices);
+          //}
         } else {
           console.log("request failed again.");
         }
