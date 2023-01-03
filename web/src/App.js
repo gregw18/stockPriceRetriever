@@ -255,9 +255,9 @@ export default function App() {
       });
     }
 
-    fetchTestPrices();
+    //fetchTestPrices();
     //fetchPricesHttp();
-    //fetchPrices();
+    fetchPrices();
   }, []);
 
   const [chartData, setChartData] = useState({});

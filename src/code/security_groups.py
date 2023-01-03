@@ -93,6 +93,7 @@ class security_groups:
         """
         Calculates group and rating for given webPriceInfo.
         Saves group as text. Saves rating as negative number if in buy zone,
+        adds 100 if in sell zone,
         so that when sort by rating get desired order.
         """
         rating = 0
@@ -103,6 +104,8 @@ class security_groups:
         rating = round(100 * self.rating_methods[group_code](myWebInfo), 2)
         if group_code == sprEnums.GroupCodes.buy:
             rating = 0 - rating
+        elif group_code == sprEnums.GroupCodes.sell:
+            rating += 100
 
         return rating, group
 
