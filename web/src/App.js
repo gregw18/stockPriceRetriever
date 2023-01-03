@@ -132,9 +132,10 @@ function getMinMaxGain(chartData) {
     }
   });
 
-  // Want range to be a multiple of ten.
-  minGain = Math.floor(minGain/10) * 10;
-  maxGain = Math.ceil(maxGain/10) * 10;
+  // Want range (gain resolution) to be a multiple of five.
+  let gainres = 5;
+  minGain = Math.floor(minGain/gainres) * gainres;
+  maxGain = Math.ceil(maxGain/gainres) * gainres;
 
   // If max gain is less than zero, or min gain is greater than zero, want
   // range to include zero.
