@@ -100,7 +100,7 @@ class security_groups:
 
         group_code = self._get_group_code(myWebInfo)
         group = self._get_group_text(group_code)
-        rating = self.rating_methods[group_code](myWebInfo)
+        rating = round(100 * self.rating_methods[group_code](myWebInfo), 2)
         if group_code == sprEnums.GroupCodes.buy:
             rating = 0 - rating
 
