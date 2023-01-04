@@ -222,7 +222,8 @@ function getMinMaxGain(chartData) {
 export default function App() {
   useEffect(() => {
     
-    const fetchTestPrices = async () => {
+    const fetchTestPrices = async (timePeriod) => {
+      console.log("fetchTestPrices, timePeriod=", timePeriod)
       let mySecurities = [];
       mySecurities.push( 
         {
@@ -287,8 +288,8 @@ export default function App() {
     //  }
 
 
-    const fetchPrices = async () => {
-      var params = {timeframe: "30days"};
+    const fetchPrices = async (timePeriod) => {
+      var params = {timeframe: timePeriod};
       const urlStr = api_endpoint + "?" + new URLSearchParams(params);
       console.log("fetchPrices, urlStr=", urlStr);
       var url = new URL(urlStr);
@@ -317,9 +318,9 @@ export default function App() {
       });
     }
 
-    fetchTestPrices();
+    fetchTestPrices(timePeriod);
     //fetchPricesHttp();
-    //fetchPrices();
+    //fetchPrices(timePeriod);
   }, []);
 
   const [chartData, setChartData] = useState({});
