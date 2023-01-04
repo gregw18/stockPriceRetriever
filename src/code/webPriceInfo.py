@@ -88,7 +88,10 @@ class WebPriceInfo:
         """
         prices = []
         for pair in myPrices:
-            prices.append(float(pair["price"]))
+            if not( pair["price"] is None):
+                prices.append(float(pair["price"]))
+            else:
+                prices.append(float(0))
 
         return prices
 
