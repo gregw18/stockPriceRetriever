@@ -101,11 +101,14 @@ class security_groups:
 
         group_code = self._get_group_code(myWebInfo)
         group = self._get_group_text(group_code)
-        rating = round(100 * self.rating_methods[group_code](myWebInfo), 2)
+        rating = 100 * self.rating_methods[group_code](myWebInfo)
         if group_code == sprEnums.GroupCodes.buy:
             rating = 0 - rating
         elif group_code == sprEnums.GroupCodes.sell:
             rating += 100
+        # Found that if round when calculate, then do addition/subtraction, can end
+        # up with 10 or more decimal places, so now doing it as last step.
+        rating = round(rating,2)
 
         return rating, group
 

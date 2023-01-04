@@ -52,6 +52,20 @@ const securityLilly= {
            "2022-12-12", "2022-12-13", "2022-12-14", "2022-12-15" ]
 };
 
+const securityZero= {
+  name: "FTX",
+  currentPrice: 0.0,
+  periodStartPrice: 0,
+  periodHighPrice: 0,
+  periodLowPrice: 0,
+  buyPrice: 93.10,
+  sellPrice: 171.10,
+  group: "1.buy",
+  rating: -100,
+  periodPrices: [0],
+  periodDates: ["2022-12-05"]
+};
+
 //const sortContext = createContext(null);
 
 function logSecurities(securityData) {
@@ -133,7 +147,14 @@ function addCalculatedData(chartData) {
     }
     security.data.sellHighPrice = sellHighPrice;
 
-    security.data.percentGain = 100 * (security.data.currentPrice - security.data.periodStartPrice) / security.data.periodStartPrice;
+    if (security.data.periodStartPrice > 0) {
+      security.data.percentGain = 100 * (security.data.currentPrice - security.data.periodStartPrice) / security.data.periodStartPrice;
+    }
+    else {
+      // Shouldn't have many with a price of zero, but if do, above formula gives Nan as gain,
+      // which prevents the item from being sorted on gain, messing up entire sort order.
+      security.data.percentGain = 0;
+    }
   })
 }
 
@@ -159,7 +180,7 @@ function getMinMaxGain(chartData) {
   // range to include zero.
   minGain = (minGain > 0 ? 0 : minGain);
   maxGain = (maxGain < 0 ? 0 : maxGain);
-
+  console.log("ran getMinMaxGain, returning: ", minGain, ", ", maxGain)
   return {minGain: minGain, maxGain: maxGain};
 }
 
@@ -176,13 +197,19 @@ export default function App() {
       );
       mySecurities.push( 
         {
+          id: 4,
+          data: securityZero
+        }
+      );
+      mySecurities.push( 
+        {
           id: 2,
           data: securityMicrosoft
         }
       );
       mySecurities.push( 
         {
-          id: 2,
+          id: 3,
           data: securityLilly
         }
       );
@@ -228,7 +255,7 @@ export default function App() {
     const fetchPrices = async () => {
       var params = {timeframe: "30days"};
       const urlStr = api_endpoint + "?" + new URLSearchParams(params);
-      console.log("urlStr=", urlStr);
+      console.log("fetchPrices, urlStr=", urlStr);
       var url = new URL(urlStr);
 
       const fetchPromise = fetch(url);
@@ -255,9 +282,9 @@ export default function App() {
       });
     }
 
-    //fetchTestPrices();
+    fetchTestPrices();
     //fetchPricesHttp();
-    fetchPrices();
+    //fetchPrices();
   }, []);
 
   const [chartData, setChartData] = useState({});
@@ -297,21 +324,20 @@ export default function App() {
       gt = -1;
     }
 
-    let sortedData = chartData.slice().sort((a, b) => {
-      //const nameA = a.data[colName].toUpperCase();
-      //const nameB = b.data[colName].toUpperCase();
-      const nameA = getVal(a);
-      const nameB = getVal(b);
-      if (nameA < nameB) {
-        return lt;
+    chartData.sort((a ,b) => {
+      let sortResult = 0;
+      const valA = getVal(a);
+      const valB = getVal(b);
+      if (valA < valB) {
+        sortResult = lt;
       }
-      if (nameA > nameB) {
-        return gt;
+      if (valA > valB) {
+        sortResult = gt;
       }
-      return 0;
+      return sortResult;
     })
-    logSecurities(sortedData);
-    setChartData(sortedData);
+    logSecurities(chartData);
+    setChartData(chartData);
   }
 
   if (!haveData) {
