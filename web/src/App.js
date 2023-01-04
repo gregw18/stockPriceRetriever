@@ -74,35 +74,70 @@ function logSecurities(securityData) {
   })
 }
 
-function GenerateTable({securityData, minMaxGain,  setChartData, sortByCol}) {
+function GenerateTimePeriodButtons(timePeriod, setTimePeriod) {
+  console.log("GenerateTimePeriodButtons, timePeriod=", timePeriod);
   return (
-    <table style={{width: "100%"}}>
-      <tbody>
-        <tr>
-          <th style={{width: "15%"}}>
-            <button id="sort_name" type="button" 
-              onClick={() => sortByCol('name')}>Name</button>
-          </th>
-          <th style={{width: "5%"}}>
-            <button id="sort_group" type="button"
-            onClick={() => sortByCol('group')}>Group</button>
-          </th>
-          <th style={{width: "5%"}}>
-            <button id="sort_rating" type="button"
-            onClick={() => sortByCol('rating')}>Rating</button>
-          </th>
-          <th style={{width: "5%"}}>Current</th>
-          <th style={{width: "15%"}}>
-            <button id="sort_gain" type="button" 
-              onClick={() => sortByCol('percentGain')}>Gain</button>
-          </th>
-          <th style={{width: "15%"}}>Price Range</th>
-          <th style={{width: "15%"}}>Buy/Sell Range</th>
-          <th style={{width: "25%"}}>Price History</th>
-        </tr>
-        {generateRows(securityData, minMaxGain)}
-      </tbody>
-    </table>
+    <div>
+      <input type="radio" value="1day" checked={timePeriod==="1day"}
+        onChange={(e) => setTimePeriod(e.target.value)}
+        name="timePeriods" /> 1 Day
+      <input type="radio" value="30days" checked={timePeriod==="30days"}
+        onChange={(e) => setTimePeriod(e.target.value)}
+        name="timePeriods" /> 1 Month
+      <input type="radio" value="3months" checked={timePeriod==="3months"} 
+        onChange={(e) => setTimePeriod(e.target.value)}
+        name="timePeriods" /> 3 Months
+      <input type="radio" value="1year" checked={timePeriod==="1year"} 
+        onChange={(e) => setTimePeriod(e.target.value)}
+        name="timePeriods" /> 1 Year
+      <input type="radio" value="3years" checked={timePeriod==="3years"} 
+        onChange={(e) => setTimePeriod(e.target.value)}
+        name="timePeriods" /> 3 Years
+      <input type="radio" value="5years" checked={timePeriod==="5years"} 
+        onChange={(e) => setTimePeriod(e.target.value)}
+        name="timePeriods" /> 5 Years
+    </div>
+  );
+}
+
+//function retrieveData(newTimePeriod) {
+//  console.log("retrieveData, newTimePeriod=", newTimePeriod);
+//  setTimePeriod(newTimePeriod);
+//}
+
+function GenerateTable({securityData, minMaxGain,  setChartData, 
+                        sortByCol, timePeriod, setTimePeriod}) {
+  return (
+    <div>
+      {GenerateTimePeriodButtons(timePeriod, setTimePeriod)}
+      <table style={{width: "100%"}}>
+        <tbody>
+          <tr>
+            <th style={{width: "15%"}}>
+              <button id="sort_name" type="button" 
+                onClick={() => sortByCol('name')}>Name</button>
+            </th>
+            <th style={{width: "5%"}}>
+              <button id="sort_group" type="button"
+              onClick={() => sortByCol('group')}>Group</button>
+            </th>
+            <th style={{width: "5%"}}>
+              <button id="sort_rating" type="button"
+              onClick={() => sortByCol('rating')}>Rating</button>
+            </th>
+            <th style={{width: "5%"}}>Current</th>
+            <th style={{width: "15%"}}>
+              <button id="sort_gain" type="button" 
+                onClick={() => sortByCol('percentGain')}>Gain</button>
+            </th>
+            <th style={{width: "15%"}}>Price Range</th>
+            <th style={{width: "15%"}}>Buy/Sell Range</th>
+            <th style={{width: "25%"}}>Price History</th>
+          </tr>
+          {generateRows(securityData, minMaxGain)}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
@@ -291,6 +326,7 @@ export default function App() {
   const [haveData, setHaveData] = useState(false);
   const [sortOrder, setSortOrder] = useState(false); // False = ascending, True = descending.
   const [sortColumn, setSortColumn] = useState("");
+  const [timePeriod, setTimePeriod] = useState("3months");
 
   function toggleSortOrder() {
     setSortOrder(sortOrder => !sortOrder);
@@ -352,7 +388,7 @@ export default function App() {
         value={{sortOrder, sortColumn, toggleSortOrder, setSortColumn}}
     > */}
         <GenerateTable securityData={chartData} minMaxGain={minMaxGain} 
-          setChartData={setChartData} sortByCol={sortByCol} />
+          setChartData={setChartData} sortByCol={sortByCol} timePeriod={timePeriod} setTimePeriod={setTimePeriod} />
       {/* </sortContext.Provider> */}
       </>
       );
