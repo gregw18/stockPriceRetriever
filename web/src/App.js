@@ -105,7 +105,7 @@ function GenerateTimePeriodButtons(timePeriod, setTimePeriod) {
 //  setTimePeriod(newTimePeriod);
 //}
 
-function GenerateTable({securityData, minMaxGain,  setChartData, 
+function GenerateTable({securityData, setChartData, 
                         sortByCol, timePeriod, setTimePeriod}) {
   return (
     <div>
@@ -134,15 +134,16 @@ function GenerateTable({securityData, minMaxGain,  setChartData,
             <th style={{width: "15%"}}>Buy/Sell Range</th>
             <th style={{width: "25%"}}>Price History</th>
           </tr>
-          {generateRows(securityData, minMaxGain)}
+          {generateRows(securityData)}
         </tbody>
       </table>
     </div>
   );
 }
 
-function generateRows(securityData, minMaxGain) {
+function generateRows(securityData) {
   console.log(securityData);
+  let myMinMaxGain = getMinMaxGain(securityData);
   return (
     <>
       {securityData.map(
@@ -152,7 +153,7 @@ function generateRows(securityData, minMaxGain) {
             <td>{d.data.group}</td>
             <td>{d.data.rating}</td>
             <td>{d.data.currentPrice}</td>
-            <td><GainChart chartData={d.data} minMax={minMaxGain} /></td>
+            <td><GainChart chartData={d.data} minMax={myMinMaxGain} /></td>
             <td><TimeRangeChart chartData={d.data} /></td>
             <td><BuySellChart chartData={d.data} /></td>
             <td><PriceHistoryChart chartData={d.data} /></td>
@@ -166,9 +167,9 @@ function generateRows(securityData, minMaxGain) {
 // Add buy low and sell high points to data, along with percent gain.
 // For both, if current not outside buy/sell range, are equal to buy/sell,
 // otherwise, are equal to current.
-function addCalculatedData(chartData) {
+function addCalculatedData(origData) {
   console.log("running addCalculatedData");
-  chartData.forEach(function (security) {
+  origData.forEach(function (security) {
     let buyLowPrice = security.data.buyPrice;
     if (security.data.currentPrice < buyLowPrice){
       buyLowPrice = security.data.currentPrice;
@@ -194,10 +195,10 @@ function addCalculatedData(chartData) {
 }
 
 // Get lowest and highest percent gains from given set of securities.
-function getMinMaxGain(chartData) {
+function getMinMaxGain(myChartData) {
   let minGain = 9999;
   let maxGain = -9999;
-  chartData.forEach(function (security) {
+  myChartData.forEach(function (security) {
     if (security.data.percentGain < minGain ) {
       minGain = security.data.percentGain;
     }
@@ -249,6 +250,7 @@ export default function App() {
           data: securityLilly
         }
       );
+      addCalculatedData(mySecurities);
       setChartData(mySecurities);
       setHaveData(true);
     }
@@ -306,6 +308,7 @@ export default function App() {
             console.log("data=", data);
             let mySecurities = parseJson(data);
 
+            addCalculatedData(mySecurities);
             setChartData(mySecurities);
             setHaveData(true);
           });
@@ -381,14 +384,14 @@ export default function App() {
     return <div> Loading...</div>
   }
   else {
-    addCalculatedData(chartData);
-    const minMaxGain = getMinMaxGain(chartData);
+    //addCalculatedData(chartData);
+    //const minMaxGain = getMinMaxGain(chartData);
     return (
       <>
       {/* <sortContext.Provider
         value={{sortOrder, sortColumn, toggleSortOrder, setSortColumn}}
     > */}
-        <GenerateTable securityData={chartData} minMaxGain={minMaxGain} 
+        <GenerateTable securityData={chartData}
           setChartData={setChartData} sortByCol={sortByCol} timePeriod={timePeriod} setTimePeriod={setTimePeriod} />
       {/* </sortContext.Provider> */}
       </>
