@@ -1,72 +1,12 @@
 import {useEffect, useState} from "react";
 import {Chart, GainChart, TimeRangeChart, BuySellChart, PriceHistoryChart} from "../src/components/Chart";
 import './App.css';
-
+import { getFakeData } from "./FakeData";
 
 const api_endpoint = "https://n7zmmbsqxc.execute-api.us-east-1.amazonaws.com/Prod/data";
 //const api_endpoint = "https://jep1avv9ui.execute-api.us-east-1.amazonaws.com/Prod/data";
 //const api_endpoint = "https://jep1a9ui.execute-api.us-east-1.amazonaws.com/Prod/data";
 
-const securityAmazon= {
-  name: "Amazon",
-  currentPrice: 114.35,
-  periodStartPrice: 165.06,
-  periodHighPrice: 188.11,
-  periodLowPrice: 113.23,
-  buyPrice: 115.8,
-  sellPrice: 150.3,
-  group: "2.near buy",
-  rating: 5.43,
-  periodPrices: [24.7, 26.5, 23.4, 34.3, 32.1, 40.3, 38.6, 35.4, 33.2],
-  periodDates: ["2022-12-05", "2022-12-06", "2022-12-07", "2022-12-08", "2022-12-09",
-           "2022-12-12", "2022-12-13", "2022-12-14", "2022-12-15" ]
-};
-
-const securityMicrosoft= {
-  name: "Microsoft",
-  currentPrice: 239.04,
-  periodStartPrice: 283.11,
-  periodHighPrice: 349.67,
-  periodLowPrice: 235.2,
-  buyPrice: 170.90,
-  sellPrice: 274.70,
-  group: "3.middle",
-  rating: 54.32,
-  periodPrices: [283.11, 349.67, 323.4, 334.3, 232.1, 240.3, 338.6, 235.4, 233.2],
-  periodDates: ["2022-12-05", "2022-12-06", "2022-12-07", "2022-12-08", "2022-12-09",
-           "2022-12-12", "2022-12-13", "2022-12-14", "2022-12-15" ]
-};
-
-const securityLilly= {
-  name: "Eli Lilly",
-  currentPrice: 307.59,
-  periodStartPrice: 224.85,
-  periodHighPrice: 331.56,
-  periodLowPrice: 224.85,
-  buyPrice: 93.10,
-  sellPrice: 171.10,
-  group: "5.sell",
-  rating: 80.54,
-  periodPrices: [224.85, 265.67, 245.4, 277.3, 237.1, 249.3, 289.6, 324.4, 307.72],
-  periodDates: ["2022-12-05", "2022-12-06", "2022-12-07", "2022-12-08", "2022-12-09",
-           "2022-12-12", "2022-12-13", "2022-12-14", "2022-12-15" ]
-};
-
-const securityZero= {
-  name: "FTX",
-  currentPrice: 0.0,
-  periodStartPrice: 0,
-  periodHighPrice: 0,
-  periodLowPrice: 0,
-  buyPrice: 93.10,
-  sellPrice: 171.10,
-  group: "1.buy",
-  rating: -100,
-  periodPrices: [0],
-  periodDates: ["2022-12-05"]
-};
-
-//const sortContext = createContext(null);
 
 function logSecurities(securityData) {
   securityData.forEach(function (security) {
@@ -103,9 +43,9 @@ function GenerateTimePeriodButtons(timePeriod, setTimePeriod, setChartData, setH
 function retrieveData(newTimePeriod, setTimePeriod, setChartData, setHaveData) {
   console.log("retrieveData, newTimePeriod=", newTimePeriod);
   setTimePeriod(newTimePeriod);
-  //fetchTestPrices(newTimePeriod, setChartData, setHaveData);
+  fetchTestPrices(newTimePeriod, setChartData, setHaveData);
   //fetchPricesHttp();
-  fetchPrices(newTimePeriod, setChartData, setHaveData);
+  //fetchPrices(newTimePeriod, setChartData, setHaveData);
 }
 
 function GenerateTable({securityData, setChartData, setHaveData, 
@@ -225,31 +165,7 @@ function getMinMaxGain(myChartData) {
 
 const fetchTestPrices = async (timePeriod, setChartData, setHaveData) => {
   console.log("fetchTestPrices, timePeriod=", timePeriod)
-  let mySecurities = [];
-  mySecurities.push( 
-    {
-      id: 1,
-      data: securityAmazon
-    }
-  );
-  mySecurities.push( 
-    {
-      id: 4,
-      data: securityZero
-    }
-  );
-  mySecurities.push( 
-    {
-      id: 2,
-      data: securityMicrosoft
-    }
-  );
-  mySecurities.push( 
-    {
-      id: 3,
-      data: securityLilly
-    }
-  );
+  let mySecurities = getFakeData();
   addCalculatedData(mySecurities);
   setChartData(mySecurities);
   setHaveData(true);
@@ -302,30 +218,9 @@ const fetchPrices = async (timePeriod, setChartData, setHaveData) => {
 export default function App() {
   useEffect(() => {
 
-    //const fetchPricesHttp = async () => {
-      //const requestDataLambda = function() {
-    //    var xhttp = new XMLHttpRequest();
-    //    xhttp.onloadend = function() {
-    //      if (this.readyState ==4 && this.status == 200) {
-    //        console.log("responseText= ", xhttp.responseText);
-    //        console.log("responseHeaders= ", xhttp.getAllResponseHeaders());
-    //        const myjson = JSON.parse(xhttp.responseText);
-    //        let mySecurities = parseJson(myjson);
-
-    //        setChartData(mySecurities);
-    //        setHaveData(true);
-    //      } else {
-    //        console.log("request failed again.");
-    //      }
-    //    }
-    //    xhttp.open("GET", api_endpoint + "?timeframe=30days", false);
-    //    xhttp.setRequestHeader("mode", "no-cors");
-    //    xhttp.send();
-    //  }
-
-    //fetchTestPrices(timePeriod, setChartData, setHaveData);
+    fetchTestPrices(timePeriod, setChartData, setHaveData);
     //fetchPricesHttp();
-    fetchPrices(timePeriod, setChartData, setHaveData);
+    //fetchPrices(timePeriod, setChartData, setHaveData);
   }, []);
 
   const [chartData, setChartData] = useState({});
@@ -386,16 +281,10 @@ export default function App() {
     return <div> Loading...</div>
   }
   else {
-    //addCalculatedData(chartData);
-    //const minMaxGain = getMinMaxGain(chartData);
     return (
       <>
-      {/* <sortContext.Provider
-        value={{sortOrder, sortColumn, toggleSortOrder, setSortColumn}}
-    > */}
         <GenerateTable securityData={chartData}
           setChartData={setChartData} sortByCol={sortByCol} timePeriod={timePeriod} setTimePeriod={setTimePeriod} setHaveData={setHaveData} />
-      {/* </sortContext.Provider> */}
       </>
       );
   }
