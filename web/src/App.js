@@ -74,42 +74,45 @@ function logSecurities(securityData) {
   })
 }
 
-function GenerateTimePeriodButtons(timePeriod, setTimePeriod) {
+function GenerateTimePeriodButtons(timePeriod, setTimePeriod, setChartData, setHaveData) {
   console.log("GenerateTimePeriodButtons, timePeriod=", timePeriod);
   return (
     <div>
       <input type="radio" value="1day" checked={timePeriod==="1day"}
-        onChange={(e) => setTimePeriod(e.target.value)}
+        onChange={(e) => retrieveData(e.target.value, setTimePeriod, setChartData, setHaveData)}
         name="timePeriods" /> 1 Day
       <input type="radio" value="30days" checked={timePeriod==="30days"}
-        onChange={(e) => setTimePeriod(e.target.value)}
+        onChange={(e) => retrieveData(e.target.value, setTimePeriod, setChartData, setHaveData)}
         name="timePeriods" /> 1 Month
       <input type="radio" value="3months" checked={timePeriod==="3months"} 
-        onChange={(e) => setTimePeriod(e.target.value)}
+        onChange={(e) => retrieveData(e.target.value, setTimePeriod, setChartData, setHaveData)}
         name="timePeriods" /> 3 Months
       <input type="radio" value="1year" checked={timePeriod==="1year"} 
-        onChange={(e) => setTimePeriod(e.target.value)}
+        onChange={(e) => retrieveData(e.target.value, setTimePeriod, setChartData, setHaveData)}
         name="timePeriods" /> 1 Year
       <input type="radio" value="3years" checked={timePeriod==="3years"} 
-        onChange={(e) => setTimePeriod(e.target.value)}
+        onChange={(e) => retrieveData(e.target.value, setTimePeriod, setChartData, setHaveData)}
         name="timePeriods" /> 3 Years
       <input type="radio" value="5years" checked={timePeriod==="5years"} 
-        onChange={(e) => setTimePeriod(e.target.value)}
+        onChange={(e) => retrieveData(e.target.value, setTimePeriod, setChartData, setHaveData)}
         name="timePeriods" /> 5 Years
     </div>
   );
 }
 
-//function retrieveData(newTimePeriod) {
-//  console.log("retrieveData, newTimePeriod=", newTimePeriod);
-//  setTimePeriod(newTimePeriod);
-//}
+function retrieveData(newTimePeriod, setTimePeriod, setChartData, setHaveData) {
+  console.log("retrieveData, newTimePeriod=", newTimePeriod);
+  setTimePeriod(newTimePeriod);
+  //fetchTestPrices(newTimePeriod, setChartData, setHaveData);
+  //fetchPricesHttp();
+  fetchPrices(newTimePeriod, setChartData, setHaveData);
+}
 
-function GenerateTable({securityData, setChartData, 
+function GenerateTable({securityData, setChartData, setHaveData, 
                         sortByCol, timePeriod, setTimePeriod}) {
   return (
     <div>
-      {GenerateTimePeriodButtons(timePeriod, setTimePeriod)}
+      {GenerateTimePeriodButtons(timePeriod, setTimePeriod, setChartData, setHaveData)}
       <table style={{width: "100%"}}>
         <tbody>
           <tr>
@@ -220,53 +223,84 @@ function getMinMaxGain(myChartData) {
   return {minGain: minGain, maxGain: maxGain};
 }
 
+const fetchTestPrices = async (timePeriod, setChartData, setHaveData) => {
+  console.log("fetchTestPrices, timePeriod=", timePeriod)
+  let mySecurities = [];
+  mySecurities.push( 
+    {
+      id: 1,
+      data: securityAmazon
+    }
+  );
+  mySecurities.push( 
+    {
+      id: 4,
+      data: securityZero
+    }
+  );
+  mySecurities.push( 
+    {
+      id: 2,
+      data: securityMicrosoft
+    }
+  );
+  mySecurities.push( 
+    {
+      id: 3,
+      data: securityLilly
+    }
+  );
+  addCalculatedData(mySecurities);
+  setChartData(mySecurities);
+  setHaveData(true);
+}
+
+const parseJson = function (srcData) {
+  let mySecurities = [];
+  let i = 1;
+  for (const security of srcData) {
+    mySecurities.push( {
+      id: i,
+      data:security
+    });
+    i++;
+  }
+  return mySecurities;
+}
+
+const fetchPrices = async (timePeriod, setChartData, setHaveData) => {
+  var params = {timeframe: timePeriod};
+  const urlStr = api_endpoint + "?" + new URLSearchParams(params);
+  console.log("fetchPrices, urlStr=", urlStr);
+  var url = new URL(urlStr);
+
+  const fetchPromise = fetch(url);
+  //console.log("1. promise=", fetchPromise);
+  fetchPromise.then((response) => {
+    //console.log("2. promise=", fetchPromise);
+    console.log("1. status=", response.status);
+    if (response.ok) {
+      const jsonPromise = response.json();
+      console.log("1. jsonPromise=", jsonPromise);
+      jsonPromise.then((data) => {
+        console.log("data=", data);
+        let mySecurities = parseJson(data);
+
+        addCalculatedData(mySecurities);
+        setChartData(mySecurities);
+        setHaveData(true);
+      });
+    } else {
+      console.log("request failed again.");
+    }
+  })
+  .catch((error) => {
+    console.log("fetchPrices failed, error=", error);
+  });
+}
+
 export default function App() {
   useEffect(() => {
-    
-    const fetchTestPrices = async (timePeriod) => {
-      console.log("fetchTestPrices, timePeriod=", timePeriod)
-      let mySecurities = [];
-      mySecurities.push( 
-        {
-          id: 1,
-          data: securityAmazon
-        }
-      );
-      mySecurities.push( 
-        {
-          id: 4,
-          data: securityZero
-        }
-      );
-      mySecurities.push( 
-        {
-          id: 2,
-          data: securityMicrosoft
-        }
-      );
-      mySecurities.push( 
-        {
-          id: 3,
-          data: securityLilly
-        }
-      );
-      addCalculatedData(mySecurities);
-      setChartData(mySecurities);
-      setHaveData(true);
-    }
-
-    const parseJson = function (srcData) {
-            let mySecurities = [];
-            let i = 1;
-            for (const security of srcData) {
-              mySecurities.push( {
-                id: i,
-                data:security
-              });
-              i++;
-            }
-            return mySecurities;
-      }
 
     //const fetchPricesHttp = async () => {
       //const requestDataLambda = function() {
@@ -289,41 +323,9 @@ export default function App() {
     //    xhttp.send();
     //  }
 
-
-    const fetchPrices = async (timePeriod) => {
-      var params = {timeframe: timePeriod};
-      const urlStr = api_endpoint + "?" + new URLSearchParams(params);
-      console.log("fetchPrices, urlStr=", urlStr);
-      var url = new URL(urlStr);
-
-      const fetchPromise = fetch(url);
-      //console.log("1. promise=", fetchPromise);
-      fetchPromise.then((response) => {
-        //console.log("2. promise=", fetchPromise);
-        console.log("1. status=", response.status);
-        if (response.ok) {
-          const jsonPromise = response.json();
-          console.log("1. jsonPromise=", jsonPromise);
-          jsonPromise.then((data) => {
-            console.log("data=", data);
-            let mySecurities = parseJson(data);
-
-            addCalculatedData(mySecurities);
-            setChartData(mySecurities);
-            setHaveData(true);
-          });
-        } else {
-          console.log("request failed again.");
-        }
-      })
-      .catch((error) => {
-        console.log("fetchPrices failed, error=", error);
-      });
-    }
-
-    fetchTestPrices(timePeriod);
+    //fetchTestPrices(timePeriod, setChartData, setHaveData);
     //fetchPricesHttp();
-    //fetchPrices(timePeriod);
+    fetchPrices(timePeriod, setChartData, setHaveData);
   }, []);
 
   const [chartData, setChartData] = useState({});
@@ -392,7 +394,7 @@ export default function App() {
         value={{sortOrder, sortColumn, toggleSortOrder, setSortColumn}}
     > */}
         <GenerateTable securityData={chartData}
-          setChartData={setChartData} sortByCol={sortByCol} timePeriod={timePeriod} setTimePeriod={setTimePeriod} />
+          setChartData={setChartData} sortByCol={sortByCol} timePeriod={timePeriod} setTimePeriod={setTimePeriod} setHaveData={setHaveData} />
       {/* </sortContext.Provider> */}
       </>
       );
