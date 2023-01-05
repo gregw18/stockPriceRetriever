@@ -1,6 +1,7 @@
 const securityAmazon= {
     name: "Amazon",
     currentPrice: 114.35,
+    lastClosePrice: 112.35,
     periodStartPrice: 165.06,
     periodHighPrice: 188.11,
     periodLowPrice: 113.23,
@@ -16,6 +17,7 @@ const securityAmazon= {
   const securityMicrosoft= {
     name: "Microsoft",
     currentPrice: 239.04,
+    lastClosePrice: 245.35,
     periodStartPrice: 283.11,
     periodHighPrice: 349.67,
     periodLowPrice: 235.2,
@@ -31,6 +33,7 @@ const securityAmazon= {
   const securityLilly= {
     name: "Eli Lilly",
     currentPrice: 307.59,
+    lastClosePrice: 312.35,
     periodStartPrice: 224.85,
     periodHighPrice: 331.56,
     periodLowPrice: 224.85,
@@ -46,6 +49,7 @@ const securityAmazon= {
   const securityZero= {
     name: "FTX",
     currentPrice: 0.0,
+    lastClosePrice: 0.0,
     periodStartPrice: 0,
     periodHighPrice: 0,
     periodLowPrice: 0,

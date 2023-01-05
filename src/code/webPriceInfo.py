@@ -13,6 +13,7 @@ class WebPriceInfo:
     def __init__(self):
         self.name = ""
         self.currentPrice = 0
+        self.lastClosePrice = 0
         self.buyPrice = 0
         self.sellPrice = 0
         self.periodStartPrice = 0
@@ -30,6 +31,7 @@ class WebPriceInfo:
         """
         self.name = mySecurity.name
         self.currentPrice = mySecurity.currentPrice
+        self.lastClosePrice = mySecurity.lastClosePrice
         self.buyPrice = mySecurity.buyPrice
         self.sellPrice = mySecurity.sellPrice
         self.status = mySecurity.status
@@ -51,6 +53,7 @@ class WebPriceInfo:
         myDict = {}
         myDict["name"] = self.name
         myDict["currentPrice"] = float(self.currentPrice)
+        myDict["lastClosePrice"] = float(self.lastClosePrice)
         myDict["buyPrice"] = float(self.buyPrice)
         myDict["sellPrice"] = float(self.sellPrice)
         myDict["periodStartPrice"] = float(self.periodStartPrice)

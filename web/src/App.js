@@ -110,7 +110,7 @@ function generateRows(securityData) {
 // Add buy low and sell high points to data, along with percent gain.
 // For both, if current not outside buy/sell range, are equal to buy/sell,
 // otherwise, are equal to current.
-function addCalculatedData(origData) {
+function addCalculatedData(origData, timePeriod) {
   console.log("running addCalculatedData");
   origData.forEach(function (security) {
     let buyLowPrice = security.data.buyPrice;
@@ -126,8 +126,13 @@ function addCalculatedData(origData) {
     }
     security.data.sellHighPrice = sellHighPrice;
 
-    if (security.data.periodStartPrice > 0) {
-      security.data.percentGain = 100 * (security.data.currentPrice - security.data.periodStartPrice) / security.data.periodStartPrice;
+    let prevPrice = security.data.periodStartPrice;
+    if (timePeriod === "1day") {
+      // Don't get historical prices if ask for just one day, so use previous close price.
+      prevPrice = security.data.lastClosePrice;
+    }
+    if (prevPrice > 0) {
+      security.data.percentGain = 100 * (security.data.currentPrice - prevPrice) / prevPrice;
     }
     else {
       // Shouldn't have many with a price of zero, but if do, above formula gives Nan as gain,
@@ -166,7 +171,7 @@ function getMinMaxGain(myChartData) {
 const fetchTestPrices = async (timePeriod, setChartData, setHaveData) => {
   console.log("fetchTestPrices, timePeriod=", timePeriod)
   let mySecurities = getFakeData();
-  addCalculatedData(mySecurities);
+  addCalculatedData(mySecurities, timePeriod);
   setChartData(mySecurities);
   setHaveData(true);
 }
@@ -202,7 +207,7 @@ const fetchPrices = async (timePeriod, setChartData, setHaveData) => {
         console.log("data=", data);
         let mySecurities = parseJson(data);
 
-        addCalculatedData(mySecurities);
+        addCalculatedData(mySecurities, timePeriod);
         setChartData(mySecurities);
         setHaveData(true);
       });
