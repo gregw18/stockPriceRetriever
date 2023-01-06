@@ -27,7 +27,7 @@
     -->
     <title>React App</title>
     <script>
-      const api_endpoint = "https://n7zmmbsqxc.execute-api.us-east-1.amazonaws.com/Prod/data";
+      //const api_endpoint = "https://n7zmmbsqxc.execute-api.us-east-1.amazonaws.com/Prod/data";
       //const api_endpoint = "https://jep1avv9ui.execute-api.us-east-1.amazonaws.com/Prod/data";
       /*
       const requestDataLambda = async() => {
@@ -44,29 +44,29 @@
         console.log("finished requestData")
       }
       */
-      const requestDataLambda = function() {
-        var xhttp = new XMLHttpRequest();
+      //const requestDataLambda = function() {
+      //  var xhttp = new XMLHttpRequest();
     //xhttp.onreadystatechange = function() {
-        xhttp.onloadend = function() {
-        if (this.readyState ==4 && this.status == 200) {
-          console.log("responseText= ", xhttp.responseText);
-          console.log("responseHeaders= ", xhttp.getAllResponseHeaders());
-          const myjson = JSON.parse(xhttp.responseText);
+      //  xhttp.onloadend = function() {
+      //  if (this.readyState ==4 && this.status == 200) {
+      //    console.log("responseText= ", xhttp.responseText);
+      //    console.log("responseHeaders= ", xhttp.getAllResponseHeaders());
+      //    const myjson = JSON.parse(xhttp.responseText);
           //for (const security of myjson) {
             //console.log("currentPrice: ", security.currentPrice);
             //console.log("periodPrices: ", security.periodPrices);
           //}
-        } else {
-          console.log("request failed again.");
-        }
-      }
-      xhttp.open("GET", api_endpoint + "?timeframe=30days", false);
-      xhttp.setRequestHeader("mode", "no-cors");
-      xhttp.send();
-    }
+      //  } else {
+      //    console.log("request failed again.");
+      //  }
+     // }
+     // xhttp.open("GET", api_endpoint + "?timeframe=30days", false);
+     // xhttp.setRequestHeader("mode", "no-cors");
+     // xhttp.send();
+    //}
 
     </script>
-    <button onclick="requestDataLambda()">Retrieve Data</button>
+    <!-- button onclick="requestDataLambda()">Retrieve Data</button -->
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

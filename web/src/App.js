@@ -14,49 +14,54 @@ function logSecurities(securityData) {
   })
 }
 
-function GenerateTimePeriodButtons(timePeriod, setTimePeriod, setChartData, setHaveData) {
+function GenerateTimePeriodButtons(timePeriod, haveData, setTimePeriod, 
+                                  setChartData, setHaveData) {
   console.log("GenerateTimePeriodButtons, timePeriod=", timePeriod);
   return (
     <div>
       <input type="radio" value="1day" checked={timePeriod==="1day"}
-        onChange={(e) => retrieveData(e.target.value, setTimePeriod, setChartData, setHaveData)}
+        onChange={(e) => retrieveData(e.target.value, haveData, setTimePeriod, setChartData, setHaveData)}
         name="timePeriods" /> 1 Day
       <input type="radio" value="30days" checked={timePeriod==="30days"}
-        onChange={(e) => retrieveData(e.target.value, setTimePeriod, setChartData, setHaveData)}
+        onChange={(e) => retrieveData(e.target.value, haveData, setTimePeriod, setChartData, setHaveData)}
         name="timePeriods" /> 1 Month
       <input type="radio" value="3months" checked={timePeriod==="3months"} 
-        onChange={(e) => retrieveData(e.target.value, setTimePeriod, setChartData, setHaveData)}
+        onChange={(e) => retrieveData(e.target.value, haveData, setTimePeriod, setChartData, setHaveData)}
         name="timePeriods" /> 3 Months
       <input type="radio" value="1year" checked={timePeriod==="1year"} 
-        onChange={(e) => retrieveData(e.target.value, setTimePeriod, setChartData, setHaveData)}
+        onChange={(e) => retrieveData(e.target.value, haveData, setTimePeriod, setChartData, setHaveData)}
         name="timePeriods" /> 1 Year
       <input type="radio" value="3years" checked={timePeriod==="3years"} 
-        onChange={(e) => retrieveData(e.target.value, setTimePeriod, setChartData, setHaveData)}
+        onChange={(e) => retrieveData(e.target.value, haveData, setTimePeriod, setChartData, setHaveData)}
         name="timePeriods" /> 3 Years
       <input type="radio" value="5years" checked={timePeriod==="5years"} 
-        onChange={(e) => retrieveData(e.target.value, setTimePeriod, setChartData, setHaveData)}
+        onChange={(e) => retrieveData(e.target.value, haveData, setTimePeriod, setChartData, setHaveData)}
         name="timePeriods" /> 5 Years
     </div>
   );
 }
 
-function retrieveData(newTimePeriod, setTimePeriod, setChartData, setHaveData) {
+function retrieveData(newTimePeriod, haveData, setTimePeriod, setChartData, setHaveData) {
   console.log("retrieveData, newTimePeriod=", newTimePeriod);
   setTimePeriod(newTimePeriod);
-  fetchTestPrices(newTimePeriod, setChartData, setHaveData);
+  //fetchTestPrices(newTimePeriod, setChartData, setHaveData);
   //fetchPricesHttp();
-  //fetchPrices(newTimePeriod, setChartData, setHaveData);
+  if (haveData) {
+    // If haveData is false, main loop will be requesting data, no need to request here as well.
+    fetchPrices(newTimePeriod, haveData, setChartData, setHaveData);
+  }
 }
 
-function GenerateTable({securityData, setChartData, setHaveData, 
+function GenerateTable({securityData, haveData, setChartData, setHaveData, 
                         sortByCol, timePeriod, setTimePeriod}) {
-  return (
+    const t5 = performance.now();
+    const myHtml = (
     <div>
-      {GenerateTimePeriodButtons(timePeriod, setTimePeriod, setChartData, setHaveData)}
+      {GenerateTimePeriodButtons(timePeriod, haveData, setTimePeriod, setChartData, setHaveData)}
       <table style={{width: "100%"}}>
         <tbody>
           <tr>
-            <th style={{width: "15%"}}>
+            <th style={{width: "10%"}}>
               <button id="sort_name" type="button" 
                 onClick={() => sortByCol('name')}>Name</button>
             </th>
@@ -68,24 +73,26 @@ function GenerateTable({securityData, setChartData, setHaveData,
               <button id="sort_rating" type="button"
               onClick={() => sortByCol('rating')}>Rating</button>
             </th>
-            <th style={{width: "5%"}}>Current</th>
+            <th style={{width: "5%"}}>Last Close</th>
             <th style={{width: "15%"}}>
               <button id="sort_gain" type="button" 
                 onClick={() => sortByCol('percentGain')}>Gain</button>
             </th>
             <th style={{width: "15%"}}>Price Range</th>
             <th style={{width: "15%"}}>Buy/Sell Range</th>
-            <th style={{width: "25%"}}>Price History</th>
+            <th style={{width: "30%"}}>Price History</th>
           </tr>
           {generateRows(securityData)}
         </tbody>
       </table>
     </div>
   );
+  console.log(new Date().toTimeString(), "GenerateTable took ", performance.now() - t5, " ms.");
+  return myHtml;
 }
 
 function generateRows(securityData) {
-  console.log(securityData);
+  console.log("generateRows, data=", securityData);
   let myMinMaxGain = getMinMaxGain(securityData);
   return (
     <>
@@ -111,6 +118,7 @@ function generateRows(securityData) {
 // For both, if current not outside buy/sell range, are equal to buy/sell,
 // otherwise, are equal to current.
 function addCalculatedData(origData, timePeriod) {
+  const t2 = performance.now();
   console.log("running addCalculatedData");
   origData.forEach(function (security) {
     let buyLowPrice = security.data.buyPrice;
@@ -140,10 +148,12 @@ function addCalculatedData(origData, timePeriod) {
       security.data.percentGain = 0;
     }
   })
+  console.log("addCalculatedData took ", performance.now() - t2, " ms.");
 }
 
 // Get lowest and highest percent gains from given set of securities.
 function getMinMaxGain(myChartData) {
+  const t3 = performance.now();
   let minGain = 9999;
   let maxGain = -9999;
   myChartData.forEach(function (security) {
@@ -165,6 +175,7 @@ function getMinMaxGain(myChartData) {
   minGain = (minGain > 0 ? 0 : minGain);
   maxGain = (maxGain < 0 ? 0 : maxGain);
   console.log("ran getMinMaxGain, returning: ", minGain, ", ", maxGain)
+  console.log("getMinMaxGain took ", performance.now() - t3, " ms.");
   return {minGain: minGain, maxGain: maxGain};
 }
 
@@ -189,10 +200,12 @@ const parseJson = function (srcData) {
   return mySecurities;
 }
 
-const fetchPrices = async (timePeriod, setChartData, setHaveData) => {
+const fetchPrices = async (timePeriod, haveData, setChartData, setHaveData) => {
+  setHaveData(false);
+  const startTime = performance.now();
   var params = {timeframe: timePeriod};
   const urlStr = api_endpoint + "?" + new URLSearchParams(params);
-  console.log("fetchPrices, urlStr=", urlStr);
+  console.log(new Date().toTimeString(), "fetchPrices, urlStr=", urlStr);
   var url = new URL(urlStr);
 
   const fetchPromise = fetch(url);
@@ -202,14 +215,15 @@ const fetchPrices = async (timePeriod, setChartData, setHaveData) => {
     console.log("1. status=", response.status);
     if (response.ok) {
       const jsonPromise = response.json();
-      console.log("1. jsonPromise=", jsonPromise);
+      console.log("2.", new Date().toTimeString(), ", jsonPromise=", jsonPromise);
       jsonPromise.then((data) => {
-        console.log("data=", data);
+        console.log("3.", new Date().toTimeString(), ", fetchPrices, data=", data);
         let mySecurities = parseJson(data);
 
         addCalculatedData(mySecurities, timePeriod);
         setChartData(mySecurities);
         setHaveData(true);
+        console.log(new Date().toTimeString(), "fetchPrices took ", performance.now() - startTime, " ms.");
       });
     } else {
       console.log("request failed again.");
@@ -221,11 +235,20 @@ const fetchPrices = async (timePeriod, setChartData, setHaveData) => {
 }
 
 export default function App() {
+  console.log("starting app");
+  let fetchIsRunning = false;
+  let t0 = performance.now();
+
   useEffect(() => {
 
-    fetchTestPrices(timePeriod, setChartData, setHaveData);
+    //fetchTestPrices(timePeriod, setChartData, setHaveData);
     //fetchPricesHttp();
-    //fetchPrices(timePeriod, setChartData, setHaveData);
+    if (!fetchIsRunning) {
+      fetchIsRunning = true;
+      console.log(new Date().toTimeString(), "calling fetchPrices from app.");
+      fetchPrices(timePeriod, haveData, setChartData, setHaveData);
+      fetchIsRunning = false;
+    }
   }, []);
 
   const [chartData, setChartData] = useState({});
@@ -239,6 +262,7 @@ export default function App() {
   }
 
   function sortByCol(colName) {
+    const t1 = performance.now();
     console.log("Resorting");
     let thisOrder = sortOrder;
     if (sortColumn === colName) {
@@ -280,16 +304,19 @@ export default function App() {
     })
     logSecurities(chartData);
     setChartData(chartData);
+    console.log("sortByCol took ", performance.now() - t1, " ms.");
   }
 
   if (!haveData) {
     return <div> Loading...</div>
   }
   else {
+    console.log("App took ", performance.now() - t0, " ms., calling GenerateTable");
     return (
       <>
-        <GenerateTable securityData={chartData}
-          setChartData={setChartData} sortByCol={sortByCol} timePeriod={timePeriod} setTimePeriod={setTimePeriod} setHaveData={setHaveData} />
+        <GenerateTable securityData={chartData} haveData={haveData}
+          setChartData={setChartData} sortByCol={sortByCol} timePeriod={timePeriod} 
+          setTimePeriod={setTimePeriod} setHaveData={setHaveData} />
       </>
       );
   }
