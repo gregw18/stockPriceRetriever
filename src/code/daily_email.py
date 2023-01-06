@@ -110,6 +110,8 @@ def get_email(myGroups):
                 myBody += "%7.2f%%, " % (rating.security.get_percent_52_week_high())
                 myBody += "%7.2f%%\n" % (rating.security.get_percent_change_today())
 
+    myBody += "\n For more details, use the following link: https://dev.dorhbll6brxxh.amplifyapp.com\n"
+
     # If no securities provided, return empties.
     if not mySubj:
         myBody = ""
