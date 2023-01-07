@@ -4,8 +4,6 @@ import './App.css';
 import { getFakeData } from "./FakeData";
 
 const api_endpoint = "https://n7zmmbsqxc.execute-api.us-east-1.amazonaws.com/Prod/data";
-//const api_endpoint = "https://jep1avv9ui.execute-api.us-east-1.amazonaws.com/Prod/data";
-//const api_endpoint = "https://jep1a9ui.execute-api.us-east-1.amazonaws.com/Prod/data";
 
 
 function logSecurities(securityData) {
@@ -46,10 +44,7 @@ function retrieveData(newTimePeriod, haveData, setTimePeriod, setChartData, setH
   setTimePeriod(newTimePeriod);
   //fetchTestPrices(newTimePeriod, setChartData, setHaveData);
   //fetchPricesHttp();
-  if (haveData) {
-    // If haveData is false, main loop will be requesting data, no need to request here as well.
-    fetchPrices(newTimePeriod, haveData, setChartData, setHaveData);
-  }
+  fetchPrices(newTimePeriod, haveData, setChartData, setHaveData);
 }
 
 function GenerateTable({securityData, haveData, setChartData, setHaveData, 
@@ -175,7 +170,7 @@ function getMinMaxGain(myChartData) {
   minGain = (minGain > 0 ? 0 : minGain);
   maxGain = (maxGain < 0 ? 0 : maxGain);
   console.log("ran getMinMaxGain, returning: ", minGain, ", ", maxGain)
-  console.log("getMinMaxGain took ", performance.now() - t3, " ms.");
+  console.log(new Date().toTimeString(), "getMinMaxGain took ", performance.now() - t3, " ms.");
   return {minGain: minGain, maxGain: maxGain};
 }
 
@@ -209,9 +204,7 @@ const fetchPrices = async (timePeriod, haveData, setChartData, setHaveData) => {
   var url = new URL(urlStr);
 
   const fetchPromise = fetch(url);
-  //console.log("1. promise=", fetchPromise);
   fetchPromise.then((response) => {
-    //console.log("2. promise=", fetchPromise);
     console.log("1. status=", response.status);
     if (response.ok) {
       const jsonPromise = response.json();
@@ -236,19 +229,12 @@ const fetchPrices = async (timePeriod, haveData, setChartData, setHaveData) => {
 
 export default function App() {
   console.log("starting app");
-  let fetchIsRunning = false;
   let t0 = performance.now();
 
   useEffect(() => {
 
-    //fetchTestPrices(timePeriod, setChartData, setHaveData);
-    //fetchPricesHttp();
-    if (!fetchIsRunning) {
-      fetchIsRunning = true;
-      console.log(new Date().toTimeString(), "calling fetchPrices from app.");
-      fetchPrices(timePeriod, haveData, setChartData, setHaveData);
-      fetchIsRunning = false;
-    }
+    console.log(new Date().toTimeString(), "calling fetchPrices from app.");
+    fetchPrices(timePeriod, haveData, setChartData, setHaveData);
   }, []);
 
   const [chartData, setChartData] = useState({});
@@ -267,7 +253,7 @@ export default function App() {
     let thisOrder = sortOrder;
     if (sortColumn === colName) {
       // If we're already sorted on the same column, just reverse the order
-      console.log("column=", colName);
+      //console.log("column=", colName);
       thisOrder = !sortOrder;
       setSortOrder(thisOrder);
     }

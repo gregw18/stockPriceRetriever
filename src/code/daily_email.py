@@ -94,7 +94,8 @@ def get_email(myGroups):
     max_wid = 45
     mySubj = ""
     # Subtracting 2 for width because of removing b' from security.name (see longer comment below.)
-    myBody = "symbol.name: ".ljust(max_wid - 2) + \
+    myBody = "\n For more details, use the following link: https://dev.dorhbll6brxxh.amplifyapp.com\n\n"
+    myBody += "symbol.name: ".ljust(max_wid - 2) + \
              "   rating, current,     buy,    sell,   %52wk,    %chg"
 
     for groupCode in sprEnums.GroupCodes:
@@ -110,7 +111,6 @@ def get_email(myGroups):
                 myBody += "%7.2f%%, " % (rating.security.get_percent_52_week_high())
                 myBody += "%7.2f%%\n" % (rating.security.get_percent_change_today())
 
-    myBody += "\n For more details, use the following link: https://dev.dorhbll6brxxh.amplifyapp.com\n"
 
     # If no securities provided, return empties.
     if not mySubj:
