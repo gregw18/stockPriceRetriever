@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 //import {Chart, GainChart, TimeRangeChart, BuySellChart, PriceHistoryChart} from "../src/components/Chart";
-import {GenerateTable, fetchPrices, logSecurities} from "../src/components/ItemsTable";
+import {ItemsTable} from "../src/components/ItemsTable";
 import './App.css';
 //import { getFakeData } from "./components/FakeData";
 
@@ -233,18 +233,19 @@ export default function App() {
   console.log("starting app");
   let t0 = performance.now();
 
-  useEffect(() => {
+  //useEffect(() => {
 
-    console.log(new Date().toTimeString(), "calling fetchPrices from app.");
-    fetchPrices(timePeriod, haveData, setChartData, setHaveData);
-  }, []);
+  //  console.log(new Date().toTimeString(), "calling fetchPrices from app.");
+  //  fetchPrices(timePeriod, haveData, setChartData, setHaveData);
+  //}, []);
 
-  const [chartData, setChartData] = useState({});
-  const [haveData, setHaveData] = useState(false);
-  const [sortOrder, setSortOrder] = useState(false); // False = ascending, True = descending.
-  const [sortColumn, setSortColumn] = useState("");
-  const [timePeriod, setTimePeriod] = useState("3months");
+  //const [chartData, setChartData] = useState({});
+  //const [haveData, setHaveData] = useState(false);
+  //const [sortOrder, setSortOrder] = useState(false); // False = ascending, True = descending.
+  //const [sortColumn, setSortColumn] = useState("");
+  //const [timePeriod, setTimePeriod] = useState("3months");
 
+  /*
   function toggleSortOrder() {
     setSortOrder(sortOrder => !sortOrder);
   }
@@ -294,18 +295,17 @@ export default function App() {
     setChartData(chartData);
     console.log("sortByCol took ", performance.now() - t1, " ms.");
   }
+  */
 
-  if (!haveData) {
-    return <div> Loading...</div>
-  }
-  else {
+  //if (!haveData) {
+  //  return <div> Loading...</div>
+  //}
+  //else {
     console.log("App took ", performance.now() - t0, " ms., calling GenerateTable");
     return (
       <>
-        <GenerateTable securityData={chartData} haveData={haveData}
-          setChartData={setChartData} sortByCol={sortByCol} timePeriod={timePeriod} 
-          setTimePeriod={setTimePeriod} setHaveData={setHaveData} />
+        <ItemsTable/>
       </>
       );
-  }
+  //}
 }
