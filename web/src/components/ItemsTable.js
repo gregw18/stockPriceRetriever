@@ -1,13 +1,12 @@
 import {useEffect, useState} from "react";
-//import {Chart, GainChart, TimeRangeChart, BuySellChart, PriceHistoryChart} from "../src/components/Chart";
-import {GenerateTable, fetchPrices, logSecurities} from "../src/components/ItemsTable";
-import './App.css';
-//import { getFakeData } from "./components/FakeData";
+import {Chart, GainChart, TimeRangeChart, BuySellChart, PriceHistoryChart} from "./Chart";
+//import './App.css';
+import { getFakeData } from "./FakeData";
 
-/*const api_endpoint = "https://n7zmmbsqxc.execute-api.us-east-1.amazonaws.com/Prod/data";
+const api_endpoint = "https://n7zmmbsqxc.execute-api.us-east-1.amazonaws.com/Prod/data";
 
 
-function logSecurities(securityData) {
+export function logSecurities(securityData) {
   securityData.forEach(function (security) {
     console.log(security.data.name);
   })
@@ -48,7 +47,7 @@ function retrieveData(newTimePeriod, haveData, setTimePeriod, setChartData, setH
   fetchPrices(newTimePeriod, haveData, setChartData, setHaveData);
 }
 
-function GenerateTable({securityData, haveData, setChartData, setHaveData, 
+export function GenerateTable({securityData, haveData, setChartData, setHaveData, 
                         sortByCol, timePeriod, setTimePeriod}) {
     const t5 = performance.now();
     const myHtml = (
@@ -196,7 +195,7 @@ const parseJson = function (srcData) {
   return mySecurities;
 }
 
-const fetchPrices = async (timePeriod, haveData, setChartData, setHaveData) => {
+export const fetchPrices = async (timePeriod, haveData, setChartData, setHaveData) => {
   setHaveData(false);
   const startTime = performance.now();
   var params = {timeframe: timePeriod};
@@ -226,86 +225,4 @@ const fetchPrices = async (timePeriod, haveData, setChartData, setHaveData) => {
   .catch((error) => {
     console.log("fetchPrices failed, error=", error);
   });
-}
-*/
-
-export default function App() {
-  console.log("starting app");
-  let t0 = performance.now();
-
-  useEffect(() => {
-
-    console.log(new Date().toTimeString(), "calling fetchPrices from app.");
-    fetchPrices(timePeriod, haveData, setChartData, setHaveData);
-  }, []);
-
-  const [chartData, setChartData] = useState({});
-  const [haveData, setHaveData] = useState(false);
-  const [sortOrder, setSortOrder] = useState(false); // False = ascending, True = descending.
-  const [sortColumn, setSortColumn] = useState("");
-  const [timePeriod, setTimePeriod] = useState("3months");
-
-  function toggleSortOrder() {
-    setSortOrder(sortOrder => !sortOrder);
-  }
-
-  function sortByCol(colName) {
-    const t1 = performance.now();
-    console.log("Resorting");
-    let thisOrder = sortOrder;
-    if (sortColumn === colName) {
-      // If we're already sorted on the same column, just reverse the order
-      //console.log("column=", colName);
-      thisOrder = !sortOrder;
-      setSortOrder(thisOrder);
-    }
-    else {
-      // If we're changing the sort column, default to the standard order for that column.
-      setSortOrder(false);
-      setSortColumn(colName);
-    }
-    console.log("thisOrder=", thisOrder, ", sortColumn=", sortColumn);
-
-    let getVal = function(security) { return security.data[colName].toUpperCase()};
-    if (colName ==="percentGain" || colName ==="rating") {
-      getVal = function(security) {return security.data[colName]};
-    }
-
-    let lt = -1;
-    let gt = 1;
-    if (thisOrder) {
-      lt = 1;
-      gt = -1;
-    }
-
-    chartData.sort((a ,b) => {
-      let sortResult = 0;
-      const valA = getVal(a);
-      const valB = getVal(b);
-      if (valA < valB) {
-        sortResult = lt;
-      }
-      if (valA > valB) {
-        sortResult = gt;
-      }
-      return sortResult;
-    })
-    logSecurities(chartData);
-    setChartData(chartData);
-    console.log("sortByCol took ", performance.now() - t1, " ms.");
-  }
-
-  if (!haveData) {
-    return <div> Loading...</div>
-  }
-  else {
-    console.log("App took ", performance.now() - t0, " ms., calling GenerateTable");
-    return (
-      <>
-        <GenerateTable securityData={chartData} haveData={haveData}
-          setChartData={setChartData} sortByCol={sortByCol} timePeriod={timePeriod} 
-          setTimePeriod={setTimePeriod} setHaveData={setHaveData} />
-      </>
-      );
-  }
 }
