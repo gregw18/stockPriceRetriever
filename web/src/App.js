@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+//import {useEffect, useState} from "react";
 //import {Chart, GainChart, TimeRangeChart, BuySellChart, PriceHistoryChart} from "../src/components/Chart";
 import {ItemsTable} from "../src/components/ItemsTable";
 import './App.css';
@@ -301,11 +301,11 @@ export default function App() {
   //  return <div> Loading...</div>
   //}
   //else {
+    let result = (<>
+                <ItemsTable/>
+              </>
+    );
     console.log("App took ", performance.now() - t0, " ms., calling GenerateTable");
-    return (
-      <>
-        <ItemsTable/>
-      </>
-      );
+    return result;
   //}
 }

@@ -24,6 +24,7 @@ export function logSecurities(securityData) {
 export class ItemsTable extends React.Component {
   constructor(props) {
     super(props);
+    this.handleChangeTimePeriod = this.handleChangeTimePeriod.bind(this);
     this.state = {
       isLoaded: false,
       securityData: [],
@@ -49,15 +50,24 @@ export class ItemsTable extends React.Component {
       isLoaded: true,
       securityData: mySecurities
     });
+    console.log("Finished parseJson");
   }
 
   componentDidMount() {
-    this.fetchPrices();
+    console.log(new Date().toTimeString(), "componentDidMount calling fetchPrices.");
+    this.fetchPrices(this.state.timePeriod);
   }
 
-  async fetchPrices () {
+  //shouldComponentUpdate() {
+  //  console.log(new Date().toTimeString(), "shouldComponentUpdate running.");
+  //  return super.shouldComponentUpdate();
+  //}
+
+  async fetchPrices (timePeriod) {
     const startTime = performance.now();
-    let myTimePeriod = this.state.timePeriod;
+    //let myTimePeriod = this.state.timePeriod;
+    let myTimePeriod = timePeriod;
+    console.log("fetchPrices, state.timePeriod=", this.state.timePeriod);
     var params = {timeframe: myTimePeriod};
     const urlStr = api_endpoint + "?" + new URLSearchParams(params);
     console.log(new Date().toTimeString(), "fetchPrices, urlStr=", urlStr);
@@ -127,6 +137,7 @@ export class ItemsTable extends React.Component {
 
   render() {
       const t5 = performance.now();
+      console.log(new Date().toTimeString(), "render starting.");
       var myHtml = "";
       if (this.state.isLoaded) {
         //let mySecurityData = this.state.securityData;
@@ -163,7 +174,7 @@ export class ItemsTable extends React.Component {
         </div>
       );
     }
-    console.log(new Date().toTimeString(), "GenerateTable took ", performance.now() - t5, " ms.");
+    console.log(new Date().toTimeString(), "render complete, took ", performance.now() - t5, " ms.");
     return myHtml;
   }
 
@@ -192,7 +203,7 @@ export class ItemsTable extends React.Component {
 
   generateTimePeriodButtons() {
     let myTimePeriod = this.state.timePeriod;
-    console.log("GenerateTimePeriodButtons, timePeriod=", myTimePeriod);
+    console.log("generateTimePeriodButtons, timePeriod=", myTimePeriod);
     return (
     <div>
     <input type="radio" value="1day" checked={myTimePeriod==="1day"}
@@ -218,11 +229,12 @@ export class ItemsTable extends React.Component {
   }
 
   handleChangeTimePeriod = (newPeriod, e) => {
-    console.log("Changing time period to ", newPeriod);
+    console.log("handleChangeTimePeriod, changing time period to ", newPeriod);
     this.setState( {
       timePeriod: newPeriod
     });
-    this.fetchPrices();
+    console.log("handleChangeTimePeriod calling fetchPrices, state.timePeriod=", this.state.timePeriod);
+    this.fetchPrices(newPeriod);
   }
 
   //toggleSortOrder() {
