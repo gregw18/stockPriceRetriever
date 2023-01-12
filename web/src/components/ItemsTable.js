@@ -12,15 +12,6 @@ export function logSecurities(securityData) {
   })
 }
 
-
-//function retrieveData(newTimePeriod, haveData, setTimePeriod, setChartData, setHaveData) {
-//  console.log("retrieveData, newTimePeriod=", newTimePeriod);
-//  setTimePeriod(newTimePeriod);
-  //fetchTestPrices(newTimePeriod, setChartData, setHaveData);
-  //fetchPricesHttp();
-//  fetchPrices(newTimePeriod, haveData, setChartData, setHaveData);
-//}
-
 export class ItemsTable extends React.Component {
   constructor(props) {
     super(props);
@@ -58,10 +49,6 @@ export class ItemsTable extends React.Component {
     this.fetchPrices(this.state.timePeriod);
   }
 
-  //shouldComponentUpdate() {
-  //  console.log(new Date().toTimeString(), "shouldComponentUpdate running.");
-  //  return super.shouldComponentUpdate();
-  //}
   fetchPrices (timePeriod) {
     //this.fetchFakeData(timePeriod);
     this.fetchPricesHttp(timePeriod);
@@ -74,7 +61,6 @@ export class ItemsTable extends React.Component {
 
   async fetchPricesHttp (timePeriod) {
     const startTime = performance.now();
-    //let myTimePeriod = this.state.timePeriod;
     let myTimePeriod = timePeriod;
     console.log("fetchPrices, state.timePeriod=", this.state.timePeriod);
     var params = {timeframe: myTimePeriod};
@@ -92,9 +78,6 @@ export class ItemsTable extends React.Component {
           console.log("3.", new Date().toTimeString(), ", fetchPrices, data=", data);
           this.parseJson(data);
   
-          //addCalculatedData(mySecurities, timePeriod);
-          //setChartData(mySecurities);
-          //setHaveData(true);
           console.log(new Date().toTimeString(), "fetchPrices took ", performance.now() - startTime, " ms.");
         });
       } else {
@@ -149,7 +132,6 @@ export class ItemsTable extends React.Component {
       console.log(new Date().toTimeString(), "render starting.");
       var myHtml = "";
       if (this.state.isLoaded) {
-        //let mySecurityData = this.state.securityData;
         myHtml = (
         <div>
           {this.generateTimePeriodButtons()}
@@ -248,29 +230,18 @@ export class ItemsTable extends React.Component {
     this.fetchPrices(newPeriod);
   }
 
-  //toggleSortOrder() {
-  //  setSortOrder(sortOrder => !sortOrder);
-  //}
-
   handleSortByCol(colName) {
     const t1 = performance.now();
     console.log("Resorting");
     let sortAscending = this.state.sortAscending;
     if (this.state.sortCol === colName) {
       // If we're already sorted on the same column, just reverse the order
-      //console.log("column=", colName);
       sortAscending = !sortAscending;
-      //setSortOrder(thisOrder);
     }
     else {
       // If we're changing the sort column, default to the standard order for that column.
       sortAscending = false;
-      //setSortColumn(colName);
     }
-    //this.setState({
-    //  sortAscending: sortAscending,
-    //  sortCol: colName
-    //})
     console.log("sortAcending=", sortAscending, ", colName=", colName);
 
     let getVal = function(security) { return security.data[colName].toUpperCase()};
@@ -305,9 +276,7 @@ export class ItemsTable extends React.Component {
     })
     console.log("sortByCol took ", performance.now() - t1, " ms.");
   }
-
 }
-
 
 
 // Get lowest and highest percent gains from given set of securities.
@@ -338,12 +307,3 @@ function getMinMaxGain(myChartData) {
   return {minGain: minGain, maxGain: maxGain};
 }
 
-/*
-const fetchTestPrices = async (timePeriod, setChartData, setHaveData) => {
-  console.log("fetchTestPrices, timePeriod=", timePeriod)
-  let mySecurities = getFakeData();
-  addCalculatedData(mySecurities, timePeriod);
-  setChartData(mySecurities);
-  setHaveData(true);
-}
-*/
