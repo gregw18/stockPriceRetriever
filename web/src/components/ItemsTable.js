@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Chart, GainChart, TimeRangeChart, BuySellChart, PriceHistoryChart} from "./Chart";
 //import './App.css';
 import { getFakeData } from "./FakeData";
+import { TimePeriodButtons } from "./TimePeriodButtons";
 
 const api_endpoint = "https://n7zmmbsqxc.execute-api.us-east-1.amazonaws.com/Prod/data";
 
@@ -134,7 +135,11 @@ export class ItemsTable extends React.Component {
       if (this.state.isLoaded) {
         myHtml = (
         <div>
-          {this.generateTimePeriodButtons()}
+          <div>
+            <TimePeriodButtons 
+              timePeriod={this.state.timePeriod}
+              onPeriodChange={this.handleChangeTimePeriod} />
+          </div>
           <table style={{width: "100%"}}>
             <thead>
               <tr>
@@ -194,34 +199,7 @@ export class ItemsTable extends React.Component {
     );
   }
 
-  generateTimePeriodButtons() {
-    let myTimePeriod = this.state.timePeriod;
-    console.log("generateTimePeriodButtons, timePeriod=", myTimePeriod);
-    return (
-    <div>
-    <input type="radio" value="1day" checked={myTimePeriod==="1day"}
-    onChange={(e) => this.handleChangeTimePeriod(e.target.value)}
-    name="timePeriods" /> 1 Day
-    <input type="radio" value="30days" checked={myTimePeriod==="30days"}
-    onChange={(e) => this.handleChangeTimePeriod(e.target.value)}
-    name="timePeriods" /> 1 Month
-    <input type="radio" value="3months" checked={myTimePeriod==="3months"} 
-    onChange={(e) => this.handleChangeTimePeriod(e.target.value)}
-    name="timePeriods" /> 3 Months
-    <input type="radio" value="1year" checked={myTimePeriod==="1year"} 
-    onChange={(e) => this.handleChangeTimePeriod(e.target.value)}
-    name="timePeriods" /> 1 Year
-    <input type="radio" value="3years" checked={myTimePeriod==="3years"} 
-    onChange={(e) => this.handleChangeTimePeriod(e.target.value)}
-    name="timePeriods" /> 3 Years
-    <input type="radio" value="5years" checked={myTimePeriod==="5years"} 
-    onChange={(e) => this.handleChangeTimePeriod(e.target.value)}
-    name="timePeriods" /> 5 Years
-    </div>
-    );
-  }
-
-  handleChangeTimePeriod = (newPeriod, e) => {
+  handleChangeTimePeriod(newPeriod) {
     console.log("handleChangeTimePeriod, changing time period to ", newPeriod);
     this.setState( {
       timePeriod: newPeriod
