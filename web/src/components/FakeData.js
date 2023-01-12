@@ -62,6 +62,18 @@ const securityAmazon= {
   };
   
 export const getFakeData = () => {
+  // Return around 90 hardcoded securities;
+  let mySecurities = [];
+  for (let i = 0; i < 90/4; i++) {
+    mySecurities.push(securityAmazon);
+    mySecurities.push(securityZero);
+    mySecurities.push(securityMicrosoft);
+    mySecurities.push(securityLilly);
+  }
+    return mySecurities;
+}
+
+/*export const getFakeData = () => {
   let mySecurities = [];
     mySecurities.push( 
     {
@@ -90,3 +102,4 @@ export const getFakeData = () => {
 
     return mySecurities;
 }
+*/

@@ -62,8 +62,17 @@ export class ItemsTable extends React.Component {
   //  console.log(new Date().toTimeString(), "shouldComponentUpdate running.");
   //  return super.shouldComponentUpdate();
   //}
+  fetchPrices (timePeriod) {
+    //this.fetchFakeData(timePeriod);
+    this.fetchPricesHttp(timePeriod);
+  }
 
-  async fetchPrices (timePeriod) {
+  fetchFakeData(timePeriod) {
+    let newData = getFakeData();
+    this.parseJson(newData);
+  }
+
+  async fetchPricesHttp (timePeriod) {
     const startTime = performance.now();
     //let myTimePeriod = this.state.timePeriod;
     let myTimePeriod = timePeriod;
@@ -145,7 +154,7 @@ export class ItemsTable extends React.Component {
         <div>
           {this.generateTimePeriodButtons()}
           <table style={{width: "100%"}}>
-            <tbody>
+            <thead>
               <tr>
                 <th style={{width: "10%"}}>
                   <button id="sort_name" type="button" 
@@ -168,6 +177,8 @@ export class ItemsTable extends React.Component {
                 <th style={{width: "15%"}}>Buy/Sell Range</th>
                 <th style={{width: "30%"}}>Price History</th>
               </tr>
+            </thead>
+            <tbody>
               {this.generateRows(this.state.securityData)}
             </tbody>
           </table>
