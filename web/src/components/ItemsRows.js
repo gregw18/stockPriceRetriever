@@ -53,7 +53,7 @@ export class ItemsRows extends React.Component {
         // range to include zero.
         minGain = (minGain > 0 ? 0 : minGain);
         maxGain = (maxGain < 0 ? 0 : maxGain);
-        console.log("ran getMinMaxGain, returning: ", minGain, ", ", maxGain)
+        //console.log("ran getMinMaxGain, returning: ", minGain, ", ", maxGain)
         console.log(new Date().toTimeString(), "getMinMaxGain took ", performance.now() - t3, " ms.");
         return {minGain: minGain, maxGain: maxGain};
     }

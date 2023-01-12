@@ -6,13 +6,6 @@ import { TimePeriodButtons } from "./TimePeriodButtons";
 
 const api_endpoint = "https://n7zmmbsqxc.execute-api.us-east-1.amazonaws.com/Prod/data";
 
-
-export function logSecurities(securityData) {
-  securityData.forEach(function (security) {
-    console.log(security.data.name);
-  })
-}
-
 export class ItemsTable extends React.Component {
   constructor(props) {
     super(props);
@@ -25,6 +18,100 @@ export class ItemsTable extends React.Component {
       sortAscending: true
     }
   }
+
+  componentDidMount() {
+    console.log(new Date().toTimeString(), "componentDidMount calling fetchPrices.");
+    this.fetchPrices(this.state.timePeriod);
+  }
+
+  render() {
+    const t5 = performance.now();
+    console.log(new Date().toTimeString(), "ItemsTable.render starting.");
+    var myHtml = "";
+    if (this.state.isLoaded) {
+      myHtml = (
+      <div>
+        <div>
+          <TimePeriodButtons 
+            timePeriod={this.state.timePeriod}
+            onPeriodChange={this.handleChangeTimePeriod} />
+        </div>
+        <table style={{width: "100%"}}>
+          <thead>
+            <tr>
+              <th style={{width: "10%"}}>
+                <button id="sort_name" type="button" 
+                  onClick={() => this.handleSortByCol('name')}>Name</button>
+              </th>
+              <th style={{width: "5%"}}>
+                <button id="sort_group" type="button"
+                onClick={() => this.handleSortByCol('group')}>Group</button>
+              </th>
+              <th style={{width: "5%"}}>
+                <button id="sort_rating" type="button"
+                onClick={() => this.handleSortByCol('rating')}>Rating</button>
+              </th>
+              <th style={{width: "5%"}}>Last Close</th>
+              <th style={{width: "15%"}}>
+                <button id="sort_gain" type="button" 
+                  onClick={() => this.handleSortByCol('percentGain')}>Gain</button>
+              </th>
+              <th style={{width: "15%"}}>Price Range</th>
+              <th style={{width: "15%"}}>Buy/Sell Range</th>
+              <th style={{width: "30%"}}>Price History</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ItemsRows
+              securityData={this.state.securityData} />
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+  console.log(new Date().toTimeString(), "ItemsTable.render complete, took ", performance.now() - t5, " ms.");
+  return myHtml;
+}
+
+fetchPrices (timePeriod) {
+  //this.fetchFakeData(timePeriod);
+  this.fetchPricesHttp(timePeriod);
+}
+
+fetchFakeData(timePeriod) {
+  let newData = getFakeData();
+  this.parseJson(newData);
+}
+
+async fetchPricesHttp (timePeriod) {
+  const startTime = performance.now();
+  let myTimePeriod = timePeriod;
+  console.log("fetchPrices, state.timePeriod=", this.state.timePeriod);
+  var params = {timeframe: myTimePeriod};
+  const urlStr = api_endpoint + "?" + new URLSearchParams(params);
+  console.log(new Date().toTimeString(), "fetchPrices, urlStr=", urlStr);
+  var url = new URL(urlStr);
+
+  const fetchPromise = fetch(url);
+  fetchPromise.then((response) => {
+    console.log("1. status=", response.status);
+    if (response.ok) {
+      const jsonPromise = response.json();
+      console.log("2.", new Date().toTimeString(), ", jsonPromise=", jsonPromise);
+      jsonPromise.then((data) => {
+        console.log("3.", new Date().toTimeString(), ", fetchPrices, data=", data);
+        this.parseJson(data);
+
+        console.log(new Date().toTimeString(), "fetchPrices took ", performance.now() - startTime, " ms.");
+      });
+    } else {
+      console.log("request failed again.");
+    }
+  })
+  .catch((error) => {
+    console.log("fetchPrices failed, error=", error);
+  });
+}
 
   parseJson(srcData) {
     let mySecurities = [];
@@ -43,51 +130,6 @@ export class ItemsTable extends React.Component {
       securityData: mySecurities
     });
     console.log("Finished parseJson");
-  }
-
-  componentDidMount() {
-    console.log(new Date().toTimeString(), "componentDidMount calling fetchPrices.");
-    this.fetchPrices(this.state.timePeriod);
-  }
-
-  fetchPrices (timePeriod) {
-    //this.fetchFakeData(timePeriod);
-    this.fetchPricesHttp(timePeriod);
-  }
-
-  fetchFakeData(timePeriod) {
-    let newData = getFakeData();
-    this.parseJson(newData);
-  }
-
-  async fetchPricesHttp (timePeriod) {
-    const startTime = performance.now();
-    let myTimePeriod = timePeriod;
-    console.log("fetchPrices, state.timePeriod=", this.state.timePeriod);
-    var params = {timeframe: myTimePeriod};
-    const urlStr = api_endpoint + "?" + new URLSearchParams(params);
-    console.log(new Date().toTimeString(), "fetchPrices, urlStr=", urlStr);
-    var url = new URL(urlStr);
-  
-    const fetchPromise = fetch(url);
-    fetchPromise.then((response) => {
-      console.log("1. status=", response.status);
-      if (response.ok) {
-        const jsonPromise = response.json();
-        console.log("2.", new Date().toTimeString(), ", jsonPromise=", jsonPromise);
-        jsonPromise.then((data) => {
-          console.log("3.", new Date().toTimeString(), ", fetchPrices, data=", data);
-          this.parseJson(data);
-  
-          console.log(new Date().toTimeString(), "fetchPrices took ", performance.now() - startTime, " ms.");
-        });
-      } else {
-        console.log("request failed again.");
-      }
-    })
-    .catch((error) => {
-      console.log("fetchPrices failed, error=", error);
-    });
   }
 
   // Add buy low and sell high points to data, along with percent gain.
@@ -126,55 +168,6 @@ export class ItemsTable extends React.Component {
       }
     })
     console.log("addCalculatedData took ", performance.now() - t2, " ms.");
-  }
-
-  render() {
-      const t5 = performance.now();
-      console.log(new Date().toTimeString(), "render starting.");
-      var myHtml = "";
-      if (this.state.isLoaded) {
-        myHtml = (
-        <div>
-          <div>
-            <TimePeriodButtons 
-              timePeriod={this.state.timePeriod}
-              onPeriodChange={this.handleChangeTimePeriod} />
-          </div>
-          <table style={{width: "100%"}}>
-            <thead>
-              <tr>
-                <th style={{width: "10%"}}>
-                  <button id="sort_name" type="button" 
-                    onClick={() => this.handleSortByCol('name')}>Name</button>
-                </th>
-                <th style={{width: "5%"}}>
-                  <button id="sort_group" type="button"
-                  onClick={() => this.handleSortByCol('group')}>Group</button>
-                </th>
-                <th style={{width: "5%"}}>
-                  <button id="sort_rating" type="button"
-                  onClick={() => this.handleSortByCol('rating')}>Rating</button>
-                </th>
-                <th style={{width: "5%"}}>Last Close</th>
-                <th style={{width: "15%"}}>
-                  <button id="sort_gain" type="button" 
-                    onClick={() => this.handleSortByCol('percentGain')}>Gain</button>
-                </th>
-                <th style={{width: "15%"}}>Price Range</th>
-                <th style={{width: "15%"}}>Buy/Sell Range</th>
-                <th style={{width: "30%"}}>Price History</th>
-              </tr>
-            </thead>
-            <tbody>
-              <ItemsRows
-                securityData={this.state.securityData} />
-            </tbody>
-          </table>
-        </div>
-      );
-    }
-    console.log(new Date().toTimeString(), "render complete, took ", performance.now() - t5, " ms.");
-    return myHtml;
   }
 
   handleChangeTimePeriod(newPeriod) {
@@ -224,7 +217,7 @@ export class ItemsTable extends React.Component {
       }
       return sortResult;
     })
-    logSecurities(chartData);
+    logSecurityNames(chartData);
     this.setState({
       securityData: chartData,
       sortAscending: sortAscending,
@@ -234,3 +227,8 @@ export class ItemsTable extends React.Component {
   }
 }
 
+function logSecurityNames(securityData) {
+  securityData.forEach(function (security) {
+    console.log(security.data.name);
+  })
+}
