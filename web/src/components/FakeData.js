@@ -72,34 +72,3 @@ export const getFakeData = () => {
   }
     return mySecurities;
 }
-
-/*export const getFakeData = () => {
-  let mySecurities = [];
-    mySecurities.push( 
-    {
-        id: 1,
-        data: securityAmazon
-    }
-    );
-    mySecurities.push( 
-    {
-        id: 4,
-        data: securityZero
-    }
-    );
-    mySecurities.push( 
-    {
-        id: 2,
-        data: securityMicrosoft
-    }
-    );
-    mySecurities.push( 
-    {
-        id: 3,
-        data: securityLilly
-    }
-    );
-
-    return mySecurities;
-}
-*/

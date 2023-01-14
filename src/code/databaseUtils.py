@@ -55,7 +55,6 @@ def _get_table_definitions():
         "   previousClosePrice DECIMAL(10,2),"
         "   52WeekHighPrice Decimal(10,2),"
         "   52WeekLowPrice Decimal(10,2),"
-        "   percentChangeToday Decimal(6,2),"
         "   PRIMARY KEY (`id`),"
         "   INDEX symbolIdx(symbol)"
         ") ENGINE=InnoDB"
