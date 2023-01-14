@@ -1,10 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 //import './App.css';
-import { getFakeData } from "./FakeData";
+import { fetchPrices } from "./FetchData";
+//import { getFakeData } from "./FakeData";
 import { ItemsRows } from "./ItemsRows";
 import { TimePeriodButtons } from "./TimePeriodButtons";
 
-const api_endpoint = "https://n7zmmbsqxc.execute-api.us-east-1.amazonaws.com/Prod/data";
+//const api_endpoint = "https://n7zmmbsqxc.execute-api.us-east-1.amazonaws.com/Prod/data";
 
 export class ItemsTable extends React.Component {
   constructor(props) {
@@ -20,8 +21,8 @@ export class ItemsTable extends React.Component {
   }
 
   componentDidMount() {
-    console.log(new Date().toTimeString(), "componentDidMount calling fetchPrices.");
-    this.fetchPrices(this.state.timePeriod);
+    console.log(new Date().toTimeString(), "componentDidMount calling fetchData.");
+    this.fetchData(this.state.timePeriod);
   }
 
   render() {
@@ -73,7 +74,21 @@ export class ItemsTable extends React.Component {
   return myHtml;
 }
 
-fetchPrices (timePeriod) {
+fetchData(timePeriod) {
+  //this.fetchFakeData(timePeriod);
+  const promise = fetchPrices(timePeriod);
+  promise.then((mySecurities) => this.saveSecurities(mySecurities));
+}
+
+saveSecurities(mySecurities) {
+  console.log(new Date().toTimeString(), "SaveSecurities running.");
+  this.setState( {
+    isLoaded: true,
+    securityData: mySecurities
+  });
+}
+
+/* fetchPrices (timePeriod) {
   //this.fetchFakeData(timePeriod);
   this.fetchPricesHttp(timePeriod);
 }
@@ -169,14 +184,15 @@ async fetchPricesHttp (timePeriod) {
     })
     console.log("addCalculatedData took ", performance.now() - t2, " ms.");
   }
+  */
 
   handleChangeTimePeriod(newPeriod) {
     console.log("handleChangeTimePeriod, changing time period to ", newPeriod);
     this.setState( {
       timePeriod: newPeriod
     });
-    console.log("handleChangeTimePeriod calling fetchPrices, state.timePeriod=", this.state.timePeriod);
-    this.fetchPrices(newPeriod);
+    console.log("handleChangeTimePeriod calling fetchData, state.timePeriod=", this.state.timePeriod);
+    this.fetchData(newPeriod);
   }
 
   handleSortByCol(colName) {
