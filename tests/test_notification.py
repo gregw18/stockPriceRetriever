@@ -1,5 +1,5 @@
 """
-Simple manual test for notification_interface.
+Simple manual test for NotificationInterface.
 Sends message via defined topic name, user has to check email to confirm that
 message was received.
 V0.01, October 13, 2020
@@ -25,7 +25,7 @@ def tst_notification():
     """
     Send message via hard-coded topic name.
     """
-    myNotifier = notification_interface.notification_interface()
+    myNotifier = notification_interface.NotificationInterface()
     if myNotifier.findArnForTopicName(myTopicName):
         myNotifier.sendEmail("notification test subject", "notification test body\n body line 1")
         assert True
@@ -96,7 +96,7 @@ class TestNotifications():
         """
         No topics, so no match
         """
-        my_notifier = notification_interface.notification_interface()
+        my_notifier = notification_interface.NotificationInterface()
         topic_exists = my_notifier.findArnForTopicName(self.bad_name)
         assert not topic_exists
 
@@ -104,7 +104,7 @@ class TestNotifications():
         """
         One topics, no match
         """
-        my_notifier = notification_interface.notification_interface()
+        my_notifier = notification_interface.NotificationInterface()
         self._add_topic(self.good_name)
         topic_exists = my_notifier.findArnForTopicName(self.bad_name)
         assert not topic_exists
@@ -113,7 +113,7 @@ class TestNotifications():
         """
         One topic, match
         """
-        my_notifier = notification_interface.notification_interface()
+        my_notifier = notification_interface.NotificationInterface()
         self._add_topic(self.good_name)
         topic_exists = my_notifier.findArnForTopicName(self.good_name)
         assert topic_exists
@@ -122,7 +122,7 @@ class TestNotifications():
         """
         Five topics, no match
         """
-        my_notifier = notification_interface.notification_interface()
+        my_notifier = notification_interface.NotificationInterface()
         self._add_n_topics(1, 5)
         topic_exists = my_notifier.findArnForTopicName(self.bad_name)
         assert not topic_exists
@@ -131,7 +131,7 @@ class TestNotifications():
         """
         Five topics, first matches
         """
-        my_notifier = notification_interface.notification_interface()
+        my_notifier = notification_interface.NotificationInterface()
         self._add_topic(self.good_name)
         self._add_n_topics(1, 5)
         topic_exists = my_notifier.findArnForTopicName(self.good_name)
@@ -141,7 +141,7 @@ class TestNotifications():
         """
         Five topics, last matches
         """
-        my_notifier = notification_interface.notification_interface()
+        my_notifier = notification_interface.NotificationInterface()
         self._add_topic(self.good_name)
         self._add_n_topics(1, 5)
         self._add_topic(self.good_name)
@@ -152,7 +152,7 @@ class TestNotifications():
         """
         Five topics, matches in middle
         """
-        my_notifier = notification_interface.notification_interface()
+        my_notifier = notification_interface.NotificationInterface()
         self._add_n_topics(1, 3)
         self._add_topic(self.good_name)
         self._add_n_topics(4, 2)
@@ -163,7 +163,7 @@ class TestNotifications():
         """
         350 topics, matches in middle of first group
         """
-        my_notifier = notification_interface.notification_interface()
+        my_notifier = notification_interface.NotificationInterface()
         self._add_n_topics(1, 45)
         self._add_topic(self.good_name)
         self._add_n_topics(46, 305)
@@ -174,7 +174,7 @@ class TestNotifications():
         """
         350 topics, matches in middle of third group (assumes groups of 100)
         """
-        my_notifier = notification_interface.notification_interface()
+        my_notifier = notification_interface.NotificationInterface()
         self._add_n_topics(1, 245)
         self._add_topic(self.good_name)
         self._add_n_topics(246, 105)
@@ -185,7 +185,7 @@ class TestNotifications():
         """
         350 topics, match is last.
         """
-        my_notifier = notification_interface.notification_interface()
+        my_notifier = notification_interface.NotificationInterface()
         self._add_n_topics(1, 350)
         self._add_topic(self.good_name)
         topic_exists = my_notifier.findArnForTopicName(self.good_name)
@@ -195,7 +195,7 @@ class TestNotifications():
         """
         350 topics, match is last.
         """
-        my_notifier = notification_interface.notification_interface()
+        my_notifier = notification_interface.NotificationInterface()
         self._add_n_topics(1, 350)
         self._add_topic(self.good_name)
         topic_exists = my_notifier.findArnForTopicName(self.bad_name)

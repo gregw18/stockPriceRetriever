@@ -6,7 +6,7 @@ V0.01, October 13, 2020
 import boto3
 
 
-class notification_interface:
+class NotificationInterface:
     """
     Interface to SNS.
     """

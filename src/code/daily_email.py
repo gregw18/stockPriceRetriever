@@ -78,7 +78,7 @@ def _generate_and_send(securitiesList, resultsTopicName):
     print(f"finished get_email")
 
     if emailSubject:
-        myNotifier = notification_interface.notification_interface()
+        myNotifier = notification_interface.NotificationInterface()
         if myNotifier.findArnForTopicName(resultsTopicName):
             myNotifier.sendEmail(emailSubject, emailBody)
             print("sent email.")

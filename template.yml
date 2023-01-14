@@ -131,12 +131,18 @@ Resources:
       VpcId: !GetAtt stockRetrieverPubVPC.VpcId
 
 
-  # Manually create log group with a retention policy of 30 days, so that automatic one
-  # isn't created with indefinite retention.
-  LogsLogGroup:
+  # Manually create log groups with a retention policy of 30 days, so that automatic ones
+  # aren't created with indefinite retention.
+  DailyLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${function}"
+      RetentionInDays: 30
+
+  WebLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${websiteFunction}"
       RetentionInDays: 30
 
   StockRetrieverError:
