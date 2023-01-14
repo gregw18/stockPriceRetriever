@@ -6,7 +6,7 @@ V0.01, December 19, 2022, GAW
 
 from datetime import date
 
-from security_groups import security_groups
+from security_groups import SecurityGroups
 
 class WebPriceInfo:
 
@@ -37,7 +37,7 @@ class WebPriceInfo:
         self.status = mySecurity.status
         self.periodPrices = self._get_prices_only(myPrices)
         self.periodDates = self._get_dates(myPrices)
-        myGroups = security_groups()
+        myGroups = SecurityGroups()
         self.rating, self.group = myGroups.get_values_for_webPriceInfo(self)
         if len(myPrices) > 0:
             self.periodStartPrice = myPrices[0]["price"]  # Price from first pair.

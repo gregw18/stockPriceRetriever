@@ -4,7 +4,7 @@ V0.01, October 21, 2020
 """
 
 
-class security_rating:
+class SecurityRating:
     """
     Add rating to security, where rating is a numeric measure used to rank a security
     within a group.

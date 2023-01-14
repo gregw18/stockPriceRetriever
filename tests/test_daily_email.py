@@ -62,7 +62,7 @@ class Test_daily_email:
         secList.append(buySec)
         buySec = self.createSecurity("Apple", "AAPL", 20.3, 130.211, 14.087999, 12.09888, 80.4488)
         secList.append(buySec)
-        myGroups = security_groups.security_groups()
+        myGroups = security_groups.SecurityGroups()
         myGroups.populate(secList)
 
         mySubj, myBody = daily_email.get_email(myGroups)
@@ -74,7 +74,7 @@ class Test_daily_email:
         Test results when pass in empty securities list.
         """
         secList = []
-        myGroups = security_groups.security_groups()
+        myGroups = security_groups.SecurityGroups()
         myGroups.populate(secList)
         mySubj, myBody = daily_email.get_email(myGroups)
         assert mySubj == ""

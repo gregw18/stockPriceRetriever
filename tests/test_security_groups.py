@@ -16,7 +16,7 @@ import sprEnums
 @pytest.mark.unit
 class Test_security_groups:
     def setup_method(self):
-        self.groups = security_groups.security_groups()
+        self.groups = security_groups.SecurityGroups()
 
     def createSecurity(self, name, symbol, buyPrice, sellPrice, currentPrice):
         mySec = security.Security()

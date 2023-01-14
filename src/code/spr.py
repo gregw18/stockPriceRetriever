@@ -68,7 +68,7 @@ def display_graphs(fileName, resultsFile):
     numSecurities = len(secList)
     if numSecurities > 0:
         # Get resorted version from security_groups.
-        myGroups = security_groups.security_groups()
+        myGroups = security_groups.SecurityGroups()
         secList = myGroups.get_sorted_list(secList)
 
         numCols = 3

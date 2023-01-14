@@ -71,7 +71,7 @@ def _generate_and_send(securitiesList, resultsTopicName):
     Receives list of security, uses that to generate and send email.
     """
     print(f"starting daily_email._generate_and_send, len={len(securitiesList)}")
-    myGroups = security_groups.security_groups()
+    myGroups = security_groups.SecurityGroups()
     myGroups.populate(securitiesList)
 
     emailSubject, emailBody = get_email(myGroups)

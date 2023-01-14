@@ -9,7 +9,7 @@ import security_rating
 import sprEnums
 
 
-class security_groups:
+class SecurityGroups:
     """
     Class to create group a list of securities, with buy/sell/current prices, into buy, sell,
     near-buy, near-sell and middle groups, all sorted (furthest to least from buy/sell price,
@@ -67,7 +67,7 @@ class security_groups:
             if security.symbol:
                 thisGroup = self._get_group_code(security)
                 thisRating = self.rating_methods[thisGroup](security)
-                my_sec_rating = security_rating.security_rating()
+                my_sec_rating = security_rating.SecurityRating()
                 my_sec_rating.set_rating(security, thisRating)
                 self.groups[thisGroup].append(my_sec_rating)
 
