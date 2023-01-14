@@ -75,8 +75,8 @@ export class ItemsTable extends React.Component {
 }
 
 fetchData(timePeriod) {
-  //this.fetchFakeData(timePeriod);
   const promise = fetchPrices(timePeriod);
+  console.log(new Date().toTimeString(), "fetchData, promise=", promise);
   promise.then((mySecurities) => this.saveSecurities(mySecurities));
 }
 

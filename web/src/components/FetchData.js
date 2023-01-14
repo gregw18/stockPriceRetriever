@@ -3,13 +3,15 @@ import { getFakeData } from "./FakeData";
 const api_endpoint = "https://n7zmmbsqxc.execute-api.us-east-1.amazonaws.com/Prod/data";
 
 export function fetchPrices (timePeriod) {
-  //return fetchFakeData(timePeriod);
-  return fetchPricesHttp(timePeriod);
+  return fetchFakeData(timePeriod);
+  //return fetchPricesHttp(timePeriod);
 }
 
 function fetchFakeData(timePeriod) {
   let newData = getFakeData();
-  return parseJson(newData, timePeriod);
+  let newSecurities = parseJson(newData, timePeriod);
+
+  return new Promise((resolve, reject) => {resolve(newSecurities)});
 }
 
 async function fetchPricesHttp (timePeriod) {

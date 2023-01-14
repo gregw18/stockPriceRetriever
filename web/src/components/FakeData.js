@@ -70,5 +70,6 @@ export const getFakeData = () => {
     mySecurities.push(securityMicrosoft);
     mySecurities.push(securityLilly);
   }
-    return mySecurities;
+
+  return mySecurities;
 }
