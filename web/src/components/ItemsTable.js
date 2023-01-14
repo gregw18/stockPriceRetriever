@@ -1,11 +1,7 @@
 import React from "react";
-//import './App.css';
 import { fetchPrices } from "./FetchData";
-//import { getFakeData } from "./FakeData";
 import { ItemsRows } from "./ItemsRows";
 import { TimePeriodButtons } from "./TimePeriodButtons";
-
-//const api_endpoint = "https://n7zmmbsqxc.execute-api.us-east-1.amazonaws.com/Prod/data";
 
 export class ItemsTable extends React.Component {
   constructor(props) {
@@ -68,123 +64,22 @@ export class ItemsTable extends React.Component {
           </tbody>
         </table>
       </div>
-    );
+    )};
+    console.log(new Date().toTimeString(), "ItemsTable.render complete, took ", performance.now() - t5, " ms.");
+    return myHtml;
   }
-  console.log(new Date().toTimeString(), "ItemsTable.render complete, took ", performance.now() - t5, " ms.");
-  return myHtml;
-}
 
-fetchData(timePeriod) {
-  const promise = fetchPrices(timePeriod);
-  console.log(new Date().toTimeString(), "fetchData, promise=", promise);
-  promise.then((mySecurities) => this.saveSecurities(mySecurities));
-}
-
-saveSecurities(mySecurities) {
-  console.log(new Date().toTimeString(), "SaveSecurities running.");
-  this.setState( {
-    isLoaded: true,
-    securityData: mySecurities
-  });
-}
-
-/* fetchPrices (timePeriod) {
-  //this.fetchFakeData(timePeriod);
-  this.fetchPricesHttp(timePeriod);
-}
-
-fetchFakeData(timePeriod) {
-  let newData = getFakeData();
-  this.parseJson(newData);
-}
-
-async fetchPricesHttp (timePeriod) {
-  const startTime = performance.now();
-  let myTimePeriod = timePeriod;
-  console.log("fetchPrices, state.timePeriod=", this.state.timePeriod);
-  var params = {timeframe: myTimePeriod};
-  const urlStr = api_endpoint + "?" + new URLSearchParams(params);
-  console.log(new Date().toTimeString(), "fetchPrices, urlStr=", urlStr);
-  var url = new URL(urlStr);
-
-  const fetchPromise = fetch(url);
-  fetchPromise.then((response) => {
-    console.log("1. status=", response.status);
-    if (response.ok) {
-      const jsonPromise = response.json();
-      console.log("2.", new Date().toTimeString(), ", jsonPromise=", jsonPromise);
-      jsonPromise.then((data) => {
-        console.log("3.", new Date().toTimeString(), ", fetchPrices, data=", data);
-        this.parseJson(data);
-
-        console.log(new Date().toTimeString(), "fetchPrices took ", performance.now() - startTime, " ms.");
+  fetchData(timePeriod) {
+    const promise = fetchPrices(timePeriod);
+    console.log(new Date().toTimeString(), "fetchData, promise=", promise);
+    promise.then((mySecurities) => {
+      console.log(new Date().toTimeString(), "SaveSecurities running.");
+      this.setState( {
+        isLoaded: true,
+        securityData: mySecurities
       });
-    } else {
-      console.log("request failed again.");
-    }
-  })
-  .catch((error) => {
-    console.log("fetchPrices failed, error=", error);
-  });
-}
-
-  parseJson(srcData) {
-    let mySecurities = [];
-    let i = 1;
-    for (const security of srcData) {
-      mySecurities.push( {
-        id: i,
-        data:security
-      });
-      i++;
-    };
-    this.addCalculatedData(mySecurities);
-
-    this.setState( {
-      isLoaded: true,
-      securityData: mySecurities
     });
-    console.log("Finished parseJson");
   }
-
-  // Add buy low and sell high points to data, along with percent gain.
-  // For both, if current not outside buy/sell range, are equal to buy/sell,
-  // otherwise, are equal to current.
-  addCalculatedData(origData) {
-    const t2 = performance.now();
-    console.log("running addCalculatedData");
-    const myTimePeriod = this.state.timePeriod;
-    origData.forEach(function (security) {
-      let buyLowPrice = security.data.buyPrice;
-      if (security.data.currentPrice < buyLowPrice){
-        buyLowPrice = security.data.currentPrice;
-        //console.log("using current for buyLow, ", security.data.currentPrice, ", buyPrice=", security.data.buyPrice);
-      }
-      security.data.buyLowPrice = buyLowPrice;
-
-      let sellHighPrice = security.data.sellPrice;
-      if (security.data.currentPrice > sellHighPrice) {
-        sellHighPrice = security.data.currentPrice;
-      }
-      security.data.sellHighPrice = sellHighPrice;
-
-      let prevPrice = security.data.periodStartPrice;
-      if (myTimePeriod === "1day") {
-        // Don't get historical prices if ask for just one day, so use previous close price.
-        prevPrice = security.data.lastClosePrice;
-      }
-      if (prevPrice > 0) {
-        security.data.percentGain = 100 * (security.data.currentPrice - prevPrice) / prevPrice;
-      }
-      else {
-        // Shouldn't have many with a price of zero, but if do, above formula gives Nan as gain,
-        // which prevents the item from being sorted on gain, messing up entire sort order.
-        security.data.percentGain = 0;
-      }
-    })
-    console.log("addCalculatedData took ", performance.now() - t2, " ms.");
-  }
-  */
 
   handleChangeTimePeriod(newPeriod) {
     console.log("handleChangeTimePeriod, changing time period to ", newPeriod);

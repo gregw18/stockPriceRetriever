@@ -3,8 +3,8 @@ import { getFakeData } from "./FakeData";
 const api_endpoint = "https://n7zmmbsqxc.execute-api.us-east-1.amazonaws.com/Prod/data";
 
 export function fetchPrices (timePeriod) {
-  return fetchFakeData(timePeriod);
-  //return fetchPricesHttp(timePeriod);
+  //return fetchFakeData(timePeriod);
+  return fetchPricesHttp(timePeriod);
 }
 
 function fetchFakeData(timePeriod) {
@@ -22,27 +22,21 @@ async function fetchPricesHttp (timePeriod) {
   console.log(new Date().toTimeString(), "fetchPrices, urlStr=", urlStr);
   var url = new URL(urlStr);
 
-  //const fetchPromise = fetch(url);
-  const response = await fetch(url);
-  //fetchPromise.then((response) => {
+  try {
+    const response = await fetch(url);
     console.log("1. status=", response.status);
     if (response.ok) {
-      //const jsonPromise = response.json();
       const data = await response.json();
-      //console.log("2.", new Date().toTimeString(), ", jsonPromise=", jsonPromise);
-      //jsonPromise.then((data) => {
-        console.log("3.", new Date().toTimeString(), ", fetchPrices, data=", data);
-        mySecurities = parseJson(data, timePeriod);
-
-        console.log(new Date().toTimeString(), "fetchPrices took ", performance.now() - startTime, " ms.");
-      //});
+      console.log("3.", new Date().toTimeString(), ", fetchPrices, data=", data);
+      mySecurities = parseJson(data, timePeriod);
+      console.log(new Date().toTimeString(), "fetchPrices took ", performance.now() - startTime, " ms.");
     } else {
       console.log("request failed again.");
     }
-  //})
-  //.catch((error) => {
-  //  console.log("fetchPrices failed, error=", error);
-  //});
+  }
+  catch(error) {
+    console.log("fetchPricesHttp failed, error=", error);
+  };
 
   return mySecurities;
 }
@@ -60,16 +54,12 @@ function parseJson(srcData, timePeriod) {
     addCalculatedData(mySecurities, timePeriod);
     console.log("Finished parseJson");
 
-    //this.setState( {
-    //    isLoaded: true,
-    //    securityData: mySecurities
-    //});
     return mySecurities;
 }
 
-  // Add buy low and sell high points to data, along with percent gain.
-  // For both, if current not outside buy/sell range, are equal to buy/sell,
-  // otherwise, are equal to current.
+// Add buy low and sell high points to data, along with percent gain.
+// For both, if current not outside buy/sell range, are equal to buy/sell,
+// otherwise, are equal to current.
 function addCalculatedData(origData, timePeriod) {
     const t2 = performance.now();
     console.log("running addCalculatedData");
