@@ -102,13 +102,13 @@ class TestSecuritiesLoadHistory():
         # prices from web, read corresponding data from table, verify that are same.
         today, dailyHistoryStart, weeklyHistoryStart = getSecurities._get_full_history_dates()
         self.compare_prices(self.secsDict["AAPL"],
-                                          today,
-                                          dailyHistoryStart,
-                                          weeklyHistoryStart)
+                            today,
+                            dailyHistoryStart,
+                            weeklyHistoryStart)
         self.compare_prices(self.secsDict["GOOGL"],
-                                          today,
-                                          dailyHistoryStart,
-                                          weeklyHistoryStart)
+                            today,
+                            dailyHistoryStart,
+                            weeklyHistoryStart)
 
         # Confirm that didn't download any data for security that was already downloaded.
         tmpSec = self.secsDict["MSFT"]
@@ -123,7 +123,7 @@ class TestSecuritiesLoadHistory():
 
         assert numDownloaded == 2
         for tmpSecurity in getSecurities.securitiesDict.values():
-            assert tmpSecurity.fullHistoryDownloaded == True
+            assert tmpSecurity.fullHistoryDownloaded
 
     def test_no_download_required(self, getUtils, getSecurities):
         """

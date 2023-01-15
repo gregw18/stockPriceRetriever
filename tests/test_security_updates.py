@@ -95,11 +95,11 @@ class TestSecurity2():
         newInfo.high52Week += 10.33
         changedFieldNames, newValues = testSecurity.get_changed_fields(newInfo, date.today())
 
-        assert ("currentPrice" in changedFieldNames) == True
-        assert ("currentPriceDate" in changedFieldNames) == True
-        assert ("previousClosePrice" in changedFieldNames) == True
-        assert ("52WeekLowPrice" in changedFieldNames) == True
-        assert ("52WeekHighPrice" in changedFieldNames) == True
+        assert "currentPrice" in changedFieldNames
+        assert "currentPriceDate" in changedFieldNames
+        assert "previousClosePrice" in changedFieldNames
+        assert "52WeekLowPrice" in changedFieldNames
+        assert "52WeekHighPrice" in changedFieldNames
         assert newValues[0] == newInfo.currentPrice
         assert newValues[1] == date.today()
         assert newValues[2] == newInfo.lastClosePrice

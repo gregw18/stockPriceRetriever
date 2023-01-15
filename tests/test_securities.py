@@ -242,7 +242,7 @@ class TestSecurities():
             weeksThreshold = datetime.date.today() - datetime.timedelta(weeksToKeep * 7)
 
             calls = [call(self.dailyDbName, daysThreshold),
-                     call(self.weeklyDbName,weeksThreshold)]
+                     call(self.weeklyDbName, weeksThreshold)]
             mock_remove.assert_has_calls(calls)
 
     """

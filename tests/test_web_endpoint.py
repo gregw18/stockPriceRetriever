@@ -40,7 +40,7 @@ class Test_web_endpoint:
         with patch('securities.Securities.get_web_data', return_value=Mock()) as mock_data:
             mock_data.return_value = self.gen_two_webPriceInfos()
 
-            result = web_endpoint.get_website_data({"queryStringParameters": 
+            result = web_endpoint.get_website_data({"queryStringParameters":
                                                         {"timeframe": "30days"}},
                                                    "morestuff")
 

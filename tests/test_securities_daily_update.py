@@ -144,8 +144,7 @@ class TestSecurities():
     """
 
     @pytest.mark.integration
-    def test_only_download_necessary_plus_full(self, getUtils, getSecurities,
-                                               getSecuritiesInter, getDict):
+    def test_only_download_necessary_plus_full(self, getUtils, getSecurities, getDict):
         """
         Verify that downloads daily prices for expected securities and weekly prices
         for one.
@@ -188,8 +187,7 @@ class TestSecurities():
         assert numUpdated == 2
 
     @pytest.mark.unit
-    def test_dont_update_weekly_date(self, getUtils, getSecurities,
-                                     getSecuritiesInter, getDict):
+    def test_dont_update_weekly_date(self, getUtils, getSecurities, getDict):
         """
         Verify that when call do_daily_price_update, lastWeeklyPriceUpdate field in
         admin table isn't updated, when don't need to do weekly price update.
@@ -253,7 +251,7 @@ class TestSecurities():
             mock_get_changed.assert_not_called()
 
     @pytest.mark.integration
-    def test_reset_daily_prices(self, getUtils, getSecurities, getDict, getSecuritiesInter):
+    def test_reset_daily_prices(self, getUtils, getSecurities, getDict):
         """
         Test that tables are in expected condition after doing reset. I.e. currentPriceDate
          in securities is yesterday, there are no records in daily/weekly price history
@@ -268,10 +266,9 @@ class TestSecurities():
         self._save_to_securities(secsDict)
 
         fieldNames = ("securityId", "priceDate", "price")
-        fieldVals = (
-                     (secsDict["AAPL"].id, date.today(), 132.44),
+        fieldVals = ((secsDict["AAPL"].id, date.today(), 132.44),
                      (secsDict["MSFT"].id, date.today(), 432.33)
-                    )
+        )
         dbAccess.insert_data(self.dailyDbName, fieldNames, fieldVals)
         dbAccess.insert_data(self.weeklyDbName, fieldNames, fieldVals)
 
@@ -395,7 +392,7 @@ class TestSecurities():
         """
         for tmpSecurity in secsDict.values():
             fieldNames = ["name", "symbol", "currentPriceDate", "buyPrice",
-                        "sellPrice", "fullHistoryDownloaded"]
+                          "sellPrice", "fullHistoryDownloaded"]
             fieldValues = [None] * len(fieldNames)
             fieldValues[0] = tmpSecurity.name
             fieldValues[1] = tmpSecurity.symbol

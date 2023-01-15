@@ -1,5 +1,5 @@
 """
-Hack to let test modules find src modules that they are testing. 
+Hack to let test modules find src modules that they are testing.
 Would love to know of a better approach.
 """
 import sys

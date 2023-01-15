@@ -42,6 +42,8 @@ class TestUtilsInterface():
         """
         dbAccess.connect()
         self._zap_admin_db()
+        
+        # Creating UtilsInterface should ensure one record in admin table.
         myUtils = UtilsInterface()
 
         dbAccess.connect()
@@ -58,7 +60,7 @@ class TestUtilsInterface():
         dbAccess.insert_data(self.adminTableName, [], [])
         dbAccess.disconnect()
 
-        # Initializes utilsInterface, should verify that have only one record.
+        # Creating UtilsInterface should ensure one record in admin table.
         myUtils = UtilsInterface()
 
         dbAccess.connect()
@@ -91,7 +93,7 @@ class TestUtilsInterface():
         myUtils.set_last_groom_date()
         savedDate = myUtils.get_last_groom_date()
         myUtils.disconnect()
- 
+
         assert savedDate == date.today()
 
     def _zap_admin_db(self):
@@ -105,5 +107,5 @@ class TestUtilsInterface():
         Count how many records are in the admin table.
         """
         records = dbAccess.select_data(self.adminTableName, ["id"], "1=1")
- 
+
         return len(records)

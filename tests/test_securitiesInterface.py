@@ -4,7 +4,6 @@ V0.01, November 22, 2022, GAW
 """
 
 from datetime import date
-from decimal import Decimal
 from unittest.mock import Mock, patch
 import pytest
 
@@ -109,7 +108,7 @@ class TestSecuritiesInterface():
             testSecurity = self.createSecurity("Apple", "aapl", 103.4, 201.1)
             myInterface = SecuritiesInterface()
             result = myInterface.add_security(testSecurity)
-            assert result == False
+            assert not result
             mock_select.assert_called_once()
 
     def test_add_security_succeeds(self):
@@ -124,7 +123,7 @@ class TestSecuritiesInterface():
                 testSecurity = self.createSecurity("Apple", "aapl", 103.4, 201.1)
                 myInterface = SecuritiesInterface()
                 result = myInterface.add_security(testSecurity)
-                assert result == True
+                assert result
 
     def test_update_security_match(self):
         """
@@ -134,7 +133,7 @@ class TestSecuritiesInterface():
             mock_update.return_value = 1
             myInterface = SecuritiesInterface()
             wasUpdated = myInterface.update_security(4, ["buyPrice"], [135.4])
-            assert wasUpdated == True
+            assert wasUpdated
             mock_update.assert_called_once()
 
     def test_update_security_no_match(self):
@@ -145,7 +144,7 @@ class TestSecuritiesInterface():
             mock_update.return_value = 0
             myInterface = SecuritiesInterface()
             wasUpdated = myInterface.update_security(5, ["buyPrice"], [135.4])
-            assert wasUpdated == False
+            assert not wasUpdated
             mock_update.assert_called_once()
 
     def test_delete_security_match(self):
@@ -156,7 +155,7 @@ class TestSecuritiesInterface():
             mock_delete.return_value = 1
             myInterface = SecuritiesInterface()
             wasDeleted = myInterface.delete_security(4)
-            assert wasDeleted == True
+            assert wasDeleted
             mock_delete.assert_called_once_with(myInterface.securitiesTable, "id=4")
 
     def test_delete_security_no_match(self):
@@ -167,7 +166,7 @@ class TestSecuritiesInterface():
             mock_delete.return_value = 0
             myInterface = SecuritiesInterface()
             wasDeleted = myInterface.delete_security(5)
-            assert wasDeleted == False
+            assert not wasDeleted
             mock_delete.assert_called_once_with(myInterface.securitiesTable, "id=5")
 
 

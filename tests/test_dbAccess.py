@@ -53,12 +53,12 @@ class TestDbAccess():
             return
 
         if dbAccess.does_table_exist(self.testTableName1):
-            assert dbAccess.delete_table(self.testTableName1) == True
+            assert dbAccess.delete_table(self.testTableName1)
 
         result = dbAccess.create_table(self.testTable1Def)
         if result:
-            assert dbAccess.does_table_exist(self.testTableName1) == True
-            assert dbAccess.delete_table(self.testTableName1) == True
+            assert dbAccess.does_table_exist(self.testTableName1)
+            assert dbAccess.delete_table(self.testTableName1)
         else:
             assert False, "create_table call failed"
         dbAccess.disconnect()
@@ -72,7 +72,7 @@ class TestDbAccess():
             return
 
         assertMsg = "assumes that table %s should always exist" % (self.knownGoodTableName,)
-        assert dbAccess.does_table_exist(self.knownGoodTableName) == True, assertMsg
+        assert dbAccess.does_table_exist(self.knownGoodTableName), assertMsg
 
         dbAccess.disconnect()
 
@@ -85,7 +85,7 @@ class TestDbAccess():
             return
 
         assertMsg = "table %s shouldn't exist" % (self.knownBadTableName,)
-        assert dbAccess.does_table_exist(self.knownBadTableName) == False, assertMsg
+        assert not dbAccess.does_table_exist(self.knownBadTableName), assertMsg
 
         dbAccess.disconnect()
 
@@ -108,7 +108,7 @@ class TestDbAccess():
         dbAccess.disconnect()
 
         assertMsg = "Failed to insert a single record"
-        assert result == True, assertMsg
+        assert result, assertMsg
 
 
     def test_insert_one_record_with_date(self):
@@ -127,7 +127,7 @@ class TestDbAccess():
         dbAccess.disconnect()
 
         assertMsg = "Failed to insert a single record"
-        assert result == True, assertMsg
+        assert result, assertMsg
 
 
     def test_insert_empty_record(self):
@@ -147,7 +147,7 @@ class TestDbAccess():
         dbAccess.disconnect()
 
         assertMsg = "Failed to insert a single record"
-        assert result == True, assertMsg
+        assert result, assertMsg
 
 
     def test_insert_three_records(self):
@@ -169,7 +169,7 @@ class TestDbAccess():
         dbAccess.disconnect()
 
         assertMsg = "Failed to insert records"
-        assert result == True, assertMsg
+        assert result, assertMsg
 
     def test_insert_bad_field(self):
         """
@@ -183,7 +183,7 @@ class TestDbAccess():
             assert False, "unable to connect to database"
 
         assertMsg = "Insert succeeded despite bad field name"
-        assert dbAccess.insert_data(table, fields, values) == False, assertMsg
+        assert not dbAccess.insert_data(table, fields, values), assertMsg
 
         dbAccess.disconnect()
 
@@ -200,7 +200,7 @@ class TestDbAccess():
             assert False, "unable to connect to database"
 
         assertMsg = "Insert succeeded despite bad table name"
-        assert dbAccess.insert_data(table, fields, values) == False, assertMsg
+        assert not dbAccess.insert_data(table, fields, values), assertMsg
 
         dbAccess.disconnect()
 
@@ -302,7 +302,7 @@ class TestDbAccess():
         self.wipeTables()
 
         assertMsg = "Failed to insert a single record"
-        assert dbAccess.insert_data(table, fields, values) == True, assertMsg
+        assert dbAccess.insert_data(table, fields, values), assertMsg
 
         updateFields = ("Name", "percentChangeToday", "currentPriceDate")
         updateValues = ("Amazing", -15.4, date(2022, 1, 28))
@@ -331,7 +331,7 @@ class TestDbAccess():
             assert False, "unable to connect to database"
 
         assertMsg = "Failed to insert records"
-        assert dbAccess.insert_data(table, fields, values) == True, assertMsg
+        assert dbAccess.insert_data(table, fields, values), assertMsg
 
         updateFields = ("Name", "percentChangeToday", "currentPriceDate")
         updateValues = ("Amazing", -15.4, date(2022, 1, 28))
@@ -360,7 +360,7 @@ class TestDbAccess():
             assert False, "unable to connect to database"
 
         assertMsg = "Failed to insert a single record"
-        assert dbAccess.insert_data(table, fields, values) == True, assertMsg
+        assert dbAccess.insert_data(table, fields, values), assertMsg
 
         updateFields = ("zzName", "percentChangeToday", "currentPriceDate")
         updateValues = ("Amazing", -15.4, date(2022, 1, 28))
@@ -384,7 +384,7 @@ class TestDbAccess():
             assert False, "unable to connect to database"
 
         assertMsg = "Failed to insert a single record"
-        assert dbAccess.insert_data(table, fields, values) == True, assertMsg
+        assert dbAccess.insert_data(table, fields, values), assertMsg
 
         updateFields = ("Name", "percentChangeToday", "currentPriceDate")
         updateValues = ("Amazing", -15.4, date(2022, 1, 28))
@@ -429,7 +429,7 @@ class TestDbAccess():
             assert False, "unable to connect to database"
 
         assertMsg = "Failed to insert a single record"
-        assert dbAccess.insert_data(table, fields, values) == True, assertMsg
+        assert dbAccess.insert_data(table, fields, values), assertMsg
 
         selectFields = ("Name", "Symbol", "SellPrice", "currentPriceDate")
         query = "Symbol='AMZN9'"
@@ -451,15 +451,15 @@ class TestDbAccess():
         """
         table = self.securitiesTable
         fields = ("Name", "Symbol", "BuyPrice", "SellPrice", "currentPriceDate")
-        values = [("Amazon", "AMZN10", 150.01, 30.21,  date(2023, 1, 28)),
-                  ("Amazon", "AMZN11", 350.01, 200.21, date(2022, 3, 26)), 
+        values = [("Amazon", "AMZN10", 150.01, 30.21, date(2023, 1, 28)),
+                  ("Amazon", "AMZN11", 350.01, 200.21, date(2022, 3, 26)),
                   ("Amazon", "AMZN12", 50.01,  100.21, date(2021, 6, 8))]
 
         if not dbAccess.connect():
             assert False, "unable to connect to database"
 
         assertMsg = "Failed to insert records"
-        assert dbAccess.insert_data(table, fields, values) == True, assertMsg
+        assert dbAccess.insert_data(table, fields, values), assertMsg
 
         selectFields = ("Name", "Symbol", "SellPrice", "currentPriceDate")
         query = "Name='Amazon'"
@@ -497,15 +497,15 @@ class TestDbAccess():
         """
         table = self.securitiesTable
         fields = ("Name", "Symbol", "BuyPrice", "SellPrice", "currentPriceDate")
-        values = [("Amazon", "AMZN13", 150.01, 30.21,  date(2023, 1, 28)),
-                  ("Amazon", "AMZN14", 350.01, 200.21, date(2022, 3, 26)), 
+        values = [("Amazon", "AMZN13", 150.01, 30.21, date(2023, 1, 28)),
+                  ("Amazon", "AMZN14", 350.01, 200.21, date(2022, 3, 26)),
                   ("Amazon", "AMZN15", 50.01,  100.21, date(2021, 6, 8))]
 
         if not dbAccess.connect():
             assert False, "unable to connect to database"
 
         assertMsg = "Failed to insert records"
-        assert dbAccess.insert_data(table, fields, values) == True, assertMsg
+        assert dbAccess.insert_data(table, fields, values), assertMsg
 
         selectFields = ("Name", "Symbol", "SellPrice", "currentPriceDate")
         query = "Name='Amazon' AND BuyPrice=350.01"
@@ -527,8 +527,8 @@ class TestDbAccess():
         """
         table = self.securitiesTable
         fields = ("Name", "Symbol", "BuyPrice", "SellPrice", "currentPriceDate")
-        values = [("Amazon", "AMZN16", 150.01, 30.21,  date(2023, 1, 28)),
-                  ("Amazon", "AMZN17", 350.01, 200.21, date(2022, 3, 26)), 
+        values = [("Amazon", "AMZN16", 150.01, 30.21, date(2023, 1, 28)),
+                  ("Amazon", "AMZN17", 350.01, 200.21, date(2022, 3, 26)),
                   ("Amazon", "AMZN18", 50.01,  100.21, date(2021, 6, 8))]
 
         if not dbAccess.connect():
@@ -536,7 +536,7 @@ class TestDbAccess():
         self.wipeTables()
 
         assertMsg = "Failed to insert records"
-        assert dbAccess.insert_data(table, fields, values) == True, assertMsg
+        assert dbAccess.insert_data(table, fields, values), assertMsg
 
         selectFields = ("Name", "Symbol", "SellPrice", "currentPriceDate")
         query = "BuyPrice < 350.01"
@@ -562,7 +562,7 @@ class TestDbAccess():
         fields = ("Name", "Symbol", "BuyPrice", "SellPrice")
         values = [("Amazon", "AMZN19", 150.01, 300.21),]
         assertMsg = "Failed to insert a single record"
-        assert dbAccess.insert_data(table, fields, values) == True, assertMsg
+        assert dbAccess.insert_data(table, fields, values), assertMsg
 
         # Get id for just added security.
         selectFields = ("ID",)
@@ -576,7 +576,7 @@ class TestDbAccess():
         priceValues = [(myId, myDate, "299.32")]
 
         assertMsg = "Failed to insert data into daily price history"
-        assert dbAccess.insert_data(priceTable, priceFields, priceValues) == True, assertMsg
+        assert dbAccess.insert_data(priceTable, priceFields, priceValues), assertMsg
 
         # Run the test - update currentPrice, currentPriceDate in securities based on value
         # from daily prices table

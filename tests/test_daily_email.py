@@ -80,8 +80,7 @@ class Test_daily_email:
         assert mySubj == ""
         assert myBody == ""
 
-    def test_daily_email(self, getUtils, getDict, getSecuritiesInter,
-                         getSecuritiesTable, get_settings):
+    def test_daily_email(self, getUtils, getDict, getSecuritiesTable, get_settings):
         """
         Test full process of generating and sending an email - full integration test.
         """
@@ -93,7 +92,7 @@ class Test_daily_email:
         secsDict["AAPL"].currentPriceDate = currentDate
         secsDict["MSFT"].currentPriceDate = currentDate
         secsDict["GOOGL"].currentPriceDate = currentDate
-        self._save_to_securities(getSecuritiesInter, getSecuritiesTable, secsDict)
+        self._save_to_securities(getSecuritiesTable, secsDict)
 
         sent = daily_email.send_from_db(get_settings.resultsTopicName)
 
@@ -108,7 +107,7 @@ class Test_daily_email:
         return utilsInterface.UtilsInterface()
 
     @pytest.fixture(scope='class')
-    def getSecuritiesInter(self, get_settings):
+    def getSecuritiesInter(self):
         return securitiesInterface.SecuritiesInterface()
 
     @pytest.fixture()
@@ -154,7 +153,7 @@ class Test_daily_email:
         for tmpSecurity in myDict.values():
             dbAccess.delete_data(getSecuritiesTable, securityQuery, tmpSecurity.id)
 
-    def _save_to_securities(self, getSecurities, getSecuritiesTable, secsDict):
+    def _save_to_securities(self, getSecuritiesTable, secsDict):
         """
         Save current securities to securities table.
         """

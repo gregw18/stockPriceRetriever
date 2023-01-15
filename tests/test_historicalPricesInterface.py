@@ -11,7 +11,6 @@ import random
 from . import addSrcToPath
 from . import helperMethods
 
-from unittest.mock import Mock, patch
 import unittest
 import pytest
 
@@ -67,9 +66,9 @@ class TestHistoricalPricesInterface(unittest.TestCase):
 
         query = f"securityId=%s AND priceDate=%s"
         records = dbAccess.select_data(self.dailyPricesTable,
-                                      ["price"],
-                                      query,
-                                      (secId, expectedDate))
+                                       ["price"],
+                                       query,
+                                       (secId, expectedDate))
 
         self.assertAlmostEqual(records[0]["price"], expectedPrice)
 
@@ -184,9 +183,9 @@ class TestHistoricalPricesInterface(unittest.TestCase):
 
         timePeriod = self.mysettings.db_weekly_history_code
         weeklyPairs = self.generate_date_price_pairs(baseDate,
-                                                    basePrice,
-                                                    numPrices,
-                                                    timePeriod)
+                                                     basePrice,
+                                                     numPrices,
+                                                     timePeriod)
 
         utilsInterface = UtilsInterface()
         utilsInterface.connect()
@@ -308,7 +307,7 @@ class TestHistoricalPricesInterface(unittest.TestCase):
         assert result == True
 
         maxAge = numPrices
-        if (timePeriod == self.mysettings.db_weekly_history_code):
+        if timePeriod == self.mysettings.db_weekly_history_code:
             # If doing weekly prices, want up to number of prices * 7 days per week as maximum age.
             maxAge = numPrices * 7
 
@@ -405,7 +404,7 @@ class TestHistoricalPricesInterface(unittest.TestCase):
     def get_number_fridays(self, baseDate, daysToKeep):
         """
         How to calculate how many Fridays are there between given date and N days prior to that
-        date? If it is a Friday, divide number of days by 7, round up to nearest int. 
+        date? If it is a Friday, divide number of days by 7, round up to nearest int.
         If not Friday, subtract number of days to get to Friday, then divide by 7 and roundup
         to nearest int.
         i.e. 20 days history to keep. If base day is
