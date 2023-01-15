@@ -136,13 +136,13 @@ Resources:
   DailyLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub "/aws/lambda/${function}"
+      LogGroupName: !Sub "/aws/lambda/${function}_1"
       RetentionInDays: 30
 
   WebLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub "/aws/lambda/${websiteFunction}"
+      LogGroupName: !Sub "/aws/lambda/${websiteFunction}_1"
       RetentionInDays: 30
 
   StockRetrieverError:
