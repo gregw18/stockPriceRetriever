@@ -4,8 +4,6 @@ V0.01, November 24, 2022, GAW
 """
 
 from datetime import date
-#from decimal import Decimal
-#from unittest.mock import Mock, patch
 import pytest
 
 from . import addSrcToPath
@@ -30,6 +28,7 @@ To Test
 mysettings = settings.Settings.instance()
 helperMethods.adjust_settings_for_tests(mysettings)
 
+
 @pytest.mark.integration
 @pytest.mark.database
 class TestUtilsInterface():
@@ -42,7 +41,7 @@ class TestUtilsInterface():
         """
         dbAccess.connect()
         self._zap_admin_db()
-        
+
         # Creating UtilsInterface should ensure one record in admin table.
         myUtils = UtilsInterface()
 

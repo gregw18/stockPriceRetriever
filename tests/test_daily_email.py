@@ -17,6 +17,7 @@ import security_groups
 import settings
 import utilsInterface
 
+
 @pytest.mark.unit
 class Test_daily_email:
     @pytest.fixture(scope='class')
@@ -85,7 +86,7 @@ class Test_daily_email:
         Test full process of generating and sending an email - full integration test.
         """
         currentDate = date.today()
-        #print(f"1 currentDate = {currentDate}")
+        # print(f"1 currentDate = {currentDate}")
 
         getUtils.connect()
         secsDict = getDict
@@ -175,7 +176,7 @@ class Test_daily_email:
 
             # Need to nest the list so that connector recognizes that adding one record
             # with five values, rather than five records with one value each.
-            nestedValues = [fieldValues,]
+            nestedValues = [fieldValues, ]
             dbAccess.insert_data(getSecuritiesTable, fieldNames, nestedValues)
 
             # Retrieve id for record just added, store in security.

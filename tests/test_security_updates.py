@@ -20,16 +20,9 @@ update_values
     Verify correct values get to correct fields.
 """
 
+
 @pytest.mark.unit
 class TestSecurity2():
-    #def setup(self):
-    #    self.testPrice = 11.59
-    #    self.testPriceInfo = security.PriceInfo()
-    #    self.testPriceInfo.currentPrice = self.testPrice
-    #    self.testPriceInfo.lastClosePrice = 42.33
-    #    self.testPriceInfo.low52Week = 33.21
-    #    self.testPriceInfo.high52Week = 64.34
-
     def _create_priceInfo(self):
         """
         Test updating one field.
@@ -108,12 +101,11 @@ class TestSecurity2():
         assert len(changedFieldNames) == 5
         assert len(newValues) == 5
 
-
     def test_get_changed_fields_no_changes(self):
         """
         No changes, expect empty lists back.
         """
-        #Create a security with data from PriceInfo.
+        # Create a security with data from PriceInfo.
         newInfo = self._create_priceInfo()
         testSecurity = Security()
         testSecurity.pop_with_priceInfo("TEST3", "TST3", 85, 110, newInfo)
@@ -127,7 +119,7 @@ class TestSecurity2():
         """
         Test updating all fields.
         """
-        #Create a security with data from PriceInfo.
+        # Create a security with data from PriceInfo.
         newInfo = self._create_priceInfo()
 
         testSecurity = Security()

@@ -38,6 +38,7 @@ delete_security
     Emits correct queries
 """
 
+
 @pytest.mark.integration
 @pytest.mark.database
 class TestHistoricalPricesInterface(unittest.TestCase):
@@ -304,7 +305,7 @@ class TestHistoricalPricesInterface(unittest.TestCase):
             print(f"Error: (exercise_save_historical_prices) unexpected time history code: ",
                   "{timePeriod}")
 
-        assert result == True
+        assert result
 
         maxAge = numPrices
         if timePeriod == self.mysettings.db_weekly_history_code:
@@ -358,7 +359,7 @@ class TestHistoricalPricesInterface(unittest.TestCase):
             print(f"Error: (exercise_save_historical_prices) unexpected time history code: ",
                   "{timePeriod}")
 
-        assert result == True
+        assert result
 
         # Remove older prices.
         timeDelta = timedelta(daysToKeep)

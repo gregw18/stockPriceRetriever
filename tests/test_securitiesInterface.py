@@ -118,7 +118,7 @@ class TestSecuritiesInterface():
         with patch('securitiesInterface.dbAccess.select_data', return_value=Mock()) as mock_select:
             mock_select.return_value = []
             with patch('securitiesInterface.dbAccess.insert_data', return_value=Mock()) \
-                as mock_insert:
+                    as mock_insert:
                 mock_insert.return_value = 1
                 testSecurity = self.createSecurity("Apple", "aapl", 103.4, 201.1)
                 myInterface = SecuritiesInterface()
@@ -168,7 +168,6 @@ class TestSecuritiesInterface():
             wasDeleted = myInterface.delete_security(5)
             assert not wasDeleted
             mock_delete.assert_called_once_with(myInterface.securitiesTable, "id=5")
-
 
     def createSecurity(self, name, symbol, buyPrice, sellPrice):
         mySec = Security()

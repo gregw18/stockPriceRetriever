@@ -20,6 +20,7 @@ import targetSecurity
 mySettings = settings.Settings.instance()
 helperMethods.adjust_settings_for_tests(mySettings)
 
+
 @pytest.mark.unit
 @pytest.mark.database
 class TestSecurities():
@@ -68,7 +69,7 @@ class TestSecurities():
         today = datetime.date(2022, 11, 5)
         lastGroomDate = datetime.date(2022, 11, 4)
         doGrooming = getSecurities._checkGroomingDate(today, lastGroomDate)
-        assert doGrooming == True
+        assert doGrooming
 
     def test_checkGroomDate_4th(self, getSecurities):
         """
@@ -77,7 +78,7 @@ class TestSecurities():
         today = datetime.date(2022, 11, 4)
         lastGroomDate = today - datetime.timedelta(28)
         doGrooming = getSecurities._checkGroomingDate(today, lastGroomDate)
-        assert doGrooming == False
+        assert not doGrooming
 
     def test_checkGroomDate_5th_alreadyRan(self, getSecurities):
         """
@@ -86,7 +87,7 @@ class TestSecurities():
         today = datetime.date(2022, 11, 5)
         lastGroomDate = today
         doGrooming = getSecurities._checkGroomingDate(today, lastGroomDate)
-        assert doGrooming == False
+        assert not doGrooming
 
     def test_checkGroomDate_20daysago(self, getSecurities):
         """
@@ -95,7 +96,7 @@ class TestSecurities():
         today = datetime.date(2022, 11, 4)
         lastGroomDate = today - datetime.timedelta(20)
         doGrooming = getSecurities._checkGroomingDate(today, lastGroomDate)
-        assert doGrooming == False
+        assert not doGrooming
 
     def test_checkGroomDate_32daysago(self, getSecurities):
         """
@@ -104,7 +105,7 @@ class TestSecurities():
         today = datetime.date(2022, 11, 4)
         lastGroomDate = today - datetime.timedelta(32)
         doGrooming = getSecurities._checkGroomingDate(today, lastGroomDate)
-        assert doGrooming == True
+        assert doGrooming
 
     def test_checkGroomDate_41daysago(self, getSecurities):
         """
@@ -113,7 +114,7 @@ class TestSecurities():
         today = datetime.date(2022, 11, 4)
         lastGroomDate = today - datetime.timedelta(41)
         doGrooming = getSecurities._checkGroomingDate(today, lastGroomDate)
-        assert doGrooming == True
+        assert doGrooming
 
     def test_checkGroomDate_null(self, getSecurities):
         """
@@ -122,7 +123,7 @@ class TestSecurities():
         today = datetime.date(2022, 11, 4)
         lastGroomDate = None
         doGrooming = getSecurities._checkGroomingDate(today, lastGroomDate)
-        assert doGrooming == True
+        assert doGrooming
 
     """
     IsWeeklyDue tests
@@ -142,7 +143,7 @@ class TestSecurities():
         today = datetime.date(2022, 11, 25)
         lastWeeklyDate = today - datetime.timedelta(7)
         doWeekly = getSecurities._checkWeeklyDate(today, lastWeeklyDate)
-        assert doWeekly == True
+        assert doWeekly
 
     def test_checkWeeklyDate_Thursday(self, getSecurities):
         """
@@ -151,7 +152,7 @@ class TestSecurities():
         today = datetime.date(2022, 11, 24)
         lastWeeklyDate = today - datetime.timedelta(7)
         doWeekly = getSecurities._checkWeeklyDate(today, lastWeeklyDate)
-        assert doWeekly == False
+        assert not doWeekly
 
     def test_checkWeeklyDate_Saturday(self, getSecurities):
         """
@@ -160,7 +161,7 @@ class TestSecurities():
         today = datetime.date(2022, 11, 26)
         lastWeeklyDate = today - datetime.timedelta(7)
         doWeekly = getSecurities._checkWeeklyDate(today, lastWeeklyDate)
-        assert doWeekly == False
+        assert not doWeekly
 
     def test_checkWeeklyDate_6DaysSince(self, getSecurities):
         """
@@ -169,7 +170,7 @@ class TestSecurities():
         today = datetime.date(2022, 11, 21)
         lastWeeklyDate = today - datetime.timedelta(6)
         doWeekly = getSecurities._checkWeeklyDate(today, lastWeeklyDate)
-        assert doWeekly == False
+        assert not doWeekly
 
     def test_checkWeeklyDate_7DaysSince(self, getSecurities):
         """
@@ -178,7 +179,7 @@ class TestSecurities():
         today = datetime.date(2022, 11, 21)
         lastWeeklyDate = today - datetime.timedelta(7)
         doWeekly = getSecurities._checkWeeklyDate(today, lastWeeklyDate)
-        assert doWeekly == False
+        assert not doWeekly
 
     def test_checkWeeklyDate_8DaysSince(self, getSecurities):
         """
@@ -187,7 +188,7 @@ class TestSecurities():
         today = datetime.date(2022, 11, 21)
         lastWeeklyDate = today - datetime.timedelta(8)
         doWeekly = getSecurities._checkWeeklyDate(today, lastWeeklyDate)
-        assert doWeekly == True
+        assert doWeekly
 
     def test_checkWeeklyDate_Never(self, getSecurities):
         """
@@ -196,7 +197,7 @@ class TestSecurities():
         today = datetime.date(2022, 11, 25)
         lastWeeklyDate = None
         doWeekly = getSecurities._checkWeeklyDate(today, lastWeeklyDate)
-        assert doWeekly == True
+        assert doWeekly
 
     def test_get_symbols_currentPriceDate_None(self, getSecurities):
         """
@@ -227,14 +228,14 @@ class TestSecurities():
         Verify that when call _groomPrices, expected calls
         are made to historyInterface.
         """
-        #dbAccess.connect()
+        # dbAccess.connect()
         with patch('historicalPricesInterface.HistoricalPricesInterface.remove_old_prices',
                    return_value=Mock()) as mock_remove:
             mock_remove.return_value = 5
-            #with patch('historicalPricesInterface.HistoricalPricesInterface.remove_old_prices',
+            # with patch('historicalPricesInterface.HistoricalPricesInterface.remove_old_prices',
             #            return_value=Mock()) as mock_remove:
             getSecurities._groomPrices()
-            #dbAccess.disconnect()
+            # dbAccess.disconnect()
 
             daysToKeep = mySettings.daily_price_days_to_keep
             weeksToKeep = mySettings.weekly_price_weeks_to_keep
@@ -284,7 +285,7 @@ class TestSecurities():
 
         # Clear out securities and price history tables.
         numDeleted = dbAccess.delete_data(self.securitiesTable, "1=1")
-        #self._wipe_history_tables(self.secsDict)
+        # self._wipe_history_tables(self.secsDict)
         dbAccess.disconnect()
 
         assert len(dbRecs) == 2

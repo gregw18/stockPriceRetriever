@@ -13,6 +13,7 @@ from . import helperMethods
 import dbAccess
 import settings
 
+
 @pytest.mark.integration
 @pytest.mark.database
 class TestDbAccess():
@@ -98,7 +99,7 @@ class TestDbAccess():
         """
         table = self.securitiesTable
         fields = ("Name", "Symbol", "BuyPrice", "SellPrice")
-        values = [("Amazon", "AMZN", 150.01, 300.21),]
+        values = [("Amazon", "AMZN", 150.01, 300.21), ]
 
         if not dbAccess.connect():
             assert False, "unable to connect to database"
@@ -110,14 +111,13 @@ class TestDbAccess():
         assertMsg = "Failed to insert a single record"
         assert result, assertMsg
 
-
     def test_insert_one_record_with_date(self):
         """
         Insert a single record, should succeed.
         """
         table = self.securitiesTable
         fields = ("Name", "Symbol", "BuyPrice", "SellPrice", "currentPriceDate")
-        values = [("Amazon", "AMZN3", 150.01, 300.21, date(2023, 12, 31)),]
+        values = [("Amazon", "AMZN3", 150.01, 300.21, date(2023, 12, 31)), ]
 
         if not dbAccess.connect():
             assert False, "unable to connect to database"
@@ -128,7 +128,6 @@ class TestDbAccess():
 
         assertMsg = "Failed to insert a single record"
         assert result, assertMsg
-
 
     def test_insert_empty_record(self):
         """
@@ -148,7 +147,6 @@ class TestDbAccess():
 
         assertMsg = "Failed to insert a single record"
         assert result, assertMsg
-
 
     def test_insert_three_records(self):
         """
@@ -177,7 +175,7 @@ class TestDbAccess():
         """
         table = self.securitiesTable
         fields = ("Name", "Symbol", "BoughtPrice", "SellPrice")
-        values = [("Amazon2", "AMZN", 150.01, 300.21),]
+        values = [("Amazon2", "AMZN", 150.01, 300.21), ]
 
         if not dbAccess.connect():
             assert False, "unable to connect to database"
@@ -187,14 +185,13 @@ class TestDbAccess():
 
         dbAccess.disconnect()
 
-
     def test_insert_bad_table(self):
         """
         Insert a single record, with a bad table name.
         """
         table = self.knownBadTableName
         fields = ("Name", "Symbol", "BuyPrice", "SellPrice")
-        values = [("Amazon2", "AMZN", 150.01, 300.21),]
+        values = [("Amazon2", "AMZN", 150.01, 300.21), ]
 
         if not dbAccess.connect():
             assert False, "unable to connect to database"
@@ -204,11 +201,10 @@ class TestDbAccess():
 
         dbAccess.disconnect()
 
-
     # Note: Wanted to have a test that failed because was putting invalid data
     # into a field, but it looks like that isn't possible - can put numbers in string fields,
     # strings in numeric fields and numbers and strings in date fields.
-    #def test_insert_bad_field_data(self):
+    # def test_insert_bad_field_data(self):
     #    """
     #    Insert a single record, with a number in a string field.
     #    """
@@ -224,7 +220,6 @@ class TestDbAccess():
 
     #    dbAccess.disconnect()
 
-
     # Testing deleting records. Delete one record, multiple. No match - 0 records.
     # Bad table name, bad field names, bad query. Multi-field query.
     def test_delete_one_record(self):
@@ -233,7 +228,7 @@ class TestDbAccess():
         """
         table = self.securitiesTable
         fields = ("Name", "Symbol", "BuyPrice", "SellPrice")
-        values = [("Amazon", "AMZN", 150.01, 300.21),]
+        values = [("Amazon", "AMZN", 150.01, 300.21), ]
 
         if not dbAccess.connect():
             assert False, "unable to connect to database"
@@ -265,7 +260,6 @@ class TestDbAccess():
 
         dbAccess.disconnect()
 
-
     def test_delete_one_record_bad_field_name(self):
         """
         Try deleting records with a query which includes a bad field name.
@@ -282,7 +276,6 @@ class TestDbAccess():
 
         dbAccess.disconnect()
 
-
     # Testing update_data. Updating one record, multiple records.
     # Updating a single field, multiple fields. Various field types - strings
     # numbers and dates.
@@ -295,7 +288,7 @@ class TestDbAccess():
         """
         table = self.securitiesTable
         fields = ("Name", "Symbol", "BuyPrice", "SellPrice")
-        values = [("Amazon", "AMZN5", 150.01, 300.21),]
+        values = [("Amazon", "AMZN5", 150.01, 300.21), ]
 
         if not dbAccess.connect():
             assert False, "unable to connect to database"
@@ -316,7 +309,6 @@ class TestDbAccess():
         assert updateResult == 1
         assert data[0]["percentChangeToday"] == Decimal('-15.4')
 
-
     def test_update_multiple_records(self):
         """
         Update multiple records, should succeed.
@@ -325,7 +317,7 @@ class TestDbAccess():
         fields = ("Name", "Symbol", "BuyPrice", "SellPrice")
         values = [("Amazon", "AMZN6", 150.01, 300.21),
                   ("Amazon2", "AMZN6", 50.01, 30.21),
-                  ("Amazon3", "AMZN6", 10.21, 230.1),]
+                  ("Amazon3", "AMZN6", 10.21, 230.1), ]
 
         if not dbAccess.connect():
             assert False, "unable to connect to database"
@@ -347,14 +339,13 @@ class TestDbAccess():
         assert data[0]["Name"] == "Amazing"
         assert data[2]["currentPriceDate"] == date(2022, 1, 28)
 
-
     def test_update_bad_update_field(self):
         """
         Update a single record, try updating field that doesn't exist.
         """
         table = self.securitiesTable
         fields = ("Name", "Symbol", "BuyPrice", "SellPrice")
-        values = [("Amazon", "AMZN7", 150.01, 300.21),]
+        values = [("Amazon", "AMZN7", 150.01, 300.21), ]
 
         if not dbAccess.connect():
             assert False, "unable to connect to database"
@@ -378,7 +369,7 @@ class TestDbAccess():
         """
         table = self.securitiesTable
         fields = ("Name", "Symbol", "BuyPrice", "SellPrice")
-        values = [("Amazon", "AMZN8", 150.01, 300.21),]
+        values = [("Amazon", "AMZN8", 150.01, 300.21), ]
 
         if not dbAccess.connect():
             assert False, "unable to connect to database"
@@ -423,7 +414,7 @@ class TestDbAccess():
         """
         table = self.securitiesTable
         fields = ("Name", "Symbol", "BuyPrice", "SellPrice", "currentPriceDate")
-        values = [("Amazon", "AMZN9", 150.01, 300.21, date(2023, 3, 28)),]
+        values = [("Amazon", "AMZN9", 150.01, 300.21, date(2023, 3, 28)), ]
 
         if not dbAccess.connect():
             assert False, "unable to connect to database"
@@ -443,7 +434,6 @@ class TestDbAccess():
         assert data[0]["Symbol"] == "AMZN9"
         assert data[0]["SellPrice"] == Decimal('300.21')
         assert data[0]["currentPriceDate"] == date(2023, 3, 28)
-
 
     def test_select_multiple_records(self):
         """
@@ -473,7 +463,6 @@ class TestDbAccess():
         assert data[2]["Symbol"] == "AMZN12"
         assert data[2]["SellPrice"] == Decimal('100.21')
         assert data[2]["currentPriceDate"] == date(2021, 6, 8)
-
 
     def test_select_zero_records(self):
         """
@@ -519,8 +508,6 @@ class TestDbAccess():
         assert data[0]["Symbol"] == "AMZN14"
         assert data[0]["SellPrice"] == Decimal('200.21')
 
-
-
     def test_select_less_than_query(self):
         """
         select one record, with query containing <.
@@ -560,7 +547,7 @@ class TestDbAccess():
         table = self.securitiesTable
         myDate = date(2022, 11, 18)
         fields = ("Name", "Symbol", "BuyPrice", "SellPrice")
-        values = [("Amazon", "AMZN19", 150.01, 300.21),]
+        values = [("Amazon", "AMZN19", 150.01, 300.21), ]
         assertMsg = "Failed to insert a single record"
         assert dbAccess.insert_data(table, fields, values), assertMsg
 
@@ -586,10 +573,10 @@ class TestDbAccess():
         query += "WHERE SecurityId=%s AND PriceDate=%s), "
         query += "currentPriceDate = %s "
 
-        #query = "UPDATE %s SET currentPrice = " % (table,)
-        #query += "(SELECT price FROM %s " % (priceTable,)
-        #query += "WHERE SecurityId=%s AND PriceDate='%s'), " % (myId, myDate)
-        #query += "currentPriceDate = '%s' " % (myDate,)
+        # query = "UPDATE %s SET currentPrice = " % (table,)
+        # query += "(SELECT price FROM %s " % (priceTable,)
+        # query += "WHERE SecurityId=%s AND PriceDate='%s'), " % (myId, myDate)
+        # query += "currentPriceDate = '%s' " % (myDate,)
         executeResult = dbAccess.execute_update_data(query, params)
 
         # Verify that price was updated.

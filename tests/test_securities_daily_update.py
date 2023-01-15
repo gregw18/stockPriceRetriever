@@ -22,6 +22,7 @@ from yahooInterface import retrieve_daily_data
 mySettings = settings.Settings.instance()
 helperMethods.adjust_settings_for_tests(mySettings)
 
+
 @pytest.mark.database
 class TestSecurities():
     def setup(self):
@@ -77,13 +78,13 @@ class TestSecurities():
         Across years.
     """
     testdata = [
-        (date(2023, 1, 1), date(2022, 12, 30)), # Sunday in 2023 to Friday in previous year.
-        (date(2022, 11, 7), date(2022, 11, 4)), # Monday
-        (date(2022, 10, 4), date(2022, 9, 30)), # Tuesday in October to Friday in September.
-        (date(2022, 10, 12), date(2022, 10, 7)), # Wednesday
-        (date(2022, 11, 3), date(2022, 10, 28)), # Thursday in November to Friday in October.
-        (date(2022, 12, 9), date(2022, 12, 9)), # Friday
-        (date(2022, 11, 19), date(2022, 11, 18))# Saturday
+        (date(2023, 1, 1), date(2022, 12, 30)),   # Sunday in 2023 to Friday in previous year.
+        (date(2022, 11, 7), date(2022, 11, 4)),   # Monday
+        (date(2022, 10, 4), date(2022, 9, 30)),   # Tuesday in October to Friday in September.
+        (date(2022, 10, 12), date(2022, 10, 7)),  # Wednesday
+        (date(2022, 11, 3), date(2022, 10, 28)),  # Thursday in November to Friday in October.
+        (date(2022, 12, 9), date(2022, 12, 9)),   # Friday
+        (date(2022, 11, 19), date(2022, 11, 18))  # Saturday
     ]
 
     @pytest.mark.parametrize("current,expected", testdata)
@@ -131,15 +132,15 @@ class TestSecurities():
         assert len(symbols) == len(expected)
 
     """
-    Testing daily update. 
-        Want to verify that correct parts fire on correct days - i.e. weekly, grooming, 
+    Testing daily update.
+        Want to verify that correct parts fire on correct days - i.e. weekly, grooming,
         full downloads. Also need to verify that correct prices for just securities needing
         updates end up in the correct places in tables.
         Does grooming run. Put some old prices in history tables, run, verify deleted.
         Does weekly update run. Run with a date of Friday, verify records added to weekly history.
         Does full downloads. Mark a security as not downloaded, run, verify records in history.
         Prices. Clear databases. Set up list of securities. Run download. For each security, verify
-        that either saved price matches manually retrieved price or price was correctly 
+        that either saved price matches manually retrieved price or price was correctly
         not downloaded.
     """
 
@@ -268,7 +269,7 @@ class TestSecurities():
         fieldNames = ("securityId", "priceDate", "price")
         fieldVals = ((secsDict["AAPL"].id, date.today(), 132.44),
                      (secsDict["MSFT"].id, date.today(), 432.33)
-        )
+                    )
         dbAccess.insert_data(self.dailyDbName, fieldNames, fieldVals)
         dbAccess.insert_data(self.weeklyDbName, fieldNames, fieldVals)
 
@@ -403,7 +404,7 @@ class TestSecurities():
 
             # Need to nest the list so that connector recognizes that adding one record
             # with five values, rather than five records with one value each.
-            nestedValues = [fieldValues,]
+            nestedValues = [fieldValues, ]
             dbAccess.insert_data(self.securitiesDbName, fieldNames, nestedValues)
 
             # Retrieve id for record just added, store in security.

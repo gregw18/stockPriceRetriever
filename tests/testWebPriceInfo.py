@@ -22,6 +22,7 @@ What to test:
 
 """
 
+
 @pytest.mark.unit
 class TestWebPriceInfo():
     def setup(self):
@@ -207,7 +208,7 @@ class TestWebPriceInfo():
         prices = []
         myInfo.populate(mySec, prices)
 
-        expectedRating = round(100 * (mySec.currentPrice - mySec.buyPrice) \
+        expectedRating = round(100 * (mySec.currentPrice - mySec.buyPrice)
                                / (mySec.sellPrice - mySec.buyPrice), 2)
         assert myInfo.group == "4.near sell"
         assert myInfo.rating == expectedRating
