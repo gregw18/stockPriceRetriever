@@ -9,6 +9,9 @@ class SecurityRating:
     Add rating to security, where rating is a numeric measure used to rank a security
     within a group.
     """
+    def __init__(self):
+        self.security = None
+        self.rating = None
 
     def set_rating(self, mySecurity, myRating):
         """

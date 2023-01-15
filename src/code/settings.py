@@ -52,7 +52,7 @@ class Settings:
 
         self.db_daily_history_code = "DAY"
         self.db_weekly_history_code = "WEEK"
-        
+
         self.db_securities_table_name = "securities"
         self.db_daily_table_name = "dailyPriceHistory"
         self.db_weekly_table_name = "weeklyPriceHistory"

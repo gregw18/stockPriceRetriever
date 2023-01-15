@@ -11,9 +11,7 @@ import boto3
 
 import daily_email
 import resultsFile
-import retrievePrices
 import settings
-import sprEnums
 from fileManagement import FileManagement
 
 

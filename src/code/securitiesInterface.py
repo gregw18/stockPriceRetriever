@@ -15,9 +15,9 @@ class SecuritiesInterface:
     def __init__(self):
         self.settings = settings.Settings.instance()
         self.securitiesTable = self.settings.db_securities_table_name
-        self.fieldNames = ["id", "name", "symbol", "fullHistoryDownloaded", "buyPrice", 
-                            "sellPrice", "currentPrice", "currentPriceDate", "previousClosePrice",
-                            "52weekLowPrice", "52weekHighPrice", "percentChangeToday"]
+        self.fieldNames = ["id", "name", "symbol", "fullHistoryDownloaded", "buyPrice",
+                           "sellPrice", "currentPrice", "currentPriceDate", "previousClosePrice",
+                           "52weekLowPrice", "52weekHighPrice", "percentChangeToday"]
 
     def get_securities(self):
         """
@@ -31,22 +31,22 @@ class SecuritiesInterface:
         """
         Add given targetSecurity to table. Need to ensure that don't have existing record
         with same symbol. Note that only saves a subset of fields - just those expected
-        in the source list, not fields that are retrieved from internet as part of the 
+        in the source list, not fields that are retrieved from internet as part of the
         daily price update.
         """
         addedOk = False
         mySymbol = newSecurity.symbol.upper()
         query = f"symbol= {mySymbol!r}"
         results = dbAccess.select_data(self.securitiesTable, ["ID",], query)
-        if (len(results) == 0):
-            fieldNames=["name", "symbol", "buyPrice", "sellPrice", "fullHistoryDownloaded"]
+        if len(results) == 0:
+            fieldNames = ["name", "symbol", "buyPrice", "sellPrice", "fullHistoryDownloaded"]
             fieldValues = [None] * len(fieldNames)
             fieldValues[0] = newSecurity.name
             fieldValues[1] = mySymbol
             fieldValues[2] = newSecurity.buyPrice
             fieldValues[3] = newSecurity.sellPrice
             fieldValues[4] = "N"
-            
+
             # Need to nest the list so that connector recognizes that adding one record
             # with five values, rather than five records with one value each.
             nestedValues = [fieldValues,]
@@ -66,7 +66,7 @@ class SecuritiesInterface:
         Update security with given id with given values for provided fields.
         """
         updatedOk = False
-        
+
         query = f"id={securityId}"
         numUpdated = dbAccess.update_data(self.securitiesTable, fieldNames, fieldValues, query)
         if numUpdated == 1:
@@ -82,11 +82,11 @@ class SecuritiesInterface:
 
         query = f"id={deleteId}"
         numDeleted = dbAccess.delete_data(self.securitiesTable, query)
-        print( f"Deleting from {self.securitiesTable} with query {query} "
-                f"resulted in {numDeleted} records being deleted.")
+        print(f"Deleting from {self.securitiesTable} with query {query} "
+              f"resulted in {numDeleted} records being deleted.")
         if numDeleted == 1:
             wasDeleted = True
-        
+
         return wasDeleted
 
     def mark_historical_data_retrieved(self, securityId):

@@ -6,12 +6,8 @@ V0.01, November 23, 2022
 
 #from memory_profiler import profile
 
-from datetime import datetime, date, timedelta
-import json
-import os
-import sys
+from datetime import date, timedelta
 
-import dbAccess
 from historicalPricesInterface import HistoricalPricesInterface
 import settings
 from securitiesInterface import SecuritiesInterface
@@ -78,7 +74,7 @@ class Securities:
                 self.securitiesDict[newSec.symbol] = newSec
                 print(f"load just read in security with symbol {newSec.symbol}")
         else:
-                print("Securities.load: No securities were found in the table.")
+            print("Securities.load: No securities were found in the table.")
         print(f"load completed with {len(self.securitiesDict)} records in securitiesDict.\n")
 
     def loadNewList(self, targetSecurities):
@@ -104,7 +100,7 @@ class Securities:
             else:
                 #print(f"About to try adding security: {symbol}")
                 self._add_security(newTarget)
-            
+
         self.load()
         updated = self.retrieve_full_price_histories()
         print(f"Finished loadNewList.\n")
@@ -125,7 +121,7 @@ class Securities:
         print(f"Starting do_daily_price_update, currentDate={currentDate}")
         numUpdated = 0
         #self.utilsInter.connect()
-        
+
         # Check if we've already run today.
         symbolsToUpdate = self._get_symbols_needing_price_update(currentDate)
         print(f"{symbolsToUpdate=}")
@@ -133,12 +129,12 @@ class Securities:
             print(f"Exiting do_daily_price_update because already ran today.")
             return numUpdated
 
-        if not self._are_all_downloaded(self.securitiesDict):
+        if not self._are_all_downloaded():
             self.retrieve_full_price_histories()
 
         weeklyUpdateDue = self._is_weekly_price_update_due()
         weeklyPriceDate = self._get_weekly_price_date(currentDate)
-        
+
         # Do prices for all securities that we haven't previously done today.
         for tmpSymbol in symbolsToUpdate:
             newPrice = retrieve_daily_data(tmpSymbol, self.mySettings)
@@ -149,13 +145,15 @@ class Securities:
                 print(f"changedFieldNames={changedFieldNames}, newValues={newValues}")
                 if len(changedFieldNames) > 0:
                     print(f"Attempting to do updates for {tmpSecurity}.")
-                    self.securitiesInter.update_security(tmpSecurity.id, changedFieldNames, newValues)
-                    self.historyInter.save_daily_price_for_security(tmpSecurity.id, 
-                                                                    newPrice.currentPrice, 
+                    self.securitiesInter.update_security(tmpSecurity.id,
+                                                         changedFieldNames,
+                                                         newValues)
+                    self.historyInter.save_daily_price_for_security(tmpSecurity.id,
+                                                                    newPrice.currentPrice,
                                                                     currentDate)
                     if weeklyUpdateDue:
-                        self.historyInter.save_weekly_price_for_security(tmpSecurity.id, 
-                                                                        weeklyPriceDate)
+                        self.historyInter.save_weekly_price_for_security(tmpSecurity.id,
+                                                                         weeklyPriceDate)
                     tmpSecurity.update_values(newPrice)
                     numUpdated += 1
             else:
@@ -199,20 +197,22 @@ class Securities:
             print(f"retrieve_full_price_history working on {tmpSecurity.symbol}")
             if not (tmpSecurity.fullHistoryDownloaded):
                 dailyPrices = retrieve_historical_prices(tmpSecurity.symbol,
-                                                            dailyHistoryStart,
-                                                            today,
-                                                            self.mySettings.daily_price_code)
+                                                         dailyHistoryStart,
+                                                         today,
+                                                         self.mySettings.daily_price_code)
                 if len(dailyPrices) > 0:
                     # Don't go any further if first download failed.
                     downloaded = self.historyInter.save_daily_historical_prices(tmpSecurity.id, dailyPrices)
                     print(f"retrieve_full_price_history saved daily prices.")
 
                     weeklyPrices = retrieve_historical_prices(tmpSecurity.symbol,
-                                                                weeklyHistoryStart,
-                                                                today,
-                                                                self.mySettings.weekly_price_code)
+                                                              weeklyHistoryStart,
+                                                              today,
+                                                              self.mySettings.weekly_price_code)
                     if downloaded:
-                        downloaded = downloaded and self.historyInter.save_weekly_historical_prices(tmpSecurity.id, weeklyPrices)
+                        downloaded = downloaded and \
+                                     self.historyInter.save_weekly_historical_prices(tmpSecurity.id,
+                                                                                     weeklyPrices)
                     print(f"retrieve_full_price_history saved weekly prices.")
                     if downloaded:
                         self.securitiesInter.mark_historical_data_retrieved(tmpSecurity.id)
@@ -220,7 +220,7 @@ class Securities:
                         numDownloaded += 1
                     else:
                         print(f"retrieve_full_price_histories failed to save data for "
-                                f"symbol: {tmpSecurity.symbol}")
+                              f"symbol: {tmpSecurity.symbol}")
 
         return numDownloaded
 
@@ -231,7 +231,7 @@ class Securities:
         emailSecs = []
         for tmpSec in self.securitiesDict.values():
             emailSecs.append(tmpSec)
-        
+
         emailSecs.sort(key=lambda x: x.get_sort_string())
         print(f"Finished retrieve_email_info, num securities ={len(emailSecs)}")
 
@@ -254,9 +254,9 @@ class Securities:
 
         webSecs = []
         for tmpSec in self.securitiesDict.values():
-            historicalPrices = self.historyInter.get_historical_prices(tmpSec.id, 
-                                                                        historyTable, 
-                                                                        maxAge)
+            historicalPrices = self.historyInter.get_historical_prices(tmpSec.id,
+                                                                       historyTable,
+                                                                       maxAge)
             tmpWebPrice = WebPriceInfo()
             tmpWebPrice.populate(tmpSec, historicalPrices)
             webSecs.append(tmpWebPrice)
@@ -269,17 +269,19 @@ class Securities:
         """
         Decide whether to read prices from daily or weekly history table.
         """
-        if timeEnum in (sprEnums.timePeriods.day, sprEnums.timePeriods.days30, sprEnums.timePeriods.months3):
+        if timeEnum in (sprEnums.timePeriods.day,
+                        sprEnums.timePeriods.days30,
+                        sprEnums.timePeriods.months3):
             table = self.mySettings.db_daily_table_name
         else:
             table = self.mySettings.db_weekly_table_name
 
         return table
 
-    def _get_price_max_age(self,timeEnum):
-        """ 
+    def _get_price_max_age(self, timeEnum):
+        """
         Convert from time period enum to number of days of price history that want
-        to display. Note that the value of the enum is actually the number of days - 
+        to display. Note that the value of the enum is actually the number of days -
         clever solution or painful hack?
         """
 
@@ -302,7 +304,7 @@ class Securities:
         """
         Add given TargetSecurity to database. Need to ensure that don't have existing record
         with same symbol. Note that only saves a subset of fields - just those expected
-        in the source list, not fields that are retrieved from internet as part of the 
+        in the source list, not fields that are retrieved from internet as part of the
         daily price update.
         """
         return self.securitiesInter.add_security(newTargetSecurity)
@@ -346,14 +348,14 @@ class Securities:
 
         if len(fields) > 0:
             updated = self.securitiesInter.update_security(existingSecurity.id, fields, values)
-        
+
         return updated
 
     def _remove_missing_securities(self, targetSecurities):
         """
         Receives: dictionary of targetSecurity, one for each security in new excel file.
         Returns: True if succeeds, False otherwise.
-        If there are any securities in the currently loaded securities dictionary, that 
+        If there are any securities in the currently loaded securities dictionary, that
         don't exist in the provided new list, then we no longer want to track them. Thus,
         delete them from the database - securities and history tables.
         """
@@ -366,7 +368,7 @@ class Securities:
         return True
 
 
-    def _are_all_downloaded(self, targetSecurities):
+    def _are_all_downloaded(self):
         """
         Receives: Dictionary of security, one for each security in securities table.
         Returns: True if all securities have full histories downloaded, false otherwise.
@@ -424,7 +426,7 @@ class Securities:
 
     def _checkWeeklyDate(self, currentDate, lastWeeklyDate):
         """
-        Want to run weekly price update every Friday, or the first following day, 
+        Want to run weekly price update every Friday, or the first following day,
         if it didn't run on the previous Friday.
         """
         doWeekly = False
@@ -438,7 +440,7 @@ class Securities:
             elif (currentDate - lastWeeklyDate).days > 7:
                 doWeekly = True
                 print("More than 7 days ago, so yes.")
-            
+
         return doWeekly
 
     def _isPriceGroomingDue(self):
@@ -469,7 +471,7 @@ class Securities:
         elif (currentDate - lastGroomDate).days > 31:
             doGrooming = True
             print("More than 31 days ago, so yes.")
-            
+
         return doGrooming
 
     def _groomPrices(self):

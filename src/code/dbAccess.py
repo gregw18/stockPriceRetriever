@@ -4,17 +4,10 @@ business logic.
 V0.02, November 9, 2022
 """
 
-from datetime import datetime
-import json
-import os
-import sys
-
 import boto3
 import pymysql
 
 import settings
-import sprEnums
-
 
 #print("Starting dbAccess init")
 client = boto3.client('rds')
@@ -29,8 +22,8 @@ def connect():
     if not connected_status:
         try:
             token = client.generate_db_auth_token(DBHostname=mysettings.rds_endpoint,
-                                                    Port=mysettings.rds_port,
-                                                    DBUsername=mysettings.rds_user_name)
+                                                  Port=mysettings.rds_port,
+                                                  DBUsername=mysettings.rds_user_name)
             print("rds_endpoint: ", mysettings.rds_endpoint)
             print("rds port: ", mysettings.rds_port)
             print("rds_user: ", mysettings.rds_user_name)
@@ -39,11 +32,11 @@ def connect():
             #print(f"{token=}")
             ssl = {'ca': 'rds-combined-ca-bundle.pem'}
             dbConn = pymysql.connect(host=mysettings.rds_endpoint,
-                                    user=mysettings.rds_user_name,
-                                    password=token,
-                                    database=mysettings.rds_db_name,
-                                    connect_timeout=10,
-                                    ssl=ssl)
+                                     user=mysettings.rds_user_name,
+                                     password=token,
+                                     database=mysettings.rds_db_name,
+                                     connect_timeout=10,
+                                     ssl=ssl)
             print("Connection succeeded")
             connected_status = True
         except pymysql.MySQLError as e:
@@ -91,7 +84,7 @@ def create_table(tableCmd):
             print("Error when creating table, ", err)
         cursor.close()
     else:
-        print( "Error (create_table) - not connected to database.")
+        print("Error (create_table) - not connected to database.")
 
     return created
 
@@ -117,8 +110,8 @@ def does_table_exist(tableName):
             print("Error when checking for table, ", err)
         cursor.close()
     else:
-        print( "Error (does_table_exist) - not connected to database.")
-    print( "does_table_exist for ", tableName, " found ", exists)
+        print("Error (does_table_exist) - not connected to database.")
+    print("does_table_exist for ", tableName, " found ", exists)
 
     return exists
 
@@ -144,8 +137,8 @@ def delete_table(tableName):
             print("Error when deleting table, ", err)
         cursor.close()
     else:
-        print( "Error (delete_table) - not connected to database.")
-    print( "delete_table for ", tableName, "found ", deleted)
+        print("Error (delete_table) - not connected to database.")
+    print("delete_table for ", tableName, "found ", deleted)
 
     return deleted
 
@@ -171,7 +164,7 @@ def insert_data(tableName, fieldNames, fieldValues):
             sqlCmd += "(%s) " % formattedFieldNames
             sqlCmd += "VALUES (" + fieldPlaceholders + ")"
             print("trying data insert, sql= ", sqlCmd)
-            
+
             # If inserting empty record, executemany doesn't do anything,
             # because it iterates through provided fieldValues.
             if len(fieldValues) > 0:
@@ -187,22 +180,22 @@ def insert_data(tableName, fieldNames, fieldValues):
             print("Error when inserting data, ", err)
         cursor.close()
     else:
-        print( "Error (insert_data) - not connected to database.")
+        print("Error (insert_data) - not connected to database.")
     print("insert_data for table ", tableName, " resulted in ", inserted)
 
     return inserted
 
 # Select data - selected fields, from specified table, matching given query.
 # Returns data as list of dictionary.
-# Note that if use Python to insert a date (or, presumably, a datetime) into a 
-# query string, it appears to end up in the final sql query looking like 
-# “datefield=datetime.date(2022, 11, 23)". Somehow the connector ignores this 
-# and passes it straight to MySql, which can’t figure out what datetime.date 
+# Note that if use Python to insert a date (or, presumably, a datetime) into a
+# query string, it appears to end up in the final sql query looking like
+# “datefield=datetime.date(2022, 11, 23)". Somehow the connector ignores this
+# and passes it straight to MySql, which can’t figure out what datetime.date
 # is – over the connector it gives an “execute command denied to user … for routine
 # datetime.date”, while if run directly at a mysql prompt it gives the more accurate
 # response “FUNCTION datetime.date does not exist”. Could use python to force the
 # datetime.date into a particular string format, then specify that format in the Sql
-# command as well, but would have to do that everywhere call select_data. 
+# command as well, but would have to do that everywhere call select_data.
 # Alternatively, seems that can pass parameters for the where clause to the execute
 # command, and those parameters can be datetime.date, which the connector does correctly
 # translate.
@@ -212,7 +205,7 @@ def select_data(tableName, fieldNames, query, queryParams=()):
     if connected_status:
         #cursor = dbConn.cursor(buffered=True, dictionary=True)
         cursor = pymysql.cursors.DictCursor(dbConn)
-        try: 
+        try:
             formattedFieldNames = ""
             for fieldName in fieldNames:
                 formattedFieldNames += fieldName + ", "
@@ -232,7 +225,7 @@ def select_data(tableName, fieldNames, query, queryParams=()):
             print("Error when selecting data, ", err)
         cursor.close()
     else:
-        print( "Error (select_data) - not connected to database.")
+        print("Error (select_data) - not connected to database.")
     if not (returnData is None):
         print("select_data is returning ", len(returnData), " records.")
 
@@ -273,13 +266,13 @@ def update_data(tableName, fieldNames, fieldValues, query):
             print("Error when updating data, ", err)
         cursor.close()
     else:
-        print( "Error (update_data) - not connected to database.")
+        print("Error (update_data) - not connected to database.")
     print("update_data for table ", tableName, " affected ", numUpdated, " records.")
 
     return numUpdated
 
 # Delete requested data from specified table.
-# Query should be of the form "field=`value`", with additional clauses connected by 
+# Query should be of the form "field=`value`", with additional clauses connected by
 # and or or.
 def delete_data(tableName, query, queryParams=()):
     global connected_status, dbConn
@@ -302,8 +295,8 @@ def delete_data(tableName, query, queryParams=()):
             print("Error when deleting data, ", err)
         cursor.close()
     else:
-        print( "Error (delete_data) - not connected to database.")
-    print( "delete_data for ", tableName, " removed ", numDeleted, " records.")
+        print("Error (delete_data) - not connected to database.")
+    print("delete_data for ", tableName, " removed ", numDeleted, " records.")
 
     return numDeleted
 
@@ -326,7 +319,7 @@ def execute_update_data(query, queryParams=()):
             print("Error when running execute_update_data, ", err)
         cursor.close()
     else:
-        print( "Error (execute_update_data) - not connected to database.")
+        print("Error (execute_update_data) - not connected to database.")
     print("execute_update_data affected ", numUpdated, " records.")
 
     return numUpdated

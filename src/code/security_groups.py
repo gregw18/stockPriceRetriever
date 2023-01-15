@@ -108,7 +108,7 @@ class SecurityGroups:
             rating += 100
         # Found that if round when calculate, then do addition/subtraction, can end
         # up with 10 or more decimal places, so now doing it as last step.
-        rating = round(rating,2)
+        rating = round(rating, 2)
 
         return rating, group
 

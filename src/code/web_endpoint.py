@@ -4,26 +4,21 @@ Retrieves data for all securities, for requested period, returns to caller.
 V0.01, October 7, 2022
 """
 
-from datetime import datetime
 import json
 import os
 import sys
 
 import boto3
-#import pymysql
 
 import settings
-import sprEnums
-#from fileManagement import FileManagement
-import databaseUtils
 import securities
 
 client = boto3.client('lambda')
 mysettings = settings.Settings.instance()
 
 def get_test_data():
-    securities = []
-    securities.append(create_test_security(
+    mySecurities = []
+    mySecurities.append(create_test_security(
         name = "AMAZON",
         currentPrice = 14.35,
         periodStartPrice = 65.06,
@@ -31,10 +26,10 @@ def get_test_data():
         periodLowPrice = 13.23,
         buyPrice = 8.4,
         sellPrice = 50.3,
-        periodPrices = [65.06, 67.45, 69.32, 70.45, 64,33, 54.33, 52.65]
+        periodPrices = [65.06, 67.45, 69.32, 70.45, 64.33, 54.33, 52.65, 55.43, 48.22]
     ))
 
-    securities.append(create_test_security(
+    mySecurities.append(create_test_security(
         name = "Microsoft",
         currentPrice = 239.04,
         periodStartPrice = 283.11,
@@ -52,7 +47,7 @@ def get_test_data():
  #   periodLowPrix = 13.23
  #   buyPrice = 8.4
  #   sellPrice = 50.3
- #   periodPrices = [65.06, 67.45, 69.32, 70.45, 64,33, 54.33, 52.65]
+ #   periodPrices = [65.06, 67.45, 69.32, 70.45, 64.33, 54.33, 52.65]
  #   body = {
  #       "name": name,
  #       "currentPrice": currentPrice,
@@ -64,12 +59,12 @@ def get_test_data():
  #       "periodPrices": periodPrices
  #   }
 
-    print("securities: ", securities)
+    print("mySecurities: ", mySecurities)
 
-    return securities
+    return mySecurities
 
 def create_test_security(name, currentPrice, periodStartPrice, periodHighPrice,
-                        periodLowPrice, buyPrice, sellPrice, periodPrices):
+                         periodLowPrice, buyPrice, sellPrice, periodPrices):
 
     thisSecurity = {
         "name": name,
@@ -137,7 +132,7 @@ def get_website_data(event, context):
     return response
 
 def get_web_data(timePeriod):
-    """ 
+    """
     Return securities data for requested time period.
     """
     mySecurities = securities.Securities()

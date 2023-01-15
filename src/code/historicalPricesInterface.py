@@ -5,13 +5,9 @@ V0.01, November 24, 2022
 """
 
 from datetime import date, timedelta
-import json
-import os
-import sys
 
 import dbAccess
 import settings
-import sprEnums
 
 
 class HistoricalPricesInterface:
@@ -26,8 +22,8 @@ class HistoricalPricesInterface:
         """
         Add given price to daily price table.
         """
-        return self._save_historical_prices(securityId, 
-                                            [(priceDate, securityPrice),], 
+        return self._save_historical_prices(securityId,
+                                            [(priceDate, securityPrice),],
                                             self.dailyPricesTable)
 
     def save_weekly_price_for_security(self, securityId, priceDate):
@@ -61,7 +57,7 @@ class HistoricalPricesInterface:
         """
         Retrieve prices for requested security, for requested window of time.
         """
-        dateThresh  = date.today() - timedelta(days=maxAge)
+        dateThresh = date.today() - timedelta(days = maxAge)
         fields = ["priceDate", "price"]
         query = "securityId = %s AND  priceDate >= %s"
         records = dbAccess.select_data(tableName, fields, query, [securityId, dateThresh])
@@ -106,7 +102,7 @@ class HistoricalPricesInterface:
         fieldValues = []
         for priceDate, price in pricePairs:
             fieldValues.append((securityId, priceDate, price))
-        
+
         if len(fieldValues) > 0:
             savedOk = dbAccess.insert_data(tableName, fieldNames, fieldValues)
             print(f"_save_historical_prices on table {tableName} gave a result of {savedOk}")

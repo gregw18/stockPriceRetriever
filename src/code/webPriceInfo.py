@@ -4,8 +4,6 @@ Includes logic to translate data into dictionary from security and prices.
 V0.01, December 19, 2022, GAW
 """
 
-from datetime import date
-
 from security_groups import SecurityGroups
 
 class WebPriceInfo:
@@ -65,7 +63,7 @@ class WebPriceInfo:
         myDict["periodPrices"] = self.periodPrices
         myDict["periodDates"] = self.periodDates
         print(f"getDict, {myDict = }")
-        
+
         return myDict
 
     def _set_high_low_prices(self):
@@ -73,17 +71,16 @@ class WebPriceInfo:
         Find lowest and highest prices from list, store in periodLow/High
         """
 
-        min = self.periodPrices[0]
-        #min = self.periodPrices[0]["price"]
-        max = min
+        myMin = self.periodPrices[0]
+        myMax = myMin
         for val in self.periodPrices:
-            if val < min:
-                min = val
-            if val > max:
-                max = val
-        
-        self.periodLowPrice = min
-        self.periodHighPrice = max
+            if val < myMin:
+                myMin = val
+            if val > myMax:
+                myMax = val
+
+        self.periodLowPrice = myMin
+        self.periodHighPrice = myMax
 
     def _get_prices_only(self, myPrices):
         """
@@ -91,7 +88,7 @@ class WebPriceInfo:
         """
         prices = []
         for pair in myPrices:
-            if not( pair["price"] is None):
+            if not(pair["price"] is None):
                 prices.append(float(pair["price"]))
             else:
                 prices.append(float(0))

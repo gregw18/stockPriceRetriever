@@ -1,13 +1,8 @@
 """
-Some miscellaneous database logic - structure/creation of tables, 
+Some miscellaneous database logic - structure/creation of tables,
 removing outdated price history
 V0.01, November 9, 2022
 """
-
-from datetime import datetime
-import json
-import os
-import sys
 
 import dbAccess
 import settings
@@ -42,7 +37,7 @@ def _get_table_definitions():
     Table definitions.
     """
     tables = {}
-    tables["securities"]= (
+    tables["securities"] = (
         "CREATE TABLE %s ("
         "   `id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,"
         "   name VARCHAR(40) NOT NULL,"

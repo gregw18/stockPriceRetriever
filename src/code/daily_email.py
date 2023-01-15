@@ -27,7 +27,7 @@ code_display_names = {sprEnums.GroupCodes.buy: "Buy",
 def send_from_db(resultsTopicName):
     """
     Create and send email summarizing price data from db, after first checking
-    that have most recent prices downloaded. 
+    that have most recent prices downloaded.
     Usually runs once a day, called by the lambda.
     """
     #h = hpy()
@@ -51,7 +51,7 @@ def send_from_db(resultsTopicName):
         print("Didn't find any securities to send an email regarding.")
     #print(f"send_from_db hpy 5: {h.heap()}")
     print("finished deaily_email.send_from_db")
-    
+
     return sent
 
 def send_from_file(myResultsFile, resFile, resultsTopicName):
@@ -94,7 +94,8 @@ def get_email(myGroups):
     max_wid = 45
     mySubj = ""
     # Subtracting 2 for width because of removing b' from security.name (see longer comment below.)
-    myBody = "\n For more details, use the following link: https://dev.dorhbll6brxxh.amplifyapp.com\n\n"
+    myBody = "\n For more details, use the following link: "
+    myBody += "https://dev.dorhbll6brxxh.amplifyapp.com\n\n"
     myBody += "symbol.name: ".ljust(max_wid - 2) + \
              "   rating, current,     buy,    sell,   %52wk,    %chg"
 

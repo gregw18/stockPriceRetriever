@@ -57,14 +57,14 @@ def set_axes_properties(ax, sec, graphData):
     ax.set_xbound(graphData.xBounds)
 
 
-def display_graphs(fileName, resultsFile):
+def display_graphs(fileName, tmpResultsFile):
     """
     Display a graph for each group of securities. Can only fit a limited number on each graph,
     so now displaying multiple graphs. Size defined by numCols and maxRows.
     """
 
     # secList = myResultsFile.read_results_file(fileName)
-    secList = resultsFile.read_results_file_s3(fileName)
+    secList = tmpResultsFile.read_results_file_s3(fileName)
     numSecurities = len(secList)
     if numSecurities > 0:
         # Get resorted version from security_groups.
@@ -92,7 +92,7 @@ def get_next_batch(secList, graphNum, graphSize):
         return secList[graphNum:]
     else:
         return secList[graphNum:(graphNum + graphSize)]
-    
+
 
 def graph(secList, numCols):
     """
@@ -158,7 +158,7 @@ def _load_new_file(srcFile, srcTab):
     myList = stockTarget.StockTarget()
     #newTargets = myList.get_list(srcFile, srcTab)
     newTargets = myList.read_target_securities(srcFile, srcTab)
-    
+
     if len(newTargets) > 0:
         myUtilsInter = utilsInterface.UtilsInterface()
         print("_load_new_file about to connect.")
@@ -222,10 +222,10 @@ if __name__ == "__main__":
     if myArgs.action == Action.help:
         display_help()
     elif myArgs.action == Action.lookup:
-        symbol_lookup(myArgs.symbol, 
-                        mysettings.alphaApiKey, 
-                        mysettings.alphaBaseUrl, 
-                        mysettings.alphaApiTimeOut)
+        symbol_lookup(myArgs.symbol,
+                      mysettings.alphaApiKey,
+                      mysettings.alphaBaseUrl,
+                      mysettings.alphaApiTimeOut)
     elif myArgs.action == Action.graph:
         myResultsFile = resultsFile.ResultsFile(mysettings.bucketName, mysettings.resultsPrefix)
         display_graphs(myArgs.srcFile, myResultsFile)
@@ -234,7 +234,7 @@ if __name__ == "__main__":
     elif myArgs.action == Action.clearDaily:
         _reset_daily_prices()
     elif myArgs.action == Action.dailyEmail:
-        daily_email.send_from_db(mysettings.resultsTopicName)        
+        daily_email.send_from_db(mysettings.resultsTopicName)
     elif myArgs.action == Action.retrieve:
         myResultsFile = resultsFile.ResultsFile(mysettings.bucketName, mysettings.resultsPrefix)
         res_file = retrievePrices.retrieve_prices_from_file(myArgs.srcFile,

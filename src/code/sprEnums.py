@@ -19,7 +19,7 @@ class Action(Enum):
     retrieveDb = 7      # Retrieve prices for symbols in database
     clearDaily = 8      # Reset database so can re-run daily price ipmort.
     dailyEmail = 9      # Download prices and send email.
-    
+
 class PriceProvider(Enum):
     """
     List of providers that we can get prices from.
@@ -50,19 +50,22 @@ class timePeriods(Enum):
     years5 = 365 * 5
 
 def get_timePeriod_from_text(timeDesc):
-        """
-        Convert string describing time period to appropriate enum member.
-        """
-        conversions = {}
-        conversions["1day"] = timePeriods.day
-        conversions["30days"] = timePeriods.days30
-        conversions["3months"] = timePeriods.months3
-        conversions["1year"] = timePeriods.years1
-        conversions["3years"] = timePeriods.years3
-        conversions["5years"] = timePeriods.years5
+    """
+    Convert string describing time period to appropriate enum member.
+    """
+    conversions = {}
+    conversions["1day"] = timePeriods.day
+    conversions["30days"] = timePeriods.days30
+    conversions["3months"] = timePeriods.months3
+    conversions["1year"] = timePeriods.years1
+    conversions["3years"] = timePeriods.years3
+    conversions["5years"] = timePeriods.years5
 
-        if timeDesc in conversions:
-            return conversions[timeDesc]
-        else:
-            print(f"sprEnums.get_member_from_text received unknown timeDesc: {timeDesc}")
-            return timePeriods.days30
+    timePeriod = timePeriods.days30
+    if timeDesc in conversions:
+        timePeriod = conversions[timeDesc]
+    else:
+        print(f"sprEnums.get_member_from_text received unknown timeDesc: {timeDesc}")
+
+    return timePeriod
+    

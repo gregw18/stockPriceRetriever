@@ -4,7 +4,6 @@ Includes price DTO (data transfer object) class.
 V0.02, February 28, 2021, GAW
 """
 
-from decimal import Decimal
 import math
 from datetime import date
 
@@ -52,7 +51,7 @@ class Security:
 
     def __str__(self):
         return self.write()
-                
+
     def write(self):
         """
         Create comma delimited string of properties, for writing to a file.
@@ -261,7 +260,7 @@ class Security:
             # two consecutive days, still want to update the date field.
             changedFields.append("currentPriceDate")
             newValues.append(currentDate)
-        
+
         if newPriceInfo.lastClosePrice != self.lastClosePrice:
             changedFields.append("previousClosePrice")
             newValues.append(newPriceInfo.lastClosePrice)
@@ -285,12 +284,12 @@ class Security:
         self.lastClosePrice = newPriceInfo.lastClosePrice
         self.low52Week = newPriceInfo.low52Week
         self.high52Week = newPriceInfo.high52Week
-    
+
     def _to_float(self, origVal):
         returnVal = 0
         if not (origVal is None):
             returnVal = float(origVal)
-        
+
         return returnVal
 
 

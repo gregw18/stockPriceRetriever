@@ -3,14 +3,11 @@ Retrieving data from yahoo
 V0.01, December 7, 2022, GAW.
 """
 
-#import inspect
 import math
 import sys
 import time
 from urllib.error import HTTPError
 
-
-# from yahoo_fin.stock_info import get_live_price
 from yahoo_fin.stock_info import get_quote_table, get_data
 
 import security
@@ -30,9 +27,11 @@ def retrieve_daily_data(symbol, mysettings):
     for i in range(0, 3):
         try:
             quote_table = get_quote_table(yahooSymbol)
-            priceInfo.currentPrice = round(float(quote_table['Quote Price']),2)
-            priceInfo.lastClosePrice = round(float(quote_table['Previous Close']),2)
-            priceInfo.low52Week, priceInfo.high52Week = _split_price_range(quote_table['52 Week Range'])
+            priceInfo.currentPrice = round(float(quote_table['Quote Price']), 2)
+            priceInfo.lastClosePrice = round(float(quote_table['Previous Close']), 2)
+            low, high = _split_price_range(quote_table['52 Week Range'])
+            priceInfo.low52Week = low
+            priceInfo.high52Week = high
             break
         except (ValueError, IndexError, ImportError, HTTPError) as E:
             print("retrieve_daily_data failed to retrieve price for ", yahooSymbol)
@@ -60,8 +59,8 @@ def retrieve_historical_prices(symbol, oldestDate, newestDate, priceFrequency):
     srcData = None
     for i in range(0, 2):
         try:
-            srcData = get_data(yahooSymbol, start_date = oldestDate, 
-                                end_date = newestDate, interval = priceFrequency)
+            srcData = get_data(yahooSymbol, start_date = oldestDate,
+                               end_date = newestDate, interval = priceFrequency)
             break
         except (AssertionError, KeyError) as E:
             # Generally means symbol not found, so no point retrying.
@@ -79,15 +78,11 @@ def retrieve_historical_prices(symbol, oldestDate, newestDate, priceFrequency):
     pairs = []
     if not (srcData is None):
         for dateVal in srcData.index:
-            # If the Monday is a holiday, interface appears to return a record, but 
+            # If the Monday is a holiday, interface appears to return a record, but
             # with nan as the value - don't want to save.
             if not (math.isnan(srcData.adjclose[dateVal])):
                 pairs.append((dateVal, srcData.adjclose[dateVal]))
         print(f"retrieve_historical_prices is returning {len(pairs)} prices.")
-
-    #name = sys.modules[__name__]
-    #method = inspect.stack()[0][3]
-    #print(f"{name}.{method} is returning {len(pairs)} prices.")
 
     return pairs
 
@@ -114,7 +109,7 @@ def _split_price_range(priceRangeStr):
     """
     cleanStr = priceRangeStr.replace(",", "")
     split_pos = cleanStr.find('-')
-    low = round(float(cleanStr[0:split_pos]),2)
-    high = round(float(cleanStr[split_pos + 1:]),2)
+    low = round(float(cleanStr[0:split_pos]), 2)
+    high = round(float(cleanStr[split_pos + 1:]), 2)
 
     return low, high

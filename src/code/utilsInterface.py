@@ -5,9 +5,6 @@ V0.01, November 23, 2022
 """
 
 from datetime import date, timedelta
-import json
-import os
-import sys
 
 import dbAccess
 import settings
@@ -42,10 +39,9 @@ class UtilsInterface:
         """
         Disconnect from database
         """
-        disconnected = True
         if dbAccess.connected_status:
             if self.we_connected:
-                disconnected = dbAccess.disconnect()
+                dbAccess.disconnect()
                 print("utilsInter disconnected.")
             else:
                 print("utilsInter did not disconnect, as we did not establish the connection.")
@@ -53,7 +49,6 @@ class UtilsInterface:
             print("utilsInter is not connected, so not disconnecting.")
         self.we_connected = False
 
-        return disconnected
 
     def get_last_weekly_update_date(self):
         """
@@ -110,7 +105,7 @@ class UtilsInterface:
             if len(records) == 1:
                 recId = records[0]["id"]
             else:
-                print (f"UtilsInterface error: After correction, admin has {len(records)} records.")
+                print(f"UtilsInterface error: After correction, admin has {len(records)} records.")
 
         self.disconnect()
 
@@ -145,7 +140,7 @@ class UtilsInterface:
 
     def _update_date_field(self, fieldName, dateVal):
         updatedOk = False
-        
+
         query = f"id={self.recId}"
         fieldNames = [fieldName]
         fieldValues = [dateVal]

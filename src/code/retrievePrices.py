@@ -6,21 +6,15 @@ V0.02, February 28, 2021, GAW.
 import datetime
 import json
 import socket
-import sys
 import time
+
 import urllib3
-from urllib.error import HTTPError
-
 import requests
-
-# from yahoo_fin.stock_info import get_live_price
-#from yahoo_fin.stock_info import get_quote_table
 
 import security
 from securities import Securities
 import stockTarget
 from sprEnums import PriceProvider
-from utilsInterface import UtilsInterface
 import yahooInterface
 
 def _get_price_alphavest(symbol, mysettings):
