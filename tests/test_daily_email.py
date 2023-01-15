@@ -3,7 +3,7 @@ File to test daily_email module.
 V0.02, October 13, 2020, GAW
 """
 
-from datetime import date, timedelta
+from datetime import date
 import pytest
 
 from . import addSrcToPath
@@ -80,14 +80,14 @@ class Test_daily_email:
         assert mySubj == ""
         assert myBody == ""
 
-    def test_daily_email(self, getUtils, getDict, getSecuritiesInter, 
-                            getSecuritiesTable, get_settings):
+    def test_daily_email(self, getUtils, getDict, getSecuritiesInter,
+                         getSecuritiesTable, get_settings):
         """
         Test full process of generating and sending an email - full integration test.
         """
         currentDate = date.today()
         #print(f"1 currentDate = {currentDate}")
-        
+
         getUtils.connect()
         secsDict = getDict
         secsDict["AAPL"].currentPriceDate = currentDate
@@ -159,9 +159,9 @@ class Test_daily_email:
         Save current securities to securities table.
         """
         for tmpSecurity in secsDict.values():
-            fieldNames=["name", "symbol", "currentPrice", "currentPriceDate", "buyPrice",
-                        "sellPrice", "fullHistoryDownloaded", "previousClosePrice",
-                        "52WeekLowPrice", "52WeekHighPrice"]
+            fieldNames = ["name", "symbol", "currentPrice", "currentPriceDate", "buyPrice",
+                          "sellPrice", "fullHistoryDownloaded", "previousClosePrice",
+                          "52WeekLowPrice", "52WeekHighPrice"]
             fieldValues = [None] * len(fieldNames)
             fieldValues[0] = tmpSecurity.name
             fieldValues[1] = tmpSecurity.symbol
@@ -173,12 +173,12 @@ class Test_daily_email:
             fieldValues[7] = tmpSecurity.lastClosePrice
             fieldValues[8] = tmpSecurity.low52Week
             fieldValues[9] = tmpSecurity.high52Week
-            
+
             # Need to nest the list so that connector recognizes that adding one record
             # with five values, rather than five records with one value each.
             nestedValues = [fieldValues,]
             dbAccess.insert_data(getSecuritiesTable, fieldNames, nestedValues)
-            
+
             # Retrieve id for record just added, store in security.
             query = "symbol = %s"
             params = (tmpSecurity.symbol,)

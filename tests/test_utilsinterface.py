@@ -4,9 +4,9 @@ V0.01, November 24, 2022, GAW
 """
 
 from datetime import date
-from decimal import *
+#from decimal import Decimal
+#from unittest.mock import Mock, patch
 import pytest
-from unittest.mock import Mock, patch
 
 from . import addSrcToPath
 from . import helperMethods
@@ -91,7 +91,7 @@ class TestUtilsInterface():
         myUtils.set_last_groom_date()
         savedDate = myUtils.get_last_groom_date()
         myUtils.disconnect()
-        
+ 
         assert savedDate == date.today()
 
     def _zap_admin_db(self):
@@ -105,5 +105,5 @@ class TestUtilsInterface():
         Count how many records are in the admin table.
         """
         records = dbAccess.select_data(self.adminTableName, ["id"], "1=1")
-        
+ 
         return len(records)

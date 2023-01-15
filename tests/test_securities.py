@@ -4,9 +4,8 @@ V0.01, November 30, 2022, GAW
 """
 
 import datetime
-from pandas import DataFrame
-import pytest
 from unittest.mock import Mock, patch, call
+import pytest
 
 from . import addSrcToPath
 from . import helperMethods
@@ -29,7 +28,7 @@ class TestSecurities():
         self.weeklyDbName = mySettings.db_weekly_table_name
         self.securitiesTable = mySettings.db_securities_table_name
         self.securitiesFields = ("id", "name", "symbol", "fullHistoryDownloaded",
-                                    "buyPrice", "sellPrice")
+                                 "buyPrice", "sellPrice")
 
         # Some standard securities for testing
         self.secsDict = {}
@@ -212,13 +211,13 @@ class TestSecurities():
         self.secsDict["XOM"] = nonesec
         self.secsDict["AAPL"].currentPriceDate = datetime.date.today()
         getSecurities.securitiesDict = self.secsDict
-        
+
         needies = getSecurities._get_symbols_needing_price_update(datetime.date.today())
 
         assert len(needies) == len(self.secsDict) - 1
         assert "XOM" in needies
         assert not("AAPL" in needies)
-    
+
     """
     Grooming tests. When call do_maintenance, want to verify contents of
     both calls to historyInterface.remove_old_prices.
@@ -229,20 +228,21 @@ class TestSecurities():
         are made to historyInterface.
         """
         #dbAccess.connect()
-        with patch('historicalPricesInterface.HistoricalPricesInterface.remove_old_prices', 
-                    return_value=Mock()) as mock_remove:
+        with patch('historicalPricesInterface.HistoricalPricesInterface.remove_old_prices',
+                   return_value=Mock()) as mock_remove:
             mock_remove.return_value = 5
-            #with patch('historicalPricesInterface.HistoricalPricesInterface.remove_old_prices', 
+            #with patch('historicalPricesInterface.HistoricalPricesInterface.remove_old_prices',
             #            return_value=Mock()) as mock_remove:
             getSecurities._groomPrices()
             #dbAccess.disconnect()
-        
+
             daysToKeep = mySettings.daily_price_days_to_keep
             weeksToKeep = mySettings.weekly_price_weeks_to_keep
             daysThreshold = datetime.date.today() - datetime.timedelta(daysToKeep)
             weeksThreshold = datetime.date.today() - datetime.timedelta(weeksToKeep * 7)
-            
-            calls = [call(self.dailyDbName, daysThreshold), call(self.weeklyDbName,weeksThreshold)]
+
+            calls = [call(self.dailyDbName, daysThreshold),
+                     call(self.weeklyDbName,weeksThreshold)]
             mock_remove.assert_has_calls(calls)
 
     """
@@ -257,7 +257,7 @@ class TestSecurities():
         Should result in in-memory list dropping that security.
         Put expected securities in table.
         Load into memory.
-        Create dictionary of new TargetSecurity, key = symbol, with one of 
+        Create dictionary of new TargetSecurity, key = symbol, with one of
         existing not included.
         Call loadNewList.
         Verify that table has lost one security
@@ -268,15 +268,15 @@ class TestSecurities():
         dbAccess.delete_data(self.securitiesTable, "1=1")
 
         # Add securities to table, then load into memory.
-        self._save_to_securities_table(getSecuritiesInter, 
-                                        ["AAPL", "MSFT", "GOOGL"])
+        self._save_to_securities_table(getSecuritiesInter,
+                                       ["AAPL", "MSFT", "GOOGL"])
         getSecurities.load()
 
         # Create dictionary representing list of new securities.
         newSecs = self._create_targets_dict(["AAPL", "MSFT"])
 
         with patch('securities.Securities.retrieve_full_price_histories',
-                        return_value=Mock()) as mock_retrieve:
+                   return_value=Mock()) as mock_retrieve:
             mock_retrieve.return_value = 3
             getSecurities.loadNewList(newSecs)
 
@@ -289,7 +289,7 @@ class TestSecurities():
 
         assert len(dbRecs) == 2
         inMemRecs = getSecurities.securitiesDict
-        assert (not ("GOOGL" in inMemRecs))
+        assert not ("GOOGL" in inMemRecs)
         assert "AAPL" in inMemRecs
         assert "MSFT" in inMemRecs
 
@@ -303,15 +303,15 @@ class TestSecurities():
         dbAccess.delete_data(self.securitiesTable, "1=1")
 
         # Add securities to table, then load into memory -"current list".
-        self._save_to_securities_table(getSecuritiesInter, 
-                                        ["MSFT"])
+        self._save_to_securities_table(getSecuritiesInter,
+                                       ["MSFT"])
         getSecurities.load()
 
         # Create dictionary representing list of new securities.
         newSecs = self._create_targets_dict(["AAPL", "MSFT", "GOOGL"])
 
         with patch('securities.Securities.retrieve_full_price_histories',
-                        return_value=Mock()) as mock_retrieve:
+                   return_value=Mock()) as mock_retrieve:
             mock_retrieve.return_value = 3
             getSecurities.loadNewList(newSecs)
 
@@ -337,8 +337,8 @@ class TestSecurities():
         dbAccess.delete_data(self.securitiesTable, "1=1")
 
         # Add securities to table, then load into memory -"current list".
-        self._save_to_securities_table(getSecuritiesInter, 
-                                        ["MSFT", "AAPL"])
+        self._save_to_securities_table(getSecuritiesInter,
+                                       ["MSFT", "AAPL"])
         getSecurities.load()
 
         # Create dictionary representing list of new securities.
@@ -346,7 +346,7 @@ class TestSecurities():
         newSecs["AAPL"].name = "ORANGE"
 
         with patch('securities.Securities.retrieve_full_price_histories',
-                        return_value=Mock()) as mock_retrieve:
+                   return_value=Mock()) as mock_retrieve:
             mock_retrieve.return_value = 3
             getSecurities.loadNewList(newSecs)
 
@@ -390,5 +390,5 @@ class TestSecurities():
         for symbol in symbolsList:
             tmpTarget = self._to_target_security(self.secsDict[symbol])
             newDict[symbol] = tmpTarget
-        
+
         return newDict

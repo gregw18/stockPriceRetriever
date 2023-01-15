@@ -3,9 +3,9 @@ File to test retrieving some settings.
 V0.01, October 27, 2022, GAW
 """
 
-from . import addSrcToPath
-
 import pytest
+
+from . import addSrcToPath
 
 import settings
 
@@ -33,7 +33,7 @@ def test_test_tables():
 
     # Call second time, verify that name didn't change.
     mysettings.use_test_tables()
-    
+
     assert mysettings.db_admin_table_name == "test_" + expectedName
 
     mysettings.db_admin_table_name = origAdminName

@@ -190,7 +190,8 @@ class TestWebPriceInfo():
         prices = []
         myInfo.populate(mySec, prices)
 
-        expectedRating = round( 100 * (0 - (mySec.buyPrice - mySec.currentPrice) / mySec.buyPrice), 2)
+        expectedRating = round(100 * (0 - (mySec.buyPrice - mySec.currentPrice) / mySec.buyPrice),
+                               2)
         assert myInfo.group == "1.buy"
         assert myInfo.rating == expectedRating
 
@@ -206,6 +207,7 @@ class TestWebPriceInfo():
         prices = []
         myInfo.populate(mySec, prices)
 
-        expectedRating = round( 100 * (mySec.currentPrice - mySec.buyPrice) / (mySec.sellPrice - mySec.buyPrice), 2)
+        expectedRating = round(100 * (mySec.currentPrice - mySec.buyPrice) \
+                               / (mySec.sellPrice - mySec.buyPrice), 2)
         assert myInfo.group == "4.near sell"
         assert myInfo.rating == expectedRating

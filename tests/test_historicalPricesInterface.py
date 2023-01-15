@@ -4,16 +4,16 @@ V0.01, November 24, 2022, GAW
 """
 
 from datetime import date, timedelta, datetime
-from decimal import *
+from decimal import Decimal
 import math
 import random
 
-import pytest
-from unittest.mock import Mock, patch
-import unittest
-
 from . import addSrcToPath
 from . import helperMethods
+
+from unittest.mock import Mock, patch
+import unittest
+import pytest
 
 import dbAccess
 from historicalPricesInterface import HistoricalPricesInterface
@@ -47,7 +47,6 @@ class TestHistoricalPricesInterface(unittest.TestCase):
         helperMethods.adjust_settings_for_tests(self.mysettings)
         self.dailyPricesTable = self.mysettings.db_daily_table_name
         self.weeklyPricesTable = self.mysettings.db_weekly_table_name
-        #print(f"dailyPricesTable={self.dailyPricesTable}, weeklyPricesTable={self.weeklyPricesTable}")
         self.baseSecurityId = 3412
 
     def test_save_daily_price_for_security(self):
@@ -63,14 +62,17 @@ class TestHistoricalPricesInterface(unittest.TestCase):
         utilsInterface = UtilsInterface()
         utilsInterface.connect()
         historyInterface = HistoricalPricesInterface()
-        
+
         historyInterface.save_daily_price_for_security(secId, expectedPrice, expectedDate)
 
         query = f"securityId=%s AND priceDate=%s"
-        records = dbAccess.select_data(self.dailyPricesTable, ["price"], query, (secId, expectedDate))
-        
+        records = dbAccess.select_data(self.dailyPricesTable,
+                                      ["price"],
+                                      query,
+                                      (secId, expectedDate))
+
         self.assertAlmostEqual(records[0]["price"], expectedPrice)
-        
+
         numDeleted = dbAccess.delete_data(self.dailyPricesTable, query, (secId, expectedDate))
         assert numDeleted == 1
 
@@ -85,11 +87,10 @@ class TestHistoricalPricesInterface(unittest.TestCase):
         numPrices = 20
         secId = self.baseSecurityId + 1
 
-        self.exercise_save_historical_prices(self.dailyPricesTable,
-                                            self.mysettings.db_daily_history_code,
-                                            secId,
-                                            basePrice,
-                                            numPrices)
+        self.exercise_save_historical_prices(self.mysettings.db_daily_history_code,
+                                             secId,
+                                             basePrice,
+                                             numPrices)
 
     def test_save_weekly_price_for_security(self):
         """
@@ -103,7 +104,7 @@ class TestHistoricalPricesInterface(unittest.TestCase):
         utilsInterface = UtilsInterface()
         utilsInterface.connect()
         historyInterface = HistoricalPricesInterface()
-        
+
         # Save the daily price that want to use as basis for the weekly price, then
         # call the method to update the weekly price.
         historyInterface.save_daily_price_for_security(secId, expectedPrice, expectedDate)
@@ -176,15 +177,15 @@ class TestHistoricalPricesInterface(unittest.TestCase):
         basePrice = 200
         numPrices = 30
         timePeriod = self.mysettings.db_daily_history_code
-        dailyPairs = self.generate_date_price_pairs(baseDate, 
-                                                    basePrice, 
-                                                    numPrices, 
+        dailyPairs = self.generate_date_price_pairs(baseDate,
+                                                    basePrice,
+                                                    numPrices,
                                                     timePeriod)
 
         timePeriod = self.mysettings.db_weekly_history_code
-        weeklyPairs = self.generate_date_price_pairs(baseDate, 
-                                                    basePrice, 
-                                                    numPrices, 
+        weeklyPairs = self.generate_date_price_pairs(baseDate,
+                                                    basePrice,
+                                                    numPrices,
                                                     timePeriod)
 
         utilsInterface = UtilsInterface()
@@ -231,7 +232,7 @@ class TestHistoricalPricesInterface(unittest.TestCase):
         numDays = 20
         baseDate = date(2022, 2, 4)
         assert self.get_number_fridays(baseDate, numDays) == 3
-        
+
         baseDate = date(2022, 2, 3)
         assert self.get_number_fridays(baseDate, numDays) == 2
 
@@ -262,40 +263,47 @@ class TestHistoricalPricesInterface(unittest.TestCase):
             myDelta = timedelta(days=7)
         else:
             print(f"Error: (generate_date_price_pairs) unexpected time history code: {timePeriod}")
-        
+
         # Add random number in 25% range around initial price to create prices.
         randRange = 0.25 * startPrice
         pairs = []
         for i in range(numPairs):
             priceDelta = random.uniform(-randRange, randRange)
-            newPrice = round(Decimal(startPrice + priceDelta),2)
+            newPrice = round(Decimal(startPrice + priceDelta), 2)
             pairs.append((newDate, newPrice))
             newDate -= myDelta
         print(f"number of pairs is {len(pairs)}")
 
         return pairs
 
-    def exercise_save_historical_prices(self, tableName, timePeriod, securityId, basePrice, numPrices):
+    def exercise_save_historical_prices(self,
+                                        timePeriod,
+                                        securityId,
+                                        basePrice,
+                                        numPrices):
         """
         Save fixed number of prices, verify that correct number of records are
         saved, verify some values.
         """
         baseDate = datetime.now().date()
-        dataPairs = self.generate_date_price_pairs(baseDate, 
-                                                    basePrice, 
-                                                    numPrices, 
-                                                    timePeriod)
+        dataPairs = self.generate_date_price_pairs(baseDate,
+                                                   basePrice,
+                                                   numPrices,
+                                                   timePeriod)
 
         utilsInterface = UtilsInterface()
         utilsInterface.connect()
         historyInterface = HistoricalPricesInterface()
         result = False
+        tableName = self.dailyPricesTable
         if timePeriod == self.mysettings.db_daily_history_code:
             result = historyInterface.save_daily_historical_prices(securityId, dataPairs)
         elif timePeriod == self.mysettings.db_weekly_history_code:
             result = historyInterface.save_weekly_historical_prices(securityId, dataPairs)
+            tableName = self.weeklyPricesTable
         else:
-            print(f"Error: (exercise_save_historical_prices) unexpected time history code: {timePeriod}")
+            print(f"Error: (exercise_save_historical_prices) unexpected time history code: ",
+                  "{timePeriod}")
 
         assert result == True
 
@@ -315,11 +323,11 @@ class TestHistoricalPricesInterface(unittest.TestCase):
         assert len(savedRecords) == numPrices
         self.assertAlmostEqual(savedRecords[0]["price"], dataPairs[0][1])
         self.assertAlmostEqual(savedRecords[numPrices - 1]["price"],
-                                 dataPairs[numPrices - 1][1])
+                               dataPairs[numPrices - 1][1])
         assert len(undeleted) == 0
 
-    def exercise_remove_old_prices(self, timePeriod, numPrices, daysToKeep, 
-                                    securityId, baseDate):
+    def exercise_remove_old_prices(self, timePeriod, numPrices, daysToKeep,
+                                   securityId, baseDate):
         """
         Add some prices across date range, use remove_old_prices to remove older prices,
         then verify that correct records were deleted.
@@ -331,12 +339,12 @@ class TestHistoricalPricesInterface(unittest.TestCase):
             tableName = self.weeklyPricesTable
         else:
             print(f"Error: (exercise_remove_old_prices) unexpected time"
-                    f" history code: {timePeriod}")
+                  f" history code: {timePeriod}")
         basePrice = 100
-        dataPairs = self.generate_date_price_pairs(baseDate, 
-                                                    basePrice, 
-                                                    numPrices, 
-                                                    timePeriod)
+        dataPairs = self.generate_date_price_pairs(baseDate,
+                                                   basePrice,
+                                                   numPrices,
+                                                   timePeriod)
 
         utilsInterface = UtilsInterface()
         utilsInterface.connect()
@@ -348,7 +356,8 @@ class TestHistoricalPricesInterface(unittest.TestCase):
         elif timePeriod == self.mysettings.db_weekly_history_code:
             result = historyInterface.save_weekly_historical_prices(securityId, dataPairs)
         else:
-            print(f"Error: (exercise_save_historical_prices) unexpected time history code: {timePeriod}")
+            print(f"Error: (exercise_save_historical_prices) unexpected time history code: ",
+                  "{timePeriod}")
 
         assert result == True
 
@@ -388,14 +397,15 @@ class TestHistoricalPricesInterface(unittest.TestCase):
         elif timePeriod == self.mysettings.db_weekly_history_code:
             expectedRemaining = self.get_number_fridays(baseDate, daysToKeep)
         else:
-            print(f"Error: (get_expected_remaining_records) unexpected time history code: {timePeriod}")
+            print(f"Error: (get_expected_remaining_records) unexpected time history code: ",
+                  "{timePeriod}")
 
         return expectedRemaining
 
     def get_number_fridays(self, baseDate, daysToKeep):
         """
-        How to calculate how many Fridays are there between given date and N days prior to that date?
-        If it is a Friday, divide number of days by 7, round up to nearest int. 
+        How to calculate how many Fridays are there between given date and N days prior to that
+        date? If it is a Friday, divide number of days by 7, round up to nearest int. 
         If not Friday, subtract number of days to get to Friday, then divide by 7 and roundup
         to nearest int.
         i.e. 20 days history to keep. If base day is

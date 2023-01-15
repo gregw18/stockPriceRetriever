@@ -6,7 +6,7 @@ V0.01, December 11, 2022, GAW
 from datetime import date, timedelta
 from decimal import Decimal
 import pytest
-from unittest.mock import Mock, patch, call
+from unittest.mock import Mock, patch
 
 from . import addSrcToPath
 from . import helperMethods
@@ -30,7 +30,7 @@ class TestSecurities():
         self.weeklyDbName = mySettings.db_weekly_table_name
         self.adminDbName = mySettings.db_admin_table_name
         self.securitiesFields = ("id", "name", "symbol", "fullHistoryDownloaded",
-                                    "buyPrice", "sellPrice")
+                                 "buyPrice", "sellPrice")
 
     @pytest.fixture()
     def getDict(self):
@@ -93,7 +93,7 @@ class TestSecurities():
         If today is monday, last Friday should be 3 days ago.
         """
         lastFriday = getSecurities._get_weekly_price_date(current)
-        
+
         assert lastFriday == expected
 
     """
@@ -115,7 +115,7 @@ class TestSecurities():
     @pytest.mark.unit
     @pytest.mark.parametrize("dateA,dateM,dateG,expected", testdata)
     def test_get_symbols_needing_price_update(self, getSecurities, getDict,
-                                            dateA, dateM, dateG, expected):
+                                              dateA, dateM, dateG, expected):
         # First security needs update.
         secsDict = getDict
         today = date.today()
@@ -144,8 +144,8 @@ class TestSecurities():
     """
 
     @pytest.mark.integration
-    def test_only_download_necessary_plus_full(self, getUtils, getSecurities, 
-                                                getSecuritiesInter, getDict):
+    def test_only_download_necessary_plus_full(self, getUtils, getSecurities,
+                                               getSecuritiesInter, getDict):
         """
         Verify that downloads daily prices for expected securities and weekly prices
         for one.
@@ -161,7 +161,7 @@ class TestSecurities():
         secsDict["AAPL"].currentPriceDate = currentDate
         secsDict["MSFT"].currentPriceDate = currentDate - timedelta(1)
         secsDict["GOOGL"].currentPriceDate = currentDate - timedelta(1)
-        self._save_to_securities(getSecuritiesInter, secsDict)
+        self._save_to_securities(secsDict)
 
         # Run daily download routine.
         print(f"Finished saving data, calling do_daily")
@@ -188,10 +188,10 @@ class TestSecurities():
         assert numUpdated == 2
 
     @pytest.mark.unit
-    def test_dont_update_weekly_date(self, getUtils, getSecurities, 
-                                    getSecuritiesInter, getDict):
+    def test_dont_update_weekly_date(self, getUtils, getSecurities,
+                                     getSecuritiesInter, getDict):
         """
-        Verify that when call do_daily_price_update, lastWeeklyPriceUpdate field in 
+        Verify that when call do_daily_price_update, lastWeeklyPriceUpdate field in
         admin table isn't updated, when don't need to do weekly price update.
         Set field to known value, which shouldn't require update.
         Call method, mocking as much as possible.
@@ -205,7 +205,7 @@ class TestSecurities():
         secsDict["AAPL"].currentPriceDate = currentDate
         secsDict["MSFT"].currentPriceDate = currentDate - timedelta(1)
         secsDict["GOOGL"].currentPriceDate = currentDate - timedelta(1)
-        self._save_to_securities(getSecuritiesInter, secsDict)
+        self._save_to_securities(secsDict)
 
         today = date.today()
         fields = ("lastWeeklyPriceUpdate",)
@@ -213,8 +213,8 @@ class TestSecurities():
         query = "1=1"
         dbAccess.update_data(self.adminDbName, fields, values, query)
 
-        with patch('utilsInterface.UtilsInterface.set_last_weekly_update_date', 
-                    return_value=Mock()) as mock_update_weekly:
+        with patch('utilsInterface.UtilsInterface.set_last_weekly_update_date',
+                   return_value=Mock()) as mock_update_weekly:
             mock_update_weekly.return_value = None
             numUpdated = getSecurities.do_daily_price_update(today)
 
@@ -224,8 +224,7 @@ class TestSecurities():
             mock_update_weekly.assert_not_called()
 
     @pytest.mark.integration
-    def test_do_daily_bad_symbol(self, getUtils, getSecurities, 
-                                    getSecuritiesInter, getDict):
+    def test_do_daily_bad_symbol(self, getUtils, getSecurities):
         """
         Verify that when call do_daily_price_update, with bad symbol,
         no data is saved.
@@ -243,8 +242,8 @@ class TestSecurities():
         secsDict[badSymbol] = badsec
         getSecurities.securitiesDict = secsDict
 
-        with patch('security.Security.get_changed_fields', 
-                    return_value=Mock()) as mock_get_changed:
+        with patch('security.Security.get_changed_fields',
+                   return_value=Mock()) as mock_get_changed:
             mock_get_changed.return_value = None
             numUpdated = getSecurities.do_daily_price_update(date.today())
 
@@ -255,7 +254,7 @@ class TestSecurities():
 
     @pytest.mark.integration
     def test_reset_daily_prices(self, getUtils, getSecurities, getDict, getSecuritiesInter):
-        """ 
+        """
         Test that tables are in expected condition after doing reset. I.e. currentPriceDate
          in securities is yesterday, there are no records in daily/weekly price history
         tables with today's date and lastWeeklyUpdateDate in admin is one week ago.
@@ -266,12 +265,12 @@ class TestSecurities():
         secsDict["AAPL"].currentPriceDate = date.today()
         secsDict["MSFT"].currentPriceDate = date.today()
         secsDict["GOOGL"].currentPriceDate = date.today()
-        self._save_to_securities(getSecuritiesInter, secsDict)
+        self._save_to_securities(secsDict)
 
         fieldNames = ("securityId", "priceDate", "price")
-        fieldVals = ( 
-                        (secsDict["AAPL"].id, date.today(), 132.44),
-                        (secsDict["MSFT"].id, date.today(), 432.33)
+        fieldVals = (
+                     (secsDict["AAPL"].id, date.today(), 132.44),
+                     (secsDict["MSFT"].id, date.today(), 432.33)
                     )
         dbAccess.insert_data(self.dailyDbName, fieldNames, fieldVals)
         dbAccess.insert_data(self.weeklyDbName, fieldNames, fieldVals)
@@ -297,7 +296,7 @@ class TestSecurities():
         assert len(matchingDailyPrices) == 0
         assert len(matchingWeeklyPrices) == 0
         assert lastWeekly == date.today() - timedelta(7)
-        
+
     def _approx_dec(self, val):
         """
         Return a value that can be compared to a decimal.
@@ -317,7 +316,7 @@ class TestSecurities():
             webPrices = retrieve_daily_data(symbol, mySettings)
 
             fields = ("currentPrice", "currentPriceDate", "previousClosePrice",
-                        "52WeekHighPrice", "52WeekLowPrice")
+                      "52WeekHighPrice", "52WeekLowPrice")
             query = "symbol = %s"
             securitiesPrices = dbAccess.select_data(self.securitiesDbName, fields, query, (symbol,))
 
@@ -327,8 +326,8 @@ class TestSecurities():
             dailyPrices = dbAccess.select_data(self.dailyDbName, fields, query, params)
 
             prices.append({"webPrices": webPrices,
-                            "securitiesPrices": securitiesPrices,
-                            "dailyPrices": dailyPrices})
+                           "securitiesPrices": securitiesPrices,
+                           "dailyPrices": dailyPrices})
 
         return prices
 
@@ -356,8 +355,10 @@ class TestSecurities():
         Retrieve data for given security/frequency from web. Compare
         to saved data.
         """
-        yahooData = yahooInterface.retrieve_historical_prices(tmpSec.symbol, 
-                                    startDate, today, frequency)
+        yahooData = yahooInterface.retrieve_historical_prices(tmpSec.symbol,
+                                                              startDate,
+                                                              today,
+                                                              frequency)
         savedData = self.retrieve_saved_prices(table, tmpSec.id)
 
         for i in range(len(yahooData)):
@@ -388,12 +389,12 @@ class TestSecurities():
             dbAccess.delete_data(self.dailyDbName, historyQuery, tmpSecurity.id)
             dbAccess.delete_data(self.weeklyDbName, historyQuery, tmpSecurity.id)
 
-    def _save_to_securities(self, getSecurities, secsDict):
+    def _save_to_securities(self, secsDict):
         """
         Save current securities to securities table.
         """
         for tmpSecurity in secsDict.values():
-            fieldNames=["name", "symbol", "currentPriceDate", "buyPrice",
+            fieldNames = ["name", "symbol", "currentPriceDate", "buyPrice",
                         "sellPrice", "fullHistoryDownloaded"]
             fieldValues = [None] * len(fieldNames)
             fieldValues[0] = tmpSecurity.name
@@ -402,12 +403,12 @@ class TestSecurities():
             fieldValues[3] = tmpSecurity.buyPrice
             fieldValues[4] = tmpSecurity.sellPrice
             fieldValues[5] = tmpSecurity.fullHistoryDownloaded
-            
+
             # Need to nest the list so that connector recognizes that adding one record
             # with five values, rather than five records with one value each.
             nestedValues = [fieldValues,]
             dbAccess.insert_data(self.securitiesDbName, fieldNames, nestedValues)
-            
+
             # Retrieve id for record just added, store in security.
             query = "symbol = %s"
             params = (tmpSecurity.symbol,)
@@ -426,4 +427,3 @@ class TestSecurities():
         print(f"_get_latest_weekday is returning {latest}")
 
         return latest
-

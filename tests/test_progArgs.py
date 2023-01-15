@@ -2,12 +2,11 @@
 File to test argument parsing
 V0.04, May 16, 2020, GAW
 """
+import pytest
 
 from . import addSrcToPath
 
 from progArgs import Action, PriceProvider, ProgArgs
-import pytest
-
 
 defltFile = "defltFile.xls"
 defltTab = "defltTab"

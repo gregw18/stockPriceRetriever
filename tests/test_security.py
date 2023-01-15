@@ -3,8 +3,8 @@ File to test Security class
 V0.01, February 27, 2019, GAW
 """
 
-import pandas as pd
 import pytest
+import pandas as pd
 
 from . import addSrcToPath
 

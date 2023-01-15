@@ -3,18 +3,15 @@ File to test loading security price histories via the Securities class
 V0.01, December 7, 2022, GAW
 """
 
-import datetime
-from decimal import *
-from pandas import DataFrame
+from decimal import Decimal
 import pytest
-from unittest.mock import Mock, patch, call
 
 from . import addSrcToPath
 from . import helperMethods
 
 import dbAccess
 import securities
-import securitiesInterface
+#import securitiesInterface
 from security import Security
 import settings
 #import targetSecurity
@@ -50,7 +47,7 @@ class TestSecuritiesLoadHistory():
         self.weeklyDbName = mySettings.db_weekly_table_name
         self.securitiesTable = mySettings.db_securities_table_name
         self.securitiesFields = ("id", "name", "symbol", "fullHistoryDownloaded",
-                                    "buyPrice", "sellPrice")
+                                 "buyPrice", "sellPrice")
 
         # Some standard securities for testing
         self.secsDict = {}
@@ -104,14 +101,14 @@ class TestSecuritiesLoadHistory():
         # For each security that we should have downloaded, manually retrieve historic
         # prices from web, read corresponding data from table, verify that are same.
         today, dailyHistoryStart, weeklyHistoryStart = getSecurities._get_full_history_dates()
-        self.compare_prices(self.secsDict["AAPL"], 
-                                            today, 
-                                            dailyHistoryStart, 
-                                            weeklyHistoryStart)
-        self.compare_prices(self.secsDict["GOOGL"], 
-                                            today, 
-                                            dailyHistoryStart, 
-                                            weeklyHistoryStart)
+        self.compare_prices(self.secsDict["AAPL"],
+                                          today,
+                                          dailyHistoryStart,
+                                          weeklyHistoryStart)
+        self.compare_prices(self.secsDict["GOOGL"],
+                                          today,
+                                          dailyHistoryStart,
+                                          weeklyHistoryStart)
 
         # Confirm that didn't download any data for security that was already downloaded.
         tmpSec = self.secsDict["MSFT"]
@@ -182,18 +179,20 @@ class TestSecuritiesLoadHistory():
 
     def compare_prices(self, tmpSec, today, dailyHistoryStart, weeklyHistoryStart):
         # Compare daily and weekly prices, downloaded vs saved, for given security.
-        self.compare_downloaded_saved_prices(tmpSec, self.dailyDbName, 
-                                            mySettings.daily_price_code,
-                                            today, dailyHistoryStart)
-        self.compare_downloaded_saved_prices(tmpSec, self.weeklyDbName, 
-                                            mySettings.weekly_price_code,
-                                            today, weeklyHistoryStart)
+        self.compare_downloaded_saved_prices(tmpSec, self.dailyDbName,
+                                             mySettings.daily_price_code,
+                                             today, dailyHistoryStart)
+        self.compare_downloaded_saved_prices(tmpSec, self.weeklyDbName,
+                                             mySettings.weekly_price_code,
+                                             today, weeklyHistoryStart)
 
     def compare_downloaded_saved_prices(self, tmpSec, table, frequency, today, startDate):
         # Retrieve data for given security/frequency from web. Compare
         # to saved data.
-        yahooData = yahooInterface.retrieve_historical_prices(tmpSec.symbol, 
-                                    startDate, today, frequency)
+        yahooData = yahooInterface.retrieve_historical_prices(tmpSec.symbol,
+                                                              startDate,
+                                                              today,
+                                                              frequency)
         savedData = self.retrieve_saved_prices(table, tmpSec.id)
 
         for i in range(len(yahooData)):

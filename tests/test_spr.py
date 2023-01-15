@@ -3,9 +3,9 @@ File to test some main spr functions
 V0.04, May 15, 2020, GAW
 """
 
-from . import addSrcToPath
-
 import pytest
+
+from . import addSrcToPath
 
 from yahooInterface import get_yahoo_ticker
 from spr import get_next_batch
@@ -35,7 +35,7 @@ def test_getPriceYahoo_TSXETF():
     """
     yTicker = get_yahoo_ticker("VCE.TRT")
     assert yTicker == "VCE.TO"
-    
+
 @pytest.mark.unit
 def test_nextBatch_oneElement():
     """
@@ -99,7 +99,8 @@ def test_nextBatch_TwoBatch():
 @pytest.mark.unit
 def test_nextBatch_OverTwoBatch():
     """
-    Have a few over two times max group size in batch, expect two groups of size groupSize then remainder.
+    Have a few over two times max group size in batch, expect two groups of size groupSize
+    then remainder.
     """
     arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     groupStart = 0
@@ -110,4 +111,3 @@ def test_nextBatch_OverTwoBatch():
     assert len(nextBatch) == groupSize
     nextBatch = get_next_batch(arr, groupSize * 2, groupSize)
     assert len(nextBatch) == (len(arr) - (groupSize * 2))
-

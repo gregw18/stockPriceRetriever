@@ -5,14 +5,13 @@
 
 import datetime
 
+import pytest
+
 from . import addSrcToPath
 
 import resultsFile
 import security
 import settings
-
-import pytest
-
 
 badBucketNameFile = "nobucket-name.txt"
 bucketNameFile = "bucket-name.txt"

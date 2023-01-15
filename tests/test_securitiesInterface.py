@@ -4,9 +4,9 @@ V0.01, November 22, 2022, GAW
 """
 
 from datetime import date
-from decimal import *
-import pytest
+from decimal import Decimal
 from unittest.mock import Mock, patch
+import pytest
 
 from . import addSrcToPath
 
@@ -41,29 +41,29 @@ mark_historical_data_retrieved
 class TestSecuritiesInterface():
     def setup(self):
         self.security1 = {"id": 1,
-                            "name": "Apple",
-                            "symbol": "AAPL", 
-                            "fullHistoryDownloaded": True,
-                            "buyPrice": 102.31, 
-                            "sellPrice": 202.33, 
-                            "currentPrice": 154.32,
-                            "currentDate": date(2022, 11, 21), 
-                            "previousClosePrice": 156.33,
-                            "52weekLowPrice": 132.1,
-                            "52weekHighPrice": 187.4, 
-                            "percentChangeToday": 5.4}
+                          "name": "Apple",
+                          "symbol": "AAPL",
+                          "fullHistoryDownloaded": True,
+                          "buyPrice": 102.31,
+                          "sellPrice": 202.33,
+                          "currentPrice": 154.32,
+                          "currentDate": date(2022, 11, 21),
+                          "previousClosePrice": 156.33,
+                          "52weekLowPrice": 132.1,
+                          "52weekHighPrice": 187.4,
+                          "percentChangeToday": 5.4}
         self.security2 = {"id": 3,
-                            "name": "Meta",
-                            "symbol": "FBOOK", 
-                            "fullHistoryDownloaded": True,
-                            "buyPrice": 202.31, 
-                            "sellPrice": 302.33, 
-                            "currentPrice": 54.32,
-                            "currentDate": date(2022, 11, 21), 
-                            "previousClosePrice": 56.33,
-                            "52weekLowPrice": 32.1,
-                            "52weekHighPrice": 587.4, 
-                            "percentChangeToday": -15.4}
+                          "name": "Meta",
+                          "symbol": "FBOOK",
+                          "fullHistoryDownloaded": True,
+                          "buyPrice": 202.31,
+                          "sellPrice": 302.33,
+                          "currentPrice": 54.32,
+                          "currentDate": date(2022, 11, 21),
+                          "previousClosePrice": 56.33,
+                          "52weekLowPrice": 32.1,
+                          "52weekHighPrice": 587.4,
+                          "percentChangeToday": -15.4}
 
     def test_get_securities_no_records(self):
         """
@@ -118,7 +118,8 @@ class TestSecuritiesInterface():
         """
         with patch('securitiesInterface.dbAccess.select_data', return_value=Mock()) as mock_select:
             mock_select.return_value = []
-            with patch('securitiesInterface.dbAccess.insert_data', return_value=Mock()) as mock_insert:
+            with patch('securitiesInterface.dbAccess.insert_data', return_value=Mock()) \
+                as mock_insert:
                 mock_insert.return_value = 1
                 testSecurity = self.createSecurity("Apple", "aapl", 103.4, 201.1)
                 myInterface = SecuritiesInterface()

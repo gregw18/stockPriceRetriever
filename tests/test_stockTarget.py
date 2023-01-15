@@ -3,9 +3,9 @@ File to test StockTarget class
 V0.04, May 11, 2020, GAW
 """
 
-from . import addSrcToPath
-
 import pytest
+
+from . import addSrcToPath
 
 import stockTarget
 

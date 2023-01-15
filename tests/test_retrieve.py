@@ -3,12 +3,11 @@
 # V0.01, May 2, 2021, GAW
 """
 
-from . import addSrcToPath
-
 from datetime import date, timedelta, datetime
 import pytest
 
-import retrievePrices
+from . import addSrcToPath
+
 import settings
 import yahooInterface
 
@@ -69,9 +68,9 @@ class TestRetrievePrices():
         newestDate = date(2022, 12, 19)
         oldestDate = newestDate - timePeriod
         prices = yahooInterface.retrieve_historical_prices(symbolAmazon,
-                                                            oldestDate,
-                                                            newestDate,
-                                                            mysettings.daily_price_code)
+                                                           oldestDate,
+                                                           newestDate,
+                                                           mysettings.daily_price_code)
         assert len(prices) == 5
         for price in prices:
             assert price[1] > 0
@@ -83,9 +82,9 @@ class TestRetrievePrices():
         timePeriod = timedelta(90)
         oldestDate = datetime.now().date() - timePeriod
         prices = yahooInterface.retrieve_historical_prices(symbolExxon,
-                                                            oldestDate,
-                                                            datetime.now().date(),
-                                                            mysettings.daily_price_code)
+                                                           oldestDate,
+                                                           datetime.now().date(),
+                                                           mysettings.daily_price_code)
         assert len(prices) > 60
         for price in prices:
             assert price[1] > 0
@@ -100,9 +99,9 @@ class TestRetrievePrices():
         newestDate = date(2022, 11, 2)
         oldestDate = newestDate - timePeriod
         prices = yahooInterface.retrieve_historical_prices(symbolExxon,
-                                                            oldestDate,
-                                                            newestDate,
-                                                            mysettings.weekly_price_code)
+                                                           oldestDate,
+                                                           newestDate,
+                                                           mysettings.weekly_price_code)
         assert len(prices) == 1
         for price in prices:
             assert price[1] > 0
@@ -117,9 +116,9 @@ class TestRetrievePrices():
         newestDate = date(2022, 12, 2)
         oldestDate = newestDate - timePeriod
         prices = yahooInterface.retrieve_historical_prices(symbolExxon,
-                                                            oldestDate,
-                                                            newestDate,
-                                                            mysettings.weekly_price_code)
+                                                           oldestDate,
+                                                           newestDate,
+                                                           mysettings.weekly_price_code)
         assert len(prices) == 60
         for price in prices:
             assert price[1] > 0
@@ -132,9 +131,9 @@ class TestRetrievePrices():
         oldestDate = datetime.now().date() - timePeriod
         prices = None
         prices = yahooInterface.retrieve_historical_prices(symbolBad,
-                                                            oldestDate,
-                                                            datetime.now().date(),
-                                                            mysettings.daily_price_code)
+                                                           oldestDate,
+                                                           datetime.now().date(),
+                                                           mysettings.daily_price_code)
 
         assert len(prices) == 0
 
@@ -146,8 +145,8 @@ class TestRetrievePrices():
         oldestDate = datetime.now().date() - timePeriod
         prices = None
         prices = yahooInterface.retrieve_historical_prices(symbolBad,
-                                                            oldestDate,
-                                                            datetime.now().date(),
-                                                            badFrequency)
+                                                           oldestDate,
+                                                           datetime.now().date(),
+                                                           badFrequency)
 
         assert len(prices) == 0

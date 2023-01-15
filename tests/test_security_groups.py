@@ -361,8 +361,8 @@ class Test_security_groups:
 
         secList = []
         for stock in srcList:
-            newSec = self.createSecurity(stock[0], stock[1], Decimal(stock[2]), 
-                                        Decimal(stock[3]), Decimal(stock[4]))
+            newSec = self.createSecurity(stock[0], stock[1], Decimal(stock[2]),
+                                         Decimal(stock[3]), Decimal(stock[4]))
             secList.append(newSec)
 
         self.groups.populate(secList)

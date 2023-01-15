@@ -4,11 +4,10 @@ V0.01, December 19, 2022, GAW
 """
 
 from datetime import date, timedelta
-from decimal import *
-from pandas import DataFrame
-import pytest
+from decimal import Decimal
 import random
-from unittest.mock import Mock, patch, call
+from unittest.mock import Mock, patch
+import pytest
 
 from . import addSrcToPath
 from . import helperMethods
@@ -55,7 +54,7 @@ class TestSecuritiesWebData():
         return securities.Securities()
 
     def test_timePeriods_good_convert(self):
-        """ 
+        """
         Verify that can convert a description to an enum name and corresponding value.
         """
         name = "3months"
@@ -66,7 +65,7 @@ class TestSecuritiesWebData():
         assert myEnum.value == 31 * 3
 
     def test_timePeriods_bad_name(self):
-        """ 
+        """
         Verify that bad name returns zero value.
         """
         name = "Snoopy"
@@ -100,8 +99,8 @@ class TestSecuritiesWebData():
         mySec = self.secsDict["AAPL"]
         mySecs = getSecurities
         mySecs.securitiesDict = {"AAPL": mySec}
-        with patch('historicalPricesInterface.HistoricalPricesInterface.get_historical_prices', 
-                    return_value=Mock()) as mock_get:
+        with patch('historicalPricesInterface.HistoricalPricesInterface.get_historical_prices',
+                   return_value=Mock()) as mock_get:
             mock_get.return_value = self._get_historical_prices(numDays)
 
             myPi = mySecs.get_web_data("1day")
@@ -120,8 +119,8 @@ class TestSecuritiesWebData():
         msftSec = self.secsDict["MSFT"]
         mySecs = getSecurities
         mySecs.securitiesDict = {"AAPL": applSec, "MSFT": msftSec}
-        with patch('historicalPricesInterface.HistoricalPricesInterface.get_historical_prices', 
-                    return_value=Mock()) as mock_get:
+        with patch('historicalPricesInterface.HistoricalPricesInterface.get_historical_prices',
+                   return_value=Mock()) as mock_get:
             mock_get.return_value = self._get_historical_prices(numDays)
 
             myPi = mySecs.get_web_data("30days")
@@ -137,8 +136,8 @@ class TestSecuritiesWebData():
         numDays = 93
         mySecs = getSecurities
         mySecs.securitiesDict = self.secsDict
-        with patch('historicalPricesInterface.HistoricalPricesInterface.get_historical_prices', 
-                    return_value=Mock()) as mock_get:
+        with patch('historicalPricesInterface.HistoricalPricesInterface.get_historical_prices',
+                   return_value=Mock()) as mock_get:
             mock_get.return_value = self._get_historical_prices(numDays)
 
             myPi = mySecs.get_web_data("3months")
@@ -158,8 +157,8 @@ class TestSecuritiesWebData():
         """
         mySecs = getSecurities
         mySecs.securitiesDict = self.secsDict
-        with patch('historicalPricesInterface.HistoricalPricesInterface.get_historical_prices', 
-                    return_value=Mock()) as mock_get:
+        with patch('historicalPricesInterface.HistoricalPricesInterface.get_historical_prices',
+                   return_value=Mock()) as mock_get:
             mock_get.return_value = self._get_historical_prices(numDays)
 
             myPi = mySecs.get_web_data(timePeriod)
@@ -183,9 +182,8 @@ class TestSecuritiesWebData():
             myDelta = timedelta(7)
         for i in range(numDays):
             priceDelta = random.uniform(-randRange, randRange)
-            newPrice = round(Decimal(startPrice + priceDelta),2)
+            newPrice = round(Decimal(startPrice + priceDelta), 2)
             prices.append({"priceDate": newDate, "price": newPrice})
             newDate += myDelta
 
         return prices
-
