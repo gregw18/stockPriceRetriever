@@ -7,6 +7,7 @@ V0.02, February 28, 2021, GAW
 import math
 from datetime import date
 
+
 class PriceInfo:
     """
     Used to return price data after retrieve it from provider.
@@ -174,7 +175,8 @@ class Security:
         self.lastClosePrice         = self._to_float(secDict["previousClosePrice"])
         self.low52Week              = self._to_float(secDict["52weekLowPrice"])
         self.high52Week             = self._to_float(secDict["52weekHighPrice"])
-        self.status                 = self.get_status()        # 0 = buy, 1 = sell, 2 = no action. Numbers chosen for sorting.
+        # status: 0 = buy, 1 = sell, 2 = no action. Numbers chosen for sorting.
+        self.status                 = self.get_status()
         self.fullHistoryDownloaded  = secDict["fullHistoryDownloaded"]
 
     def get_sort_string(self):

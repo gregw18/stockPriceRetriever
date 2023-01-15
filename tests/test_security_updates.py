@@ -27,7 +27,7 @@ class TestSecurity2():
         """
         Test updating one field.
         """
-        #Create a security with data from PriceInfo.
+        # Create a security with data from PriceInfo.
         newInfo = PriceInfo()
         newInfo.currentPrice = 101.2
         newInfo.lastClosePrice = 101.1
@@ -40,7 +40,7 @@ class TestSecurity2():
         """
         Test updating one field.
         """
-        #Create a security with data from PriceInfo.
+        # Create a security with data from PriceInfo.
         newInfo = self._create_priceInfo()
         testSecurity = Security()
         testSecurity.pop_with_priceInfo("TEST1", "TST1", 85, 110, newInfo)
@@ -58,7 +58,7 @@ class TestSecurity2():
         """
         Test that recognizes when only currentPriceDate field changes.
         """
-        #Create a security with data from PriceInfo.
+        # Create a security with data from PriceInfo.
         newInfo = self._create_priceInfo()
         testSecurity = Security()
         testSecurity.pop_with_priceInfo("TEST1", "TST1", 85, 110, newInfo)
@@ -75,7 +75,7 @@ class TestSecurity2():
         """
         Test updating all fields.
         """
-        #Create a security with data from PriceInfo.
+        # Create a security with data from PriceInfo.
         newInfo = self._create_priceInfo()
 
         testSecurity = Security()

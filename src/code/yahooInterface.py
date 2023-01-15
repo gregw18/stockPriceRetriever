@@ -12,6 +12,7 @@ from yahoo_fin.stock_info import get_quote_table, get_data
 
 import security
 
+
 def retrieve_daily_data(symbol, mysettings):
     """
     Return current price for given stock, 0 if hit an error.
@@ -59,8 +60,8 @@ def retrieve_historical_prices(symbol, oldestDate, newestDate, priceFrequency):
     srcData = None
     for i in range(0, 2):
         try:
-            srcData = get_data(yahooSymbol, start_date = oldestDate,
-                               end_date = newestDate, interval = priceFrequency)
+            srcData = get_data(yahooSymbol, start_date=oldestDate,
+                               end_date=newestDate, interval=priceFrequency)
             break
         except (AssertionError, KeyError) as E:
             # Generally means symbol not found, so no point retrying.

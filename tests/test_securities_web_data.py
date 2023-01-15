@@ -24,7 +24,6 @@ helperMethods.adjust_settings_for_tests(mySettings)
 class TestSecuritiesWebData():
     def setup(self):
         print("Running setup")
-        #self.mySettings = settings.Settings.instance()
         self.dailyDbName = mySettings.db_daily_table_name
         self.weeklyDbName = mySettings.db_weekly_table_name
 

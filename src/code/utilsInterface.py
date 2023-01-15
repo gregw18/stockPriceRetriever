@@ -49,7 +49,6 @@ class UtilsInterface:
             print("utilsInter is not connected, so not disconnecting.")
         self.we_connected = False
 
-
     def get_last_weekly_update_date(self):
         """
         Assumes already connected to database.

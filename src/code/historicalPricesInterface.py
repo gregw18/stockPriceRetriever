@@ -23,7 +23,7 @@ class HistoricalPricesInterface:
         Add given price to daily price table.
         """
         return self._save_historical_prices(securityId,
-                                            [(priceDate, securityPrice),],
+                                            [(priceDate, securityPrice), ],
                                             self.dailyPricesTable)
 
     def save_weekly_price_for_security(self, securityId, priceDate):
@@ -57,7 +57,7 @@ class HistoricalPricesInterface:
         """
         Retrieve prices for requested security, for requested window of time.
         """
-        dateThresh = date.today() - timedelta(days = maxAge)
+        dateThresh = date.today() - timedelta(days=maxAge)
         fields = ["priceDate", "price"]
         query = "securityId = %s AND  priceDate >= %s"
         records = dbAccess.select_data(tableName, fields, query, [securityId, dateThresh])

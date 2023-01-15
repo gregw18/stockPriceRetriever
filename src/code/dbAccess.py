@@ -9,12 +9,10 @@ import pymysql
 
 import settings
 
-#print("Starting dbAccess init")
 client = boto3.client('rds')
 mysettings = settings.Settings.instance()
 dbConn = None
 connected_status = False
-#print("Finished dbAccess init, connected_status=", connected_status)
 
 # Connect to RDS.
 def connect():
@@ -28,8 +26,8 @@ def connect():
             print("rds port: ", mysettings.rds_port)
             print("rds_user: ", mysettings.rds_user_name)
             print("db_name: ", mysettings.rds_db_name)
-            #print(f"rds token length: {len(token)}")
-            #print(f"{token=}")
+            # print(f"rds token length: {len(token)}")
+            # print(f"{token=}")
             ssl = {'ca': 'rds-combined-ca-bundle.pem'}
             dbConn = pymysql.connect(host=mysettings.rds_endpoint,
                                      user=mysettings.rds_user_name,
@@ -203,7 +201,7 @@ def select_data(tableName, fieldNames, query, queryParams=()):
     global connected_status, dbConn
     returnData = None
     if connected_status:
-        #cursor = dbConn.cursor(buffered=True, dictionary=True)
+        # cursor = dbConn.cursor(buffered=True, dictionary=True)
         cursor = pymysql.cursors.DictCursor(dbConn)
         try:
             formattedFieldNames = ""
@@ -219,7 +217,7 @@ def select_data(tableName, fieldNames, query, queryParams=()):
             print("last statement was: ", cursor._last_executed)
             returnData = cursor.fetchall()
             print("returnData: ", returnData)
-            #print("type(returnData)= ", type(returnData))
+            # print("type(returnData)= ", type(returnData))
         except pymysql.MySQLError as err:
             print("last statement was: ", cursor._last_executed)
             print("Error when selecting data, ", err)
@@ -241,8 +239,8 @@ def update_data(tableName, fieldNames, fieldValues, query):
         try:
             # Need to turn field names and values into comma-delimited string,
             # like "field1='value1', field2='value2'" etc.
-            #formattedUpdates = ""
-            #for fieldName, fieldValue in zip(fieldNames, fieldValues):
+            # formattedUpdates = ""
+            # for fieldName, fieldValue in zip(fieldNames, fieldValues):
             #    formattedUpdates += fieldName + "=" + fieldValue + ", "
 
             formattedUpdates = ""

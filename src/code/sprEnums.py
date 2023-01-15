@@ -68,4 +68,3 @@ def get_timePeriod_from_text(timeDesc):
         print(f"sprEnums.get_member_from_text received unknown timeDesc: {timeDesc}")
 
     return timePeriod
-    

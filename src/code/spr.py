@@ -37,6 +37,7 @@ from sprEnums import Action
 import stockTarget
 import utilsInterface
 
+
 def set_axes_properties(ax, sec, graphData):
     """
     Set axes properties to display info for given security.
@@ -156,7 +157,7 @@ def _load_new_file(srcFile, srcTab):
     """
     # Read in contents of file.
     myList = stockTarget.StockTarget()
-    #newTargets = myList.get_list(srcFile, srcTab)
+    # newTargets = myList.get_list(srcFile, srcTab)
     newTargets = myList.read_target_securities(srcFile, srcTab)
 
     if len(newTargets) > 0:
@@ -191,7 +192,7 @@ def display_help():
     """
     print("Expect either 0, 1, 2 or 4 arguments:")
     # Not showing this option as it requires an AlphaVest api key.
-    #print("\t-l 'stock name' to look up a symbol,")
+    # print("\t-l 'stock name' to look up a symbol,")
     print("\t-e to retrieve prices and send email, for symbols in database.")
     print("\t-g 'filename' to display results from a file,")
     print("\t-f 'filename' to retrieve and display results for symbols in a file.")
@@ -200,7 +201,7 @@ def display_help():
     print("\t-r to retrieve latest prices for symbols in database.")
     print("\t-c to clear any prices that were updated today, so can re-run daily price update.")
     # Not showing this option as it requires an AlphaVest api key.
-    #print("\t-p yahoo/alpha to specify which provider to retrieve prices from.")
+    # print("\t-p yahoo/alpha to specify which provider to retrieve prices from.")
     print("\t-n no display - don't display graphs after retrieving prices.")
     print("\t-h display this help information.")
     print("0 arguments results in retrieving results for symbols in the default")

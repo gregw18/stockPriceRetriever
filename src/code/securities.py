@@ -4,7 +4,7 @@ Should not communicate directly with mySql.
 V0.01, November 23, 2022
 """
 
-#from memory_profiler import profile
+# from memory_profiler import profile
 
 from datetime import date, timedelta
 
@@ -48,7 +48,6 @@ class Securities:
         """
         Runs the stuff that should run every day - price update and price grooming.
         """
-        #myUtilsInter = UtilsInterface()
         self.utilsInter.connect()
         self.load()
         numUpdated = self.do_daily_price_update(date.today())
@@ -70,7 +69,6 @@ class Securities:
             for tmpSecurity in dbSecurities:
                 newSec = Security()
                 newSec.pop_from_dict(tmpSecurity)
-                #print(f"load adding security {newSec}")
                 self.securitiesDict[newSec.symbol] = newSec
                 print(f"load just read in security with symbol {newSec.symbol}")
         else:
@@ -92,13 +90,10 @@ class Securities:
         print(f"\nStarting loadNewList")
         self._remove_missing_securities(targetSecurities)
         for symbol in targetSecurities:
-            #print(f"loadNewList is looking at symbol {symbol}")
             newTarget = targetSecurities[symbol]
-            #print(f"newTarget = {newTarget}, name = {newTarget.name}")
             if symbol in self.securitiesDict:
                 self._update_security(newTarget)
             else:
-                #print(f"About to try adding security: {symbol}")
                 self._add_security(newTarget)
 
         self.load()
@@ -107,7 +102,7 @@ class Securities:
 
         return updated
 
-    #@profile
+    # @profile
     def do_daily_price_update(self, currentDate):
         """
         Daily price update process. Ensures that have full price history downloaded for
@@ -120,7 +115,6 @@ class Securities:
         """
         print(f"Starting do_daily_price_update, currentDate={currentDate}")
         numUpdated = 0
-        #self.utilsInter.connect()
 
         # Check if we've already run today.
         symbolsToUpdate = self._get_symbols_needing_price_update(currentDate)
@@ -162,7 +156,6 @@ class Securities:
         if weeklyUpdateDue:
             self.utilsInter.set_last_weekly_update_date()
 
-        #self.utilsInter.disconnect()
         print(f"Finished do_daily_price_update, numUpdated={numUpdated}")
 
         return numUpdated
@@ -202,7 +195,8 @@ class Securities:
                                                          self.mySettings.daily_price_code)
                 if len(dailyPrices) > 0:
                     # Don't go any further if first download failed.
-                    downloaded = self.historyInter.save_daily_historical_prices(tmpSecurity.id, dailyPrices)
+                    downloaded = self.historyInter.save_daily_historical_prices(tmpSecurity.id,
+                                                                                dailyPrices)
                     print(f"retrieve_full_price_history saved daily prices.")
 
                     weeklyPrices = retrieve_historical_prices(tmpSecurity.symbol,
@@ -361,12 +355,11 @@ class Securities:
         """
         for key in self.securitiesDict:
             tmpSecurity = self.securitiesDict[key]
-            #print(f"_remove_missing_securities looking at security {tmpSecurity}")
+            # print(f"_remove_missing_securities looking at security {tmpSecurity}")
             if not (key in targetSecurities):
                 self._delete_security(tmpSecurity)
                 print(f"_remove_missing_securities removed {key}")
         return True
-
 
     def _are_all_downloaded(self):
         """

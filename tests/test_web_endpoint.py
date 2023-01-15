@@ -36,7 +36,6 @@ class Test_web_endpoint:
                    return_value=Mock()) as mock_remove:
             mock_remove.return_value = 5
 
-        #myWebPriceInfos = mySecurities.get_web_data(timePeriod)
         with patch('securities.Securities.get_web_data', return_value=Mock()) as mock_data:
             mock_data.return_value = self.gen_two_webPriceInfos()
 
@@ -44,14 +43,12 @@ class Test_web_endpoint:
                                                         {"timeframe": "30days"}},
                                                    "morestuff")
 
-            #print("test result:" + json.dumps(result))
+            # print("test result:" + json.dumps(result))
             assert len(result) > 0
             body = result["body"]
-            #print(f"{body=}")
 
             reconstituted = json.loads(body)
-            #reconstituted = json.loads(result["body"])
-            #print(f"test_get_website_data, {reconstituted=}")
+            # print(f"test_get_website_data, {reconstituted=}")
             assert len(reconstituted) == 2
 
     def gen_two_webPriceInfos(self):

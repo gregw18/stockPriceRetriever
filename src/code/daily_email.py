@@ -6,9 +6,9 @@ an email.
 V0.01, October 13, 2020
 """
 
-#from memory_profiler import profile
-#from guppy import hpy
-#import sys
+# from memory_profiler import profile
+# from guppy import hpy
+# import sys
 
 import notification_interface
 from securities import Securities
@@ -23,33 +23,34 @@ code_display_names = {sprEnums.GroupCodes.buy: "Buy",
                       sprEnums.GroupCodes.sell: "Sell"
                       }
 
-#@profile
+
+# @profile
 def send_from_db(resultsTopicName):
     """
     Create and send email summarizing price data from db, after first checking
     that have most recent prices downloaded.
     Usually runs once a day, called by the lambda.
     """
-    #h = hpy()
-    #print(f"send_from_db hpy 1: {h.heap()}")
+    # h = hpy()
+    # print(f"send_from_db hpy 1: {h.heap()}")
     sent = False
     print("Starting daily_email.send_from_db")
 
     mySecurities = Securities()
-    #print(f"send_from_db hpy 2: {h.heap()}")
-    #print(f"Initial size of securities: {sys.getsizeof(mySecurities)}")
+    # print(f"send_from_db hpy 2: {h.heap()}")
+    # print(f"Initial size of securities: {sys.getsizeof(mySecurities)}")
     mySecurities.do_daily_updates()
-    #print(f"send_from_db hpy 3: {h.heap()}")
-    #print(f"After update size of securities: {sys.getsizeof(mySecurities)}")
+    # print(f"send_from_db hpy 3: {h.heap()}")
+    # print(f"After update size of securities: {sys.getsizeof(mySecurities)}")
     securitiesList = mySecurities.retrieve_email_info()
-    #print(f"send_from_db hpy 4: {h.heap()}")
-    #print(f"After email size of securities: {sys.getsizeof(mySecurities)}")
+    # print(f"send_from_db hpy 4: {h.heap()}")
+    # print(f"After email size of securities: {sys.getsizeof(mySecurities)}")
     if len(securitiesList) > 0:
         _generate_and_send(securitiesList, resultsTopicName)
         sent = True
     else:
         print("Didn't find any securities to send an email regarding.")
-    #print(f"send_from_db hpy 5: {h.heap()}")
+    # print(f"send_from_db hpy 5: {h.heap()}")
     print("finished deaily_email.send_from_db")
 
     return sent
@@ -96,8 +97,8 @@ def get_email(myGroups):
     # Subtracting 2 for width because of removing b' from security.name (see longer comment below.)
     myBody = "\n For more details, use the following link: "
     myBody += "https://dev.dorhbll6brxxh.amplifyapp.com\n\n"
-    myBody += "symbol.name: ".ljust(max_wid - 2) + \
-             "   rating, current,     buy,    sell,   %52wk,    %chg"
+    myBody += "symbol.name: ".ljust(max_wid - 2)
+    myBody += "   rating, current,     buy,    sell,   %52wk,    %chg"
 
     for groupCode in sprEnums.GroupCodes:
         myList = myGroups.get_results_for_group(groupCode)

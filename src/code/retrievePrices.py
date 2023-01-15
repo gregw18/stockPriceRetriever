@@ -17,6 +17,7 @@ import stockTarget
 from sprEnums import PriceProvider
 import yahooInterface
 
+
 def _get_price_alphavest(symbol, mysettings):
     """
     Return current price for given stock, 0 if hit an error.
@@ -64,15 +65,10 @@ def retrieve_prices_using_db():
     """
     Retrieve and store daily/weekly prices, using list from database.
     """
-    #myUtilsInter = UtilsInterface()
     mySecurities = Securities()
 
-    #myUtilsInter.connect()
     numUpdates = mySecurities.do_daily_updates()
     print(f"retrieve_price_using_db resulted in {numUpdates} securities being updated.")
-    #numUpdated = mySecurities.do_daily_price_update(datetime.date.today())
-    #mySecurities.do_maintenance()
-    #myUtilsInter.disconnect()
 
 def retrieve_prices_from_file(excelFile,
                               excelTabName,

@@ -7,12 +7,11 @@ import json
 
 from singleton import Singleton
 
-# srcFile = "Portfolio.xls"
-# srcTab = "Current"                 # name of tab in spreadsheet to read data from.
 bucketNameFile = "bucket-name.txt"
 alphaFile = "alpha.txt"
 rdsEndpointFile = "dbendpoint.txt"
 rdsSettings = "dbparams.json"
+
 
 @Singleton
 class Settings:
@@ -28,9 +27,9 @@ class Settings:
 
         self.alphaBaseUrl = "https://www.alphavantage.co/query"
         self.alphaCallDelay = 20			# Number of seconds to wait before
-                                                      # calling api (to avoid going over
-                                                      # req/min limit.)
-        self.respContName = "Global Quote"	# Name of master container in response.
+                                            # calling api (to avoid going over
+                                            # req/min limit.)
+        self.respContName = "Global Quote"  # Name of master container in response.
         self.priceName = "05. price"		# Name of entry containing price.
         self.alphaApiTimeOut = 4
         self.alphaApiKey = self._read_setting_from_file(alphaFile)

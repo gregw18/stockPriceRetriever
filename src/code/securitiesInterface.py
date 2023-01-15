@@ -37,7 +37,7 @@ class SecuritiesInterface:
         addedOk = False
         mySymbol = newSecurity.symbol.upper()
         query = f"symbol= {mySymbol!r}"
-        results = dbAccess.select_data(self.securitiesTable, ["ID",], query)
+        results = dbAccess.select_data(self.securitiesTable, ["ID", ], query)
         if len(results) == 0:
             fieldNames = ["name", "symbol", "buyPrice", "sellPrice", "fullHistoryDownloaded"]
             fieldValues = [None] * len(fieldNames)
@@ -49,7 +49,7 @@ class SecuritiesInterface:
 
             # Need to nest the list so that connector recognizes that adding one record
             # with five values, rather than five records with one value each.
-            nestedValues = [fieldValues,]
+            nestedValues = [fieldValues, ]
             if dbAccess.insert_data(self.securitiesTable, fieldNames, nestedValues):
                 print(f"successfully added record for {mySymbol}")
                 addedOk = True

@@ -4,7 +4,6 @@ the list of securities that want to follow, their symbols and buy/sell prices.
 V0.01, November 30, 2022, GAW
 """
 
-#import pandas as pd
 
 class TargetSecurity:
     """

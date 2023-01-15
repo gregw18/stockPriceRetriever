@@ -3,8 +3,6 @@ Group and sort security_ratings.
 V0.01, October 21, 2020
 """
 
-#from decimal import Decimal
-
 import security_rating
 import sprEnums
 

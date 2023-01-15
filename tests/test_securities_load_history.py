@@ -11,10 +11,8 @@ from . import helperMethods
 
 import dbAccess
 import securities
-#import securitiesInterface
 from security import Security
 import settings
-#import targetSecurity
 import utilsInterface
 import yahooInterface
 
@@ -76,11 +74,6 @@ class TestSecuritiesLoadHistory():
         print("Running getSecurities")
         return securities.Securities()
 
-    #@pytest.fixture(scope='class')
-    #def getSecuritiesInter(self):
-    #    print("Running getSecuritiesInter")
-    #    return securitiesInterface.SecuritiesInterface()
-
     @pytest.fixture(scope='class')
     def getUtils(self):
         print("Running getUtils")
@@ -113,10 +106,6 @@ class TestSecuritiesLoadHistory():
         # Confirm that didn't download any data for security that was already downloaded.
         tmpSec = self.secsDict["MSFT"]
         self.confirm_no_saved_data_for_security(tmpSec)
-        #savedDailies = self.retrieve_saved_prices(self.dailyDbName, tmpSec.id)
-        #assert len(savedDailies) == 0
-        #savedWeeklies = self.retrieve_saved_prices(self.weeklyDbName, tmpSec.id)
-        #assert len(savedWeeklies) == 0
 
         self._wipe_history_tables(self.secsDict)
         getUtils.disconnect()
@@ -201,7 +190,6 @@ class TestSecuritiesLoadHistory():
 
     def confirm_no_saved_data_for_security(self, tmpSec):
         # Confirm that didn't download any data for given security.
-        #tmpSec = self.secsDict["MSFT"]
         savedDailies = self.retrieve_saved_prices(self.dailyDbName, tmpSec.id)
         assert len(savedDailies) == 0
         savedWeeklies = self.retrieve_saved_prices(self.weeklyDbName, tmpSec.id)

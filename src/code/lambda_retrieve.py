@@ -29,16 +29,6 @@ def lambda_handler(event, context):
     print('python version=', sys.version)
     print("cwd=", os.getcwd())
 
-    #resFile = retrievePrices.retrieve_prices_from_file(mysettings.srcFile,
-    #                                                   mysettings.srcTab,
-    #                                                   sprEnums.PriceProvider.yahoo,
-    #                                                   mysettings=mysettings,
-    #                                                   myResultsFile=myResultsFile)
-    #print("Finished retrieve")
-    #retrievePrices.retrieve_prices_using_db()
-
-    #if resFile:
-        # Send daily email summarizing results.
     daily_email.send_from_db(mysettings.resultsTopicName)
 
     # Remove old files
