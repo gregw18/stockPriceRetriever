@@ -60,7 +60,7 @@ class Settings:
         # Keeping daily prices for 100 days - approximately 3 months, and
         # weekly prices for 265 weeks - just over 5 years.
         self.daily_price_days_to_keep = 100
-        self.weekly_price_weeks_to_keep = 70
+        self.weekly_price_weeks_to_keep = 265
         self.daily_price_code = "1d"
         self.weekly_price_code = "1wk"
 
