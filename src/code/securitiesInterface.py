@@ -17,7 +17,7 @@ class SecuritiesInterface:
         self.securitiesTable = self.settings.db_securities_table_name
         self.fieldNames = ["id", "name", "symbol", "fullHistoryDownloaded", "buyPrice",
                            "sellPrice", "currentPrice", "currentPriceDate", "previousClosePrice",
-                           "52weekLowPrice", "52weekHighPrice", "percentChangeToday"]
+                           "52weekLowPrice", "52weekHighPrice"]
 
     def get_securities(self):
         """

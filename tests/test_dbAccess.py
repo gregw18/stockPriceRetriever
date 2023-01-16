@@ -297,8 +297,9 @@ class TestDbAccess():
         assertMsg = "Failed to insert a single record"
         assert dbAccess.insert_data(table, fields, values), assertMsg
 
-        updateFields = ("Name", "percentChangeToday", "currentPriceDate")
-        updateValues = ("Amazing", -15.4, date(2022, 1, 28))
+        newPrice = 132.1
+        updateFields = ("Name", "buyPrice", "currentPriceDate")
+        updateValues = ("Amazing", newPrice, date(2022, 1, 28))
         query = "Symbol='AMZN5'"
         updateResult = dbAccess.update_data(table, updateFields, updateValues, query)
         data = dbAccess.select_data(table, updateFields, query)
@@ -307,7 +308,7 @@ class TestDbAccess():
         dbAccess.disconnect()
 
         assert updateResult == 1
-        assert data[0]["percentChangeToday"] == Decimal('-15.4')
+        assert data[0]["buyPrice"] == Decimal(str(newPrice))
 
     def test_update_multiple_records(self):
         """
@@ -325,8 +326,9 @@ class TestDbAccess():
         assertMsg = "Failed to insert records"
         assert dbAccess.insert_data(table, fields, values), assertMsg
 
-        updateFields = ("Name", "percentChangeToday", "currentPriceDate")
-        updateValues = ("Amazing", -15.4, date(2022, 1, 28))
+        newPrice = 102.33
+        updateFields = ("Name", "buyPrice", "currentPriceDate")
+        updateValues = ("Amazing", newPrice, date(2022, 1, 28))
         query = "Symbol='AMZN6'"
         updateResult = dbAccess.update_data(table, updateFields, updateValues, query)
 
@@ -353,8 +355,8 @@ class TestDbAccess():
         assertMsg = "Failed to insert a single record"
         assert dbAccess.insert_data(table, fields, values), assertMsg
 
-        updateFields = ("zzName", "percentChangeToday", "currentPriceDate")
-        updateValues = ("Amazing", -15.4, date(2022, 1, 28))
+        updateFields = ("zzName", "buyPrice", "currentPriceDate")
+        updateValues = ("Amazing", 15.4, date(2022, 1, 28))
         query = "Symbol='AMZN7'"
         updateResult = dbAccess.update_data(table, updateFields, updateValues, query)
         dbAccess.delete_data(table, "Symbol='AMZN7'")
@@ -377,8 +379,8 @@ class TestDbAccess():
         assertMsg = "Failed to insert a single record"
         assert dbAccess.insert_data(table, fields, values), assertMsg
 
-        updateFields = ("Name", "percentChangeToday", "currentPriceDate")
-        updateValues = ("Amazing", -15.4, date(2022, 1, 28))
+        updateFields = ("Name", "buyPrice", "currentPriceDate")
+        updateValues = ("Amazing", 152.4, date(2022, 1, 28))
         query = "Symbolaz='AMZN8'"
         updateResult = dbAccess.update_data(table, updateFields, updateValues, query)
         dbAccess.delete_data(table, "Symbol='AMZN8'")
@@ -398,8 +400,8 @@ class TestDbAccess():
 
         dbAccess.delete_data(table, "Symbol='r3dgeadtt'")
 
-        updateFields = ("Name", "percentChangeToday", "currentPriceDate")
-        updateValues = ("Amazing", -15.4, date(2022, 1, 28))
+        updateFields = ("Name", "buyPrice", "currentPriceDate")
+        updateValues = ("Amazing", 215.4, date(2022, 1, 28))
         query = "Symbol='r3dgeadtt'"
         assert dbAccess.update_data(table, updateFields, updateValues, query) == 0
 
