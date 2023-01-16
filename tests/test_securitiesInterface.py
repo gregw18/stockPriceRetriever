@@ -49,8 +49,7 @@ class TestSecuritiesInterface():
                           "currentDate": date(2022, 11, 21),
                           "previousClosePrice": 156.33,
                           "52weekLowPrice": 132.1,
-                          "52weekHighPrice": 187.4,
-                          "percentChangeToday": 5.4}
+                          "52weekHighPrice": 187.4}
         self.security2 = {"id": 3,
                           "name": "Meta",
                           "symbol": "FBOOK",
@@ -61,8 +60,7 @@ class TestSecuritiesInterface():
                           "currentDate": date(2022, 11, 21),
                           "previousClosePrice": 56.33,
                           "52weekLowPrice": 32.1,
-                          "52weekHighPrice": 587.4,
-                          "percentChangeToday": -15.4}
+                          "52weekHighPrice": 587.4}
 
     def test_get_securities_no_records(self):
         """
