@@ -235,7 +235,7 @@ if __name__ == "__main__":
     elif myArgs.action == Action.clearDaily:
         _reset_daily_prices()
     elif myArgs.action == Action.dailyEmail:
-        daily_email.send_from_db(mysettings.resultsTopicName)
+        daily_email.send_from_db(mysettings.resultsTopicName, mysettings.websiteUrl)
     elif myArgs.action == Action.retrieve:
         myResultsFile = resultsFile.ResultsFile(mysettings.bucketName, mysettings.resultsPrefix)
         res_file = retrievePrices.retrieve_prices_from_file(myArgs.srcFile,

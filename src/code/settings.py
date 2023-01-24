@@ -11,7 +11,7 @@ bucketNameFile = "bucket-name.txt"
 alphaFile = "alpha.txt"
 rdsEndpointFile = "dbendpoint.txt"
 rdsSettings = "dbparams.json"
-
+websiteUrlFile = "websiteurl.txt"
 
 @Singleton
 class Settings:
@@ -37,6 +37,8 @@ class Settings:
         self.yahooCallDelay = 0.5
         self.errFile = "errors.txt"
 
+        self.websiteUrl = self._read_setting_from_file(websiteUrlFile)
+        
         self.fileMaxAge = 30                    # Keep results files for this many days.
         self.resultsPrefix = "results"          # "directory" in S3 to store results files in.
         self.bucketName = self._read_setting_from_file(bucketNameFile)

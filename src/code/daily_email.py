@@ -25,7 +25,7 @@ code_display_names = {sprEnums.GroupCodes.buy: "Buy",
 
 
 # @profile
-def send_from_db(resultsTopicName):
+def send_from_db(resultsTopicName, websiteUrl):
     """
     Create and send email summarizing price data from db, after first checking
     that have most recent prices downloaded.
@@ -46,7 +46,7 @@ def send_from_db(resultsTopicName):
     # print(f"send_from_db hpy 4: {h.heap()}")
     # print(f"After email size of securities: {sys.getsizeof(mySecurities)}")
     if len(securitiesList) > 0:
-        _generate_and_send(securitiesList, resultsTopicName)
+        _generate_and_send(securitiesList, resultsTopicName, websiteUrl)
         sent = True
     else:
         print("Didn't find any securities to send an email regarding.")
@@ -67,15 +67,16 @@ def send_from_file(myResultsFile, resFile, resultsTopicName):
     securitiesList = myResultsFile.read_results_file_s3(resFile)
     _generate_and_send(securitiesList, resultsTopicName)
 
-def _generate_and_send(securitiesList, resultsTopicName):
+def _generate_and_send(securitiesList, resultsTopicName, websiteUrl):
     """
-    Receives list of security, uses that to generate and send email.
+    Receives list of security, topic to use for email, url to include in email,
+    uses that to generate and send email.
     """
     print(f"starting daily_email._generate_and_send, len={len(securitiesList)}")
     myGroups = security_groups.SecurityGroups()
     myGroups.populate(securitiesList)
 
-    emailSubject, emailBody = get_email(myGroups)
+    emailSubject, emailBody = get_email(myGroups, websiteUrl)
     print(f"finished get_email")
 
     if emailSubject:
@@ -86,7 +87,7 @@ def _generate_and_send(securitiesList, resultsTopicName):
 
     print("Finished daily_email._generate_and_send")
 
-def get_email(myGroups):
+def get_email(myGroups, websiteUrl):
     """
     Create email message (subject and body) summarizing price data from
     given grouped lists of security.
@@ -96,7 +97,7 @@ def get_email(myGroups):
     mySubj = ""
     # Subtracting 2 for width because of removing b' from security.name (see longer comment below.)
     myBody = "\n For more details, use the following link: "
-    myBody += "https://dev.dorhbll6brxxh.amplifyapp.com\n\n"
+    myBody += websiteUrl + "\n\n"
     myBody += "symbol.name: ".ljust(max_wid - 2)
     myBody += "   rating, current,     buy,    sell,   %52wk,    %chg"
 
