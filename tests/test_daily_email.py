@@ -66,7 +66,7 @@ class Test_daily_email:
         myGroups = security_groups.SecurityGroups()
         myGroups.populate(secList)
 
-        mySubj, myBody = daily_email.get_email(myGroups)
+        mySubj, myBody = daily_email.get_email(myGroups, "www.fakeurl.ca")
         print("\nemail:", mySubj, "\n", myBody)
         assert False
 
@@ -77,7 +77,7 @@ class Test_daily_email:
         secList = []
         myGroups = security_groups.SecurityGroups()
         myGroups.populate(secList)
-        mySubj, myBody = daily_email.get_email(myGroups)
+        mySubj, myBody = daily_email.get_email(myGroups, "www.fakeurl.ca")
         assert mySubj == ""
         assert myBody == ""
 
@@ -95,7 +95,7 @@ class Test_daily_email:
         secsDict["GOOGL"].currentPriceDate = currentDate
         self._save_to_securities(getSecuritiesTable, secsDict)
 
-        sent = daily_email.send_from_db(get_settings.resultsTopicName)
+        sent = daily_email.send_from_db(get_settings.resultsTopicName, "www.fakeurl.ca")
 
         self._wipe_tables(secsDict, getSecuritiesTable)
         getUtils.disconnect()

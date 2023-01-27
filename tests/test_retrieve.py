@@ -78,6 +78,8 @@ class TestRetrievePrices():
     def test_yahoo_historical_daily_90days(self):
         """
         Retrieve daily prices for Exxon for last 90 days. Should all be > 0.
+        Note that am verifying have at least 58 prices - can be this low over
+        Christmas/New Years because of various holidays.
         """
         timePeriod = timedelta(90)
         oldestDate = datetime.now().date() - timePeriod
@@ -85,7 +87,7 @@ class TestRetrievePrices():
                                                            oldestDate,
                                                            datetime.now().date(),
                                                            mysettings.daily_price_code)
-        assert len(prices) > 60
+        assert len(prices) > 58
         for price in prices:
             assert price[1] > 0
 
