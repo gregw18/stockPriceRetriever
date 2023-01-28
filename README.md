@@ -29,7 +29,7 @@ There are also a few maintenance-type functions that are run locally but access 
 Note that because of the MySQL database, running this project on AWS now has a cost, unless you qualify for the AWS RDS free tier. It had previously snuck under the free tier limit, at least for me.
 
 
-# Usage
+## Usage
 After successfully following the "Getting Started" instructions below, the program will automatically run at the selected time, every weekday, retrieving and saving the most recent price for each security and the Friday close price for each, and sending an email containing a summary of that data. The email also contains a link to a web page showing more of the data, mostly in chart form, that can be sorted by various columns. You are also able to select the period of time for which you want to view data.
 
 If you want to refresh your list of securities, update the spreadsheet that was created in step 1 below (or, create an entirely new one) and run the "python spr.py -o Portfolio.xls" command again, where Portlolio.xls is the name of your updated spreadsheet. The update process uses the symbol to update values for existing securities, add new ones and remove any that are no longer in the spreadsheet. 
@@ -132,3 +132,13 @@ Web Requirements
 - NPM
 - React
 - React-chartjs
+
+
+## Authors
+
+* **Greg Walker** - *Initial work* - (https://github.com/gregw18)
+
+
+## License
+
+MIT
