@@ -29,7 +29,7 @@ def lambda_handler(event, context):
     print('python version=', sys.version)
     print("cwd=", os.getcwd())
 
-    daily_email.send_from_db(mysettings.resultsTopicName)
+    daily_email.send_from_db(mysettings.resultsTopicName, mysettings.websiteUrl)
 
     # Remove old files
     myManager = FileManagement()
