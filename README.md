@@ -34,21 +34,21 @@ After successfully following the "Getting Started" instructions below, the progr
 
 If you want to refresh your list of securities, update the spreadsheet that was created in step 1 below (or, create an entirely new one) and run the "python spr.py -o Portfolio.xls" command again, where Portlolio.xls is the name of your updated spreadsheet. The update process uses the symbol to update values for existing securities, add new ones and remove any that are no longer in the spreadsheet. 
 
-If something like a stock split happens, that invalidates all the existing price history data for a security, you can manually remove the existing data and tell the program to reload it.
+If something like a stock split happens, that invalidates all the existing price history data for a security, you can manually remove the existing data and tell the program to reload it, using the following process:
 
-        1. Connect to your database. Run 7-connect-rds.sh. Enter the DbPassword that you put in dbparams.json in step 5 below.
+1. Connect to your database. Run 7-connect-rds.sh. Enter the DbPassword that you put in dbparams.json in step 5 below.
 
-        2. Select your database. Run "use stock_retriever_db;", replacing stock_retriever_db with the name of your database.
+2. Select your database. Run "use stock_retriever_db;", replacing stock_retriever_db with the name of your database.
 
-        3. Retrieve the id for the security that you want to update prices for. Run "select * from securities;" and scroll to find the security of interest. (Or, add an appropriate query.)
+3. Retrieve the id for the security that you want to update prices for. Run "select * from securities;" and scroll to find the security of interest. (Or, add an appropriate query.)
 
-        4. Update the security so that the program knows that it needs to reload price history. Run "update securities set fullHistoryDownloaded='0' where id=999;", replacing 999 with the security id from step 3.
+4. Update the security so that the program knows that it needs to reload its price history. Run "update securities set fullHistoryDownloaded='0' where id=999;", replacing 999 with the security id from step 3.
 
-        5. Delete daily price history for this security. Run "delete * from dailyPriceHistory where securityId = 999;", again replacing 999 with the security id from step 3.
+5. Delete daily price history for this security. Run "delete * from dailyPriceHistory where securityId = 999;", again replacing 999 with the security id from step 3.
 
-        6. Delete weekly price history for this security. Run "delete * from weeklyPriceHistory where securityId = 999;", similarly to above.
+6. Delete weekly price history for this security. Run "delete * from weeklyPriceHistory where securityId = 999;", similarly to above.
 
-        7. Disconnect - "quit".
+7. Disconnect - "quit".
 
 Now, when the next automatic daily price update runs, the program will recognize that it doesn't have full data for that security and automatically retrieve and store it.
 
@@ -63,28 +63,28 @@ The various parts of the deployment - i.e. the lambdas, the database and the web
 3. Prepare install libraries. Run 2-build-layer.sh, which will install the libraries required for this application, in the package directory.
 4. Configuration. The template.yml contains the Cloudformation template for this project, which has various names and settings that can be changed.
 
-        Time to run. The default is to run the function every weekday at 22:04 UTC, which is 5:04pm or 6:04pm eastern, depending on daylight savings time. My goal was to run it sometime after US markets close. If yours is different, change the Schedule in the "function" resource.
+- Time to run. The default is to run the function every weekday at 22:04 UTC, which is 5:04pm or 6:04pm eastern, depending on daylight savings time. My goal was to run it sometime after US markets close. If yours is different, change the Schedule in the "function" resource.
 
-        Timeout. If your list of securities is particularly long, the "function" lambda might timeout when retrieving all the prices. If this happens, you can change the Timeout in the function resource from 600 to up to 900 seconds (15 minutes is currently the maximum allowable run time for a Lambda function.)
+- Timeout. If your list of securities is particularly long (mine contains 87 securities and takes 4-8 minutes to run), the "function" lambda might timeout when retrieving all the prices. If this happens, you can change the Timeout in the function resource from 600 to up to 900 seconds (15 minutes is currently the maximum allowable run time for a Lambda function.)
 
-        SNS topics. This lambda uses two SNS topics, one to send out the daily stock data email and the second to send out any errors executing the lambda. The first is called "StockRetrieverResultsTopic" and the second StockRetrieverErrorsTopic. If you don't like these names, you will have to change them in several places in the template as well as in settings.py.
+- SNS topics. This lambda uses two SNS topics, one to send out the daily stock data email and the second to send out any errors executing the lambda. The first is called "StockRetrieverResultsTopic" and the second StockRetrieverErrorsTopic. If you don't like these names, you will have to change them in several places in the template as well as in settings.py.
 
-        Topic subscriber. If you would like to receive emails when the program publishes something to the topics, change the "Endpoint" entries in the template for both topics to the desired email address.
-5. Deploy the lambdas and supporting infrastructure -run 3-deploy.sh
+- Topic subscriber. If you would like to receive emails when the program publishes something to the topics, change the "Endpoint" entries in the template for both topics to the desired email address.
+5. Deploy the lambdas and supporting infrastructure. Run 3-deploy.sh
 6. Retrieve the identifier for the database instance. Run 3a-get-dbidentifier.sh.
 7. Create the database. (The previous step only created an empty database instance. This step creates a database and users with appropriate rights.) Copy the json fragment below, paste it into a file called dbparams.json in the src/code directory. Change the password to one that isn't publicly known. Run 8-create-db-and-user.sh.
 
-{
-    "Parameters": {
-        "DbUsername": "stockDbRoot",
-        "DbPassword": "mySecurePassword",
-        "DbUserSR": "dbUserSR",
-        "DbName": "stock_retriever_db"
-    }
-}
-8. Redeploy the lambdas - run 3-deploy.sh. This will add the various endpoints/identifiers that have been created to the project, for the python code to use.
+        {
+        "Parameters": {
+                "DbUsername": "stockDbRoot",
+                "DbPassword": "mySecurePassword",
+                "DbUserSR": "dbUserSR",
+                "DbName": "stock_retriever_db"
+                }
+        }
+8. Redeploy the lambdas. Run 3-deploy.sh. This will add the various endpoints/identifiers that have been created to the project, for the python code to use.
 9. Create the database tables. From the src/code directory run "python spr.py -d". This will create the tables required for the program.
-10. Load your target securities into the database. From the src/code directory, run "python spr.py -o Portfolio.xls", where Portfolio.xls is the name of the spreadsheet that you created in step 3. If you're not comfortable with making your stocks of interest and corresponding buy/sell prices public, I recommend keeping the spreadsheet in the directory above this project, load the securities with something like "python spr.py -o ../mystocks.xls".
+10. Load your target securities into the database. From the src/code directory, run "python spr.py -o Portfolio.xls", where Portfolio.xls is the name of the spreadsheet that you created in step 3. If you're not comfortable with making your stocks of interest and corresponding buy/sell prices public, I recommend keeping the spreadsheet in the directory above this project. You can then load the securities with something like "python spr.py -o ../mystocks.xls".
 11. Prepare for website deployment. Ensure that have npm and the AWS Amplify cli installed.
 12. Retrieve the url for the api. Run 9-get-apigateway.sh. Copy the contents of the api_url.txt file that is created into the api_endpoint variable in the web/src/components/FetchData.js file and save it. (Please let me know if you have a way to avoid hardcoding this value.)
 13. Deploy the website. From the web directory, run "amplify publish".
@@ -94,68 +94,41 @@ The various parts of the deployment - i.e. the lambdas, the database and the web
 
 
 Development Environment
-        Ubuntu
 
-        Virtual Machine Manager and image for AWS' latest Python3 Lambda environment, if want to fully test locally.
+- Ubuntu
+- Virtual Machine Manager and image for AWS' latest Python3 Lambda environment, if want to fully test locally.
 
 Python Requirements
 
-        Python 3
-
-        AWS cli
-
-        boto3
-
-        botocore
-
-        cryptogoraphy
-
-        datetime
-
-        getopt
-
-        idna
-
-        json
-
-        lxml
-
-        matplotlib
-
-        math
-
-        moto
-
-        numpy
-
-        os
-
-        pandas
-
-        pymysql
-
-        pytest
-
-        requests
-
-        socket
-
-        sys
-
-        urllib3
-
-        xlrd
-
-        yahoo-fin
+- Python 3
+- AWS cli
+- boto3
+- botocore
+- cryptogoraphy
+- datetime
+- getopt
+- idna
+- json
+- lxml
+- matplotlib
+- math
+- moto
+- numpy
+- os
+- pandas
+- pymysql
+- pytest
+- requests
+- socket
+- sys
+- urllib3
+- xlrd
+- yahoo-fin
 
 Web Requirements
 
-        AWS Amplify
-
-        Chart.js
-
-        NPM
-
-        React
-        
-        React-chartjs
+- AWS Amplify
+- Chart.js
+- NPM
+- React
+- React-chartjs
