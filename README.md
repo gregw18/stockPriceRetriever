@@ -1,7 +1,10 @@
 # Stock Price Retriever
 This project has two purposes - to give me some experience with AWS Lambdas and to help monitor my investment portfolio.
+
 It consists mainly of two AWS Lambda functions, written in Python. The first automatically runs every day and retrieves data, stores it and sends a summary email. The second retrieves data for an associated web page.
+
 The daily Lambda retrieves stock prices, saves them in a database, performs some calculations and sends a daily email notification. For each stock, the notification includes a rating, the current price, the specified buy and sell prices for that stock, the current price as a percentage of its 52 week high and the percent that the stock price changed today. Each stock is placed in one of five groups - buy, near buy, middle, near sell and sell, based on where its current price is relative to the buy and sell prices. (The user of this program has to supply the buy and sell prices, based on whatever they like.)
+
 The rating is a calculation used to further rank each stock within the group.
         Buy group: percentage of buy price that current price is below buy price. i.e.
                         (buyPrice - currentPrice)/buyPrice
